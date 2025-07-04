@@ -145,8 +145,8 @@ var createFlightArc = function (scene, lat1, lng1, lat2, lng2, radius) {
     // Create the arc using a tube geometry for better visibility than lines
     var arcTube = BABYLON.MeshBuilder.CreateTube("flightArc", {
         path: arcPoints,
-        radius: 0.003, // Slightly thicker for lightsaber effect
-        tessellation: 12, // More sides for smoother glow
+        radius: 0.001, // Slightly thicker for lightsaber effect
+        tessellation: 6, // More sides for smoother glow
         cap: BABYLON.Mesh.CAP_ALL // Cap both ends of the tube
     }, scene);
 
@@ -197,7 +197,7 @@ var initializeFlightArcs = function (scene) {
                         fromAirport.longitude,   // Origin longitude
                         toAirport.latitude,     // Destination latitude
                         toAirport.longitude,     // Destination longitude
-                        1.01               // Radius slightly above Earth surface
+                        1               // Radius slightly above Earth surface
                     );
                 } else {
                     // Log missing airport data for debugging
