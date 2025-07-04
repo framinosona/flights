@@ -78,7 +78,7 @@ var getVertexDataForTile = function (tileY, tileZ) {
     var positions = [];
     var indices = [];
     var uvs = [];
-    var subdivisions = 4; // Number of subdivisions for mesh detail
+    var subdivisions = 8; // Increased subdivisions for smoother geometry
 
     // Generate vertices for the tile mesh
     for (var sy = 0; sy <= subdivisions + .5; sy++) {
@@ -120,7 +120,11 @@ var getVertexDataForTile = function (tileY, tileZ) {
     vertexData.positions = positions;
     vertexData.indices = indices;
     vertexData.uvs = uvs;
-    vertexData.normals = positions; // Use positions as normals for sphere
+    
+    // Calculate proper normals for the mesh
+    var normals = [];
+    BABYLON.VertexData.ComputeNormals(positions, indices, normals);
+    vertexData.normals = normals;
 
     // Cache the vertex data for future use
     vertexDataMap[key] = vertexData;
@@ -161,10 +165,10 @@ var getMeshForTile = function (tileId, scene) {
     var mat = new BABYLON.StandardMaterial("mat " + tileId, scene);
     mat.wireframe = false;
     mat.backFaceCulling = true;
-    mat.ambientColor = new BABYLON.Color3(0.6, 0.6, 0.6); // Reduced ambient contribution
+    mat.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3); // Slightly increased ambient
     mat.diffuseColor = new BABYLON.Color3(1, 1, 1); // Keep diffuse at full for texture
-    mat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1); // Reduced specular for less shine
-    mat.specularPower = 32; // Lower specular power for softer highlights
+    mat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Very low specular
+    mat.specularPower = 64; // Higher specular power for tighter highlights
     
     // Get tile URL using the current tile provider
     const tileUrl = getTileUrl(tileId.x, tileId.y, tileId.zoom);
@@ -174,14 +178,15 @@ var getMeshForTile = function (tileId, scene) {
         var texture = new BABYLON.Texture(
             tileUrl,
             scene,
-            false,
-            true,
-            BABYLON.Texture.LINEAR_SAMPLINGMODE,
+            false, // noMipmap - set to false for better quality
+            true,  // invertY
+            BABYLON.Texture.TRILINEAR_SAMPLINGMODE, // Better filtering
             async () => {
                 // Texture loaded successfully - configure and optimize mesh
                 mat.diffuseTexture = texture;
-                mat.diffuseTexture.wrapU = 0;
-                mat.diffuseTexture.wrapV = 0;
+                mat.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
+                mat.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
+                mat.diffuseTexture.anisotropicFilteringLevel = 4; // Improve texture quality at angles
                 mat.freeze(); // Freeze material for performance
                 mesh.material = mat;
                 scene.addMesh(mesh);
@@ -193,6 +198,7 @@ var getMeshForTile = function (tileId, scene) {
             },
             () => {
                 // Texture loading failed
+                console.warn(`Failed to load texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`);
                 reject();
             });
     });
@@ -238,53 +244,75 @@ var getMeshes = async function (tileId, scene) {
  * @param {BABYLON.Scene} scene - The Babylon.js scene
  */
 var setupTileRefinement = function(scene) {
+    let refinementActive = false; // Prevent concurrent refinements
+    
     scene.registerAfterRender(() => {
-        // Progressive tile refinement system
-        if (loadedTiles.length > 0) {
-            // Randomly select a tile for potential subdivision
-            var index = Math.floor(Math.random() * loadedTiles.length);
-            var mesh = loadedTiles[index];
-            loadedTiles[index] = loadedTiles.pop();
-            var tileId = mesh.tileId;
+        // Progressive tile refinement system - throttled to prevent visual artifacts
+        if (loadedTiles.length > 0 && !refinementActive) {
+            refinementActive = true;
+            
+            // Randomly select a tile for potential subdivision (less frequently)
+            if (Math.random() < 0.1) { // Only 10% chance per frame
+                var index = Math.floor(Math.random() * loadedTiles.length);
+                var mesh = loadedTiles[index];
+                
+                if (mesh && mesh.tileId && !mesh.isDisposed()) {
+                    loadedTiles[index] = loadedTiles.pop();
+                    var tileId = mesh.tileId;
 
-            // Only subdivide if we haven't reached maximum detail level
-            if (tileId.zoom < 5) {
-                var children = tileId.children;
-                var child0 = getMeshForTile(children[0], scene);
-                var child1 = getMeshForTile(children[1], scene);
-                var child2 = getMeshForTile(children[2], scene);
-                var child3 = getMeshForTile(children[3], scene);
+                    // Only subdivide if we haven't reached maximum detail level
+                    if (tileId.zoom < 5) { // Reduced max zoom to prevent excessive detail
+                        var children = tileId.children;
+                        var child0 = getMeshForTile(children[0], scene);
+                        var child1 = getMeshForTile(children[1], scene);
+                        var child2 = getMeshForTile(children[2], scene);
+                        var child3 = getMeshForTile(children[3], scene);
 
-                // Wait for all child tiles to load, then replace parent with children
-                Promise.all([child0, child1, child2, child3]).then(async () => {
-                    // Remove and dispose of parent tile
-                    scene.removeMesh(mesh);
-                    mesh.dispose();
-                    
-                    // Add child tiles to scene
-                    var mesh0 = await child0;
-                    var mesh1 = await child1;
-                    var mesh2 = await child2;
-                    var mesh3 = await child3;
-                    mesh0.isVisible = true;
-                    mesh1.isVisible = true;
-                    mesh2.isVisible = true;
-                    mesh3.isVisible = true;
-                    scene.addMesh(mesh0);
-                    scene.addMesh(mesh1);
-                    scene.addMesh(mesh2);
-                    scene.addMesh(mesh3);
-                    
-                    // Add child tiles to loaded tiles array for future refinement
-                    loadedTiles.push(mesh0);
-                    loadedTiles.push(mesh1);
-                    loadedTiles.push(mesh2);
-                    loadedTiles.push(mesh3);
-                    
-                    // Update spatial optimization structures
-                    scene.createOrUpdateSelectionOctree();
-                });
+                        // Wait for all child tiles to load, then replace parent with children
+                        Promise.all([child0, child1, child2, child3]).then(async () => {
+                            try {
+                                // Remove and dispose of parent tile
+                                scene.removeMesh(mesh);
+                                if (mesh.material) mesh.material.dispose();
+                                mesh.dispose();
+                                
+                                // Add child tiles to scene
+                                var mesh0 = await child0;
+                                var mesh1 = await child1;
+                                var mesh2 = await child2;
+                                var mesh3 = await child3;
+                                
+                                // Validate meshes before adding
+                                [mesh0, mesh1, mesh2, mesh3].forEach(childMesh => {
+                                    if (childMesh && !childMesh.isDisposed()) {
+                                        childMesh.isVisible = true;
+                                        scene.addMesh(childMesh);
+                                        loadedTiles.push(childMesh);
+                                    }
+                                });
+                                
+                                // Update spatial optimization structures
+                                scene.createOrUpdateSelectionOctree();
+                            } catch (error) {
+                                console.warn('Error during tile refinement:', error);
+                            } finally {
+                                refinementActive = false;
+                            }
+                        }).catch(error => {
+                            console.warn('Error loading child tiles:', error);
+                            refinementActive = false;
+                        });
+                    } else {
+                        refinementActive = false;
+                    }
+                } else {
+                    refinementActive = false;
+                }
+            } else {
+                refinementActive = false;
             }
+        } else if (!refinementActive) {
+            refinementActive = false;
         }
     });
 };
@@ -298,13 +326,22 @@ var setupTileRefinement = function(scene) {
  * @param {BABYLON.Scene} scene - The Babylon.js scene to add the Earth to
  */
 var initializeEarth = function (scene) {
-    console.log('Initializing Earth tile system...');
+    console.group("🌍 Earth System");
+    console.log('Setting up Earth tile system...');
     
-    // Initialize the tile loading system with root tile
-    getMeshes(new TileId(0, 0, 0), scene);
-    
-    // Setup progressive tile refinement
-    setupTileRefinement(scene);
-    
-    console.log('Earth tile system initialized');
+    try {
+        // Initialize the tile loading system with root tile
+        console.log('Loading initial tiles...');
+        getMeshes(new TileId(0, 0, 0), scene);
+        
+        // Setup progressive tile refinement
+        console.log('Setting up progressive refinement...');
+        setupTileRefinement(scene);
+        
+        console.log('✅ Earth system ready');
+    } catch (error) {
+        console.error('❌ Earth initialization failed:', error);
+    } finally {
+        console.groupEnd();
+    }
 };
