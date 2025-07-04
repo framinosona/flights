@@ -53,7 +53,11 @@
 
     <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
         
-    <script src="js/flights.js"></script>
+    <!-- Load JavaScript modules in dependency order -->
+    <script src="js/tile-providers.js"></script>
+    <script src="js/debug.js"></script>
     <script src="js/earth.js"></script>
+    <script src="js/flights.js"></script>
+    <script src="js/scene.js"></script>
   </body>
 </html>
