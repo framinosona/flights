@@ -194,7 +194,7 @@ var createScene = function () {
     // ==============================
 
     var camera = new BABYLON.ArcRotateCamera("camera1", 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
-    camera.setPosition(new BABYLON.Vector3(0, 1, -2));
+    camera.setPosition(new BABYLON.Vector3(-1.949, 1.861, -0.225)); // Europe centric position (because Europe is the center of the world 😇)
     camera.lowerRadiusLimit = 1.05;
     camera.upperRadiusLimit = 3;
     camera.wheelDeltaPercentage = .01;
@@ -424,8 +424,38 @@ var createScene = function () {
      * This runs every frame to:
      * 1. Adjust camera sensitivity based on zoom level
      * 2. Progressively refine tiles by subdividing lower resolution tiles
+     * 3. Log camera position for debugging (if enabled)
      */
     scene.registerAfterRender(() => {
+        // Debug camera position logging
+        if (window.debugCameraLogging) {
+            const currentPosition = camera.position.clone();
+            const currentTarget = camera.getTarget().clone();
+            
+            // Only log if camera has moved significantly
+            if (!window.lastLoggedPosition || 
+                BABYLON.Vector3.Distance(currentPosition, window.lastLoggedPosition) > (window.cameraLogThreshold || 0.1)) {
+                
+                console.log('Camera Debug Info:', {
+                    position: {
+                        x: currentPosition.x.toFixed(3),
+                        y: currentPosition.y.toFixed(3),
+                        z: currentPosition.z.toFixed(3)
+                    },
+                    target: {
+                        x: currentTarget.x.toFixed(3),
+                        y: currentTarget.y.toFixed(3),
+                        z: currentTarget.z.toFixed(3)
+                    },
+                    radius: camera.radius.toFixed(3),
+                    alpha: (camera.alpha * 180 / Math.PI).toFixed(1) + '°',
+                    beta: (camera.beta * 180 / Math.PI).toFixed(1) + '°'
+                });
+                
+                window.lastLoggedPosition = currentPosition;
+            }
+        }
+
         // Update camera sensitivity based on zoom level for better user experience
         if (camera.radius != oldRadius) {
             oldRadius = camera.radius;
@@ -672,4 +702,90 @@ window.testTileUrl = function(x = 0, y = 0, z = 1) {
         };
         img.src = url;
     });
+};
+
+// ==============================
+// CAMERA DEBUG UTILITIES
+// ==============================
+
+/**
+ * Enables camera position logging for debugging
+ * @param {boolean} enabled - Whether to enable camera logging
+ * @param {number} threshold - Minimum movement distance before logging (default: 0.1)
+ */
+window.enableCameraLogging = function(enabled = true, threshold = 0.1) {
+    window.debugCameraLogging = enabled;
+    window.cameraLogThreshold = threshold;
+    window.lastLoggedPosition = null; // Reset last logged position
+    
+    console.log(`Camera logging ${enabled ? 'enabled' : 'disabled'}${enabled ? ` (threshold: ${threshold})` : ''}`);
+};
+
+/**
+ * Disables camera position logging
+ */
+window.disableCameraLogging = function() {
+    enableCameraLogging(false);
+};
+
+/**
+ * Logs current camera position immediately
+ */
+window.logCameraPosition = function() {
+    if (window.scene && window.scene.activeCamera) {
+        const camera = window.scene.activeCamera;
+        const position = camera.position;
+        const target = camera.getTarget();
+        
+        console.log('Current Camera Position:', {
+            position: {
+                x: position.x.toFixed(3),
+                y: position.y.toFixed(3),
+                z: position.z.toFixed(3)
+            },
+            target: {
+                x: target.x.toFixed(3),
+                y: target.y.toFixed(3),
+                z: target.z.toFixed(3)
+            },
+            radius: camera.radius.toFixed(3),
+            alpha: (camera.alpha * 180 / Math.PI).toFixed(1) + '°',
+            beta: (camera.beta * 180 / Math.PI).toFixed(1) + '°'
+        });
+    } else {
+        console.warn('Camera not available');
+    }
+};
+
+/**
+ * Sets camera to a specific position
+ * @param {number} x - X position
+ * @param {number} y - Y position  
+ * @param {number} z - Z position
+ */
+window.setCameraPosition = function(x, y, z) {
+    if (window.scene && window.scene.activeCamera) {
+        window.scene.activeCamera.setPosition(new BABYLON.Vector3(x, y, z));
+        console.log(`Camera position set to (${x}, ${y}, ${z})`);
+    } else {
+        console.warn('Camera not available');
+    }
+};
+
+/**
+ * Sets camera using spherical coordinates (radius, alpha, beta)
+ * @param {number} radius - Distance from target
+ * @param {number} alpha - Horizontal angle in degrees
+ * @param {number} beta - Vertical angle in degrees
+ */
+window.setCameraSpherical = function(radius, alpha, beta) {
+    if (window.scene && window.scene.activeCamera) {
+        const camera = window.scene.activeCamera;
+        camera.radius = radius;
+        camera.alpha = alpha * Math.PI / 180; // Convert to radians
+        camera.beta = beta * Math.PI / 180;   // Convert to radians
+        console.log(`Camera set to radius: ${radius}, alpha: ${alpha}°, beta: ${beta}°`);
+    } else {
+        console.warn('Camera not available');
+    }
 };
