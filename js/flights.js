@@ -19,7 +19,7 @@ var flightLogs = null;
 var getAirportCoords = async function () {
 
     var promise = new Promise((resolve, reject) => {
-        fetch("airports_by_iata.json")
+        fetch("js/data/airports_by_iata.json")
             .then(response => response.json())
             .then(data => {
                 flightLogs = data;
@@ -46,7 +46,7 @@ var getAirportCoords = async function () {
  */
 var getFlightLogs = async function () {
     var promise = new Promise((resolve, reject) => {
-        fetch("flight_logs.json")
+        fetch("js/data/flight_logs.json")
             .then(response => response.json())
             .then(data => {
                 flightLogs = data;
