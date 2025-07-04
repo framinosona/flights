@@ -1,4 +1,3 @@
-
 // ==============================
 // FLIGHT VISUALIZATION SYSTEM
 // ==============================
@@ -60,6 +59,143 @@ var getFlightLogs = async function () {
 
     return promise;
 };
+// ==============================
+// AIRPORT POINT VISUALIZATION
+// ==============================
+
+// Global variable to track created airport points
+var airportPoints = [];
+
+/**
+ * Extracts distinct airports from flight logs to avoid duplicates
+ * @param {Object} airportCoords - Airport coordinates data
+ * @param {Object} flightLogs - Flight logs data
+ * @returns {Array} Array of unique airport objects with their data
+ */
+var getDistinctAirports = function(airportCoords, flightLogs) {
+    const distinctAirports = new Map(); // Use Map to avoid duplicates
+    const flightArray = Object.values(flightLogs);
+    
+    // Collect all unique airport codes from flight logs
+    flightArray.forEach(flight => {
+        // Add origin airport
+        if (flight.from_code && airportCoords[flight.from_code]) {
+            const airportData = airportCoords[flight.from_code];
+            distinctAirports.set(flight.from_code, {
+                code: flight.from_code,
+                name: flight.from,
+                airport: airportData.airport,
+                country_code: airportData.country_code,
+                region: airportData.region,
+                latitude: airportData.latitude,
+                longitude: airportData.longitude,
+                icao: airportData.icao
+            });
+        }
+        
+        // Add destination airport
+        if (flight.to_code && airportCoords[flight.to_code]) {
+            const airportData = airportCoords[flight.to_code];
+            distinctAirports.set(flight.to_code, {
+                code: flight.to_code,
+                name: flight.to,
+                airport: airportData.airport,
+                country_code: airportData.country_code,
+                region: airportData.region,
+                latitude: airportData.latitude,
+                longitude: airportData.longitude,
+                icao: airportData.icao
+            });
+        }
+    });
+    
+    console.log(`Found ${distinctAirports.size} distinct airports`);
+    return Array.from(distinctAirports.values());
+};
+
+/**
+ * Creates a 3D point/sphere at an airport location
+ * @param {BABYLON.Scene} scene - The Babylon.js scene
+ * @param {Object} airport - Airport data object
+ * @param {number} radius - Distance from Earth center (default: 1.005)
+ * @returns {BABYLON.Mesh} The created airport point mesh
+ */
+var createAirportPoint = function(scene, airport, radius) {
+    radius = radius || 1; // Slightly above Earth surface
+    
+    // Convert latitude/longitude to radians
+    var latRad = airport.latitude * Math.PI / 180;
+    var lngRad = (airport.longitude - 180) * Math.PI / 180; // Adjust longitude for coordinate system
+    
+    // Convert to 3D coordinates (matching the tile system)
+    var position = new BABYLON.Vector3(
+        radius * Math.cos(lngRad) * Math.cos(latRad),
+        radius * Math.sin(latRad),
+        radius * Math.sin(lngRad) * Math.cos(latRad)
+    );
+    
+    // Create a small sphere for the airport point
+    var airportSphere = BABYLON.MeshBuilder.CreateSphere(
+        `airport_${airport.code}`, 
+        { diameter: 0.008 }, // Small but visible size
+        scene
+    );
+    
+    // Position the sphere at the airport location
+    airportSphere.position = position;
+    
+    // Create glowing material for the airport point
+    var pointMaterial = new BABYLON.StandardMaterial(`airportMat_${airport.code}`, scene);
+    pointMaterial.emissiveColor = new BABYLON.Color3(1, 0.8, 0.2); // Warm yellow/orange glow
+    pointMaterial.diffuseColor = new BABYLON.Color3(1, 0.9, 0.4); // Bright yellow core
+    pointMaterial.specularColor = new BABYLON.Color3(1, 1, 0.8); // White-yellow specular
+    pointMaterial.disableLighting = true; // Always visible
+    pointMaterial.alpha = 0.9;
+    
+    airportSphere.material = pointMaterial;
+    
+    // Store airport data on the mesh for future reference
+    airportSphere.airportData = airport;
+    
+    // Enable picking for mouse interactions
+    airportSphere.isPickable = true;
+    
+    // Store original material properties for hover effects
+    airportSphere.originalEmissive = pointMaterial.emissiveColor.clone();
+    airportSphere.originalDiffuse = pointMaterial.diffuseColor.clone();
+    
+    return airportSphere;
+};
+
+/**
+ * Creates airport points for all distinct airports
+ * @param {BABYLON.Scene} scene - The Babylon.js scene
+ * @param {Array} distinctAirports - Array of unique airport objects
+ */
+var createAirportPoints = function(scene, distinctAirports) {
+    console.log(`Creating points for ${distinctAirports.length} airports`);
+    
+    distinctAirports.forEach(airport => {
+        const airportPoint = createAirportPoint(scene, airport);
+        airportPoints.push(airportPoint);
+    });
+    
+    console.log(`Created ${airportPoints.length} airport points`);
+};
+
+/**
+ * Removes all airport points from the scene
+ */
+var clearAirportPoints = function() {
+    airportPoints.forEach(point => {
+        if (point.dispose) {
+            point.dispose();
+        }
+    });
+    airportPoints = [];
+    console.log("Airport points cleared");
+};
+
 // ==============================
 // FLIGHT ARC CREATION FUNCTIONS
 // ==============================
@@ -168,12 +304,13 @@ var createFlightArc = function (scene, lat1, lng1, lat2, lng2, radius) {
 // ==============================
 
 /**
- * Initializes flight arcs in the scene
- * Loads airport coordinates and flight logs, then creates arcs for each flight
- * Ensures arcs are created only once to avoid duplicates
- * @param {BABYLON.Scene} scene - The Babylon.js scene to add flight arcs to
+ * Initializes flight arcs and airport points in the scene
+ * Loads airport coordinates and flight logs, then creates arcs for each flight and points for each airport
+ * Ensures arcs and points are created only once to avoid duplicates
+ * @param {BABYLON.Scene} scene - The Babylon.js scene to add flight arcs and airport points to
  */
-var initializeFlightArcs = function (scene) {
+var initializeFlights = function (scene) {
+    
     // Load both airport coordinates and flight logs concurrently
     var airportCoordsPromise = getAirportCoords();
     var flightLogsPromise = getFlightLogs();
@@ -181,8 +318,13 @@ var initializeFlightArcs = function (scene) {
     Promise.all([airportCoordsPromise, flightLogsPromise]).then(
         ([airportCoords, flightLogs]) => {
             const flightArray = Object.values(flightLogs);
-            //console.log(`Creating flight arcs for ${flightArray.length} flights`);
-
+            
+            // Get distinct airports first
+            const distinctAirports = getDistinctAirports(airportCoords, flightLogs);
+            
+            // Create airport points
+            createAirportPoints(scene, distinctAirports);
+        
             // Create arc for each flight in the logs
             for (const flight of flightArray) {
                 const fromAirport = airportCoords[flight.from_code];
@@ -206,9 +348,115 @@ var initializeFlightArcs = function (scene) {
                 }
             }
 
-            console.log("Flight arcs creation completed");
+            console.log("Flight arcs and airport points creation completed");
         }
     ).catch(error => {
         console.error("Error initializing flight arcs:", error);
     });
+};
+
+
+// ==============================
+// AIRPORT VISUALIZATION UTILITIES
+// ==============================
+
+/**
+ * Toggles visibility of all airport points
+ */
+window.toggleAirportPoints = function() {
+    const visible = airportPoints.length > 0 ? !airportPoints[0].isVisible : false;
+    airportPoints.forEach(point => {
+        point.isVisible = !visible;
+    });
+    console.log(`Airport points ${!visible ? 'shown' : 'hidden'}`);
+};
+
+/**
+ * Shows all airport points
+ */
+window.showAirportPoints = function() {
+    airportPoints.forEach(point => {
+        point.isVisible = true;
+    });
+    console.log("Airport points shown");
+};
+
+/**
+ * Hides all airport points
+ */
+window.hideAirportPoints = function() {
+    airportPoints.forEach(point => {
+        point.isVisible = false;
+    });
+    console.log("Airport points hidden");
+};
+
+/**
+ * Changes the color of airport points
+ * @param {string} color - Color name ('yellow', 'red', 'blue', 'green', 'white')
+ */
+window.setAirportPointColor = function(color = 'yellow') {
+    const colors = {
+        yellow: { emissive: [1, 0.8, 0.2], diffuse: [1, 0.9, 0.4] },
+        red: { emissive: [1, 0.2, 0.2], diffuse: [1, 0.4, 0.4] },
+        blue: { emissive: [0.2, 0.4, 1], diffuse: [0.4, 0.6, 1] },
+        green: { emissive: [0.2, 1, 0.2], diffuse: [0.4, 1, 0.4] },
+        white: { emissive: [1, 1, 1], diffuse: [1, 1, 1] },
+        orange: { emissive: [1, 0.5, 0], diffuse: [1, 0.7, 0.2] }
+    };
+    
+    const colorData = colors[color] || colors.yellow;
+    
+    airportPoints.forEach(point => {
+        if (point.material) {
+            point.material.emissiveColor = new BABYLON.Color3(...colorData.emissive);
+            point.material.diffuseColor = new BABYLON.Color3(...colorData.diffuse);
+        }
+    });
+    
+    console.log(`Airport points color changed to ${color}`);
+};
+
+/**
+ * Changes the size of airport points
+ * @param {number} scale - Scale factor (1.0 = default, 2.0 = double size, 0.5 = half size)
+ */
+window.setAirportPointSize = function(scale = 0.5) {
+    airportPoints.forEach(point => {
+        point.scaling = new BABYLON.Vector3(scale, scale, scale);
+    });
+    console.log(`Airport points scaled to ${scale}x`);
+};
+
+/**
+ * Gets information about airports currently displayed
+ */
+window.getAirportPointsInfo = function() {
+    const info = {
+        totalAirports: airportPoints.length,
+        visible: airportPoints.filter(p => p.isVisible).length,
+        countries: [...new Set(airportPoints.map(p => p.airportData.country_code))].sort(),
+        regions: [...new Set(airportPoints.map(p => p.airportData.region))].sort()
+    };
+    
+    console.log("Airport Points Info:", info);
+    return info;
+};
+
+/**
+ * Finds airports by country code
+ * @param {string} countryCode - Two-letter country code (e.g., 'US', 'GB', 'JP')
+ */
+window.findAirportsByCountry = function(countryCode) {
+    const airports = airportPoints
+        .filter(point => point.airportData.country_code === countryCode.toUpperCase())
+        .map(point => ({
+            code: point.airportData.code,
+            name: point.airportData.name,
+            airport: point.airportData.airport,
+            region: point.airportData.region
+        }));
+    
+    console.log(`Found ${airports.length} airports in ${countryCode}:`, airports);
+    return airports;
 };

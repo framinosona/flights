@@ -480,7 +480,7 @@ var createScene = function () {
             }
         }
     });
-    initializeFlightArcs(scene);
+    initializeFlights(scene);
     return scene;
 };
 // ==============================
