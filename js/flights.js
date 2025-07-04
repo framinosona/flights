@@ -26,7 +26,7 @@ var getAirportCoords = async function () {
             })
             .then(data => {
                 airportCoords = data;
-                console.log("Airport coordinates loaded from file");
+                //console.log("Airport coordinates loaded from file");
                 resolve(airportCoords);
             })
             .catch(error => {
@@ -109,7 +109,7 @@ var getDistinctAirports = function(airportCoords, flightLogs) {
         }
     });
     
-    console.log(`Found ${distinctAirports.size} distinct airports`);
+    //console.log(`Found ${distinctAirports.size} distinct airports`);
     return Array.from(distinctAirports.values());
 };
 
@@ -173,14 +173,14 @@ var createAirportPoint = function(scene, airport, radius) {
  * @param {Array} distinctAirports - Array of unique airport objects
  */
 var createAirportPoints = function(scene, distinctAirports) {
-    console.log(`Creating points for ${distinctAirports.length} airports`);
+    //console.log(`Creating points for ${distinctAirports.length} airports`);
     
     distinctAirports.forEach(airport => {
         const airportPoint = createAirportPoint(scene, airport);
         airportPoints.push(airportPoint);
     });
     
-    console.log(`Created ${airportPoints.length} airport points`);
+    //console.log(`Created ${airportPoints.length} airport points`);
 };
 
 /**
@@ -348,7 +348,7 @@ var initializeFlights = function (scene) {
                 }
             }
 
-            console.log("Flight arcs and airport points creation completed");
+            //console.log("Flight arcs and airport points creation completed");
         }
     ).catch(error => {
         console.error("Error initializing flight arcs:", error);

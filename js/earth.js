@@ -81,7 +81,7 @@ function tileToQuadkey(x, y, z) {
  */
 function getTileUrl(x, y, z) {
     const provider = currentTileProvider;
-    console.log(`Using tile provider: ${provider.name} for tile (${x}, ${y}, ${z})`);
+    //console.log(`Using tile provider: ${provider.name} for tile (${x}, ${y}, ${z})`);
     
     if (provider === TileProviders.BING_SATELLITE) {
         // Special handling for Bing's quadkey system
