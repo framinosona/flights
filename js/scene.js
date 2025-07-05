@@ -156,7 +156,8 @@ var setupCameraControls = function(camera, scene) {
         // Update camera sensitivity based on zoom level for better user experience
         if (camera.radius != oldRadius) {
             oldRadius = camera.radius;
-            camera.angularSensibilityX = camera.angularSensibilityY = 10000 / Math.log2(camera.radius);
+            camera.angularSensibilityX = camera.angularSensibilityY = 6000 / Math.log2(camera.radius);
+            camera.wheelPrecision = 1000 / Math.log2(camera.radius);
         }
     });
 };

@@ -30,7 +30,7 @@ const FLIGHT_CONFIG = {
     // Visualization settings
     airportPoint: {
         diameter: 0.008,
-        radius: 1, // Slightly above Earth surface
+        radius: 1,
         colors: {
             default: { emissive: [1, 0.8, 0.2], diffuse: [1, 0.9, 0.4] },
             hover: { emissive: [1, 1, 0.5], diffuse: [1, 1, 0.7] }
