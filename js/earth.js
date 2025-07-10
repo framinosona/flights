@@ -247,7 +247,7 @@ var addPoleCaps = function (scene) {
   const northPoleCap = BABYLON.MeshBuilder.CreateDisc(
     "northCap",
     {
-      radius: 0.11,
+      radius: 0.1,
       tessellation: 32,
     },
     scene
@@ -260,10 +260,16 @@ var addPoleCaps = function (scene) {
   southPoleCap.position.y = -1;
   southPoleCap.rotation.x = -Math.PI / 2;
 
-  const poleMaterial = new BABYLON.StandardMaterial("poleMat", scene);
-  poleMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0); // or use a texture
-  northPoleCap.material = poleMaterial;
-  southPoleCap.material = poleMaterial;
+  var mat = new BABYLON.StandardMaterial("poleCapMat", scene);
+  mat.wireframe = false;
+  mat.backFaceCulling = true;
+  mat.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3); // Slightly increased ambient
+  mat.diffuseColor = new BABYLON.Color3(0, 0, 0); // Keep diffuse at full for texture
+  mat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Very low specular
+  mat.specularPower = 64; // Higher specular power for tighter highlights
+
+  northPoleCap.material = mat;
+  southPoleCap.material = mat;
 };
 
 /**
