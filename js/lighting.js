@@ -117,6 +117,42 @@ var createFillLight = function (scene) {
 };
 
 /**
+ * Creates a diffused light that follows the camera to illuminate dark areas
+ * @param {BABYLON.Scene} scene - The Babylon.js scene
+ * @returns {BABYLON.DirectionalLight} The camera-following light source
+ */
+var createCameraFollowLight = function (scene) {
+  console.log("Creating camera-following light...");
+
+  // Get the camera from the scene
+  var camera = scene.activeCamera;
+  if (!camera) {
+    console.warn("No active camera found, using default direction");
+    var cameraDirection = new BABYLON.Vector3(0, 0, 1);
+  } else {
+    // Calculate direction from camera position towards the target (Earth center)
+    var cameraPosition = camera.position;
+    var target = camera.getTarget();
+    var cameraDirection = target.subtract(cameraPosition).normalize();
+  }
+
+  // Create a directional light that points from camera towards Earth
+  var cameraLight = new BABYLON.DirectionalLight(
+    "cameraFollowLight",
+    cameraDirection,
+    scene
+  );
+
+  // Configure for soft, diffused lighting
+  cameraLight.intensity = 0.4; // Moderate intensity to not overpower the sun
+  cameraLight.diffuse = new BABYLON.Color3(0.6, 0.7, 0.9); // Cool, atmospheric blue-white
+  cameraLight.specular = new BABYLON.Color3(0.1, 0.1, 0.2); // Minimal specular for soft look
+
+  console.log("📷 Camera-following light created");
+  return cameraLight;
+};
+
+/**
  * Updates the sun light position based on current time
  * @param {BABYLON.DirectionalLight} sunLight - The sun light to update
  */
@@ -128,6 +164,22 @@ var updateSunPosition = function (sunLight) {
 
   var now = new Date();
   console.log(`☀️ Sun position updated for ${now.toLocaleTimeString()} UTC`);
+};
+
+/**
+ * Updates the camera-following light direction based on current camera position
+ * @param {BABYLON.DirectionalLight} cameraLight - The camera light to update
+ * @param {BABYLON.Scene} scene - The Babylon.js scene
+ */
+var updateCameraLightDirection = function (cameraLight, scene) {
+  if (!cameraLight || !scene.activeCamera) return;
+
+  var camera = scene.activeCamera;
+  var cameraPosition = camera.position;
+  var target = camera.getTarget();
+  var newDirection = target.subtract(cameraPosition).normalize();
+
+  cameraLight.direction = newDirection;
 };
 
 /**
@@ -160,6 +212,7 @@ var setupSunTracking = function (sunLight, intervalMinutes = 15) {
  * @param {Object} options - Configuration options
  * @param {boolean} options.enableSunTracking - Enable automatic sun position updates (default: true)
  * @param {number} options.trackingInterval - Update interval in minutes (default: 15)
+ * @param {boolean} options.enableCameraLight - Enable camera-following light (default: true)
  * @returns {Object} Object containing lighting components and controls
  */
 var initializeLighting = function (scene, options = {}) {
@@ -169,6 +222,7 @@ var initializeLighting = function (scene, options = {}) {
   try {
     var enableSunTracking = options.enableSunTracking !== false; // Default to true
     var trackingInterval = options.trackingInterval || 15;
+    var enableCameraLight = options.enableCameraLight !== false; // Default to true
 
     // Create sun lighting with real-time position
     var sunLight = createSun(scene);
@@ -176,28 +230,45 @@ var initializeLighting = function (scene, options = {}) {
     // Create fill lighting
     var fillLight = createFillLight(scene);
 
+    // Create camera-following light for better nightside visibility
+    var cameraLight = null;
+    if (enableCameraLight) {
+      cameraLight = createCameraFollowLight(scene);
+
+      // Set up camera light direction updates on camera movement
+      scene.registerBeforeRender(() => {
+        updateCameraLightDirection(cameraLight, scene);
+      });
+
+      console.log("📷 Camera-following light enabled with real-time updates");
+    }
+
     // Set up automatic sun tracking if enabled
-    var trackingInterval = null;
+    var sunTrackingInterval = null;
     if (enableSunTracking) {
-      trackingInterval = setupSunTracking(sunLight, trackingInterval);
+      sunTrackingInterval = setupSunTracking(sunLight, trackingInterval);
     }
 
     // Store lights globally for easy access (if needed by other modules)
     window.sunLight = sunLight;
     window.fillLight = fillLight;
+    window.cameraLight = cameraLight;
 
     console.log(
       "✅ Lighting system ready" +
-        (enableSunTracking ? " with real-time sun tracking" : "")
+        (enableSunTracking ? " with real-time sun tracking" : "") +
+        (enableCameraLight ? " and camera-following light" : "")
     );
     console.groupEnd();
 
     return {
       sunLight: sunLight,
       fillLight: fillLight,
-      trackingInterval: trackingInterval,
+      cameraLight: cameraLight,
+      trackingInterval: sunTrackingInterval,
       updateSunPosition: () => updateSunPosition(sunLight),
       setupSunTracking: (interval) => setupSunTracking(sunLight, interval),
+      updateCameraLight: () => updateCameraLightDirection(cameraLight, scene),
       calculateSunPosition: calculateSunPosition,
     };
   } catch (error) {
