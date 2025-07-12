@@ -8,6 +8,22 @@
       "args": ["-m", "http.server", "8000"],
       "group": "build",
       "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^Executing task:",
+          "endsPattern": "Serving HTTP on"
+        }
+      }
+    },
+    {
+      "label": "open-browser",
+      "type": "shell",
+      "command": "open", // macOS
+      "args": ["http://localhost:8000"],
       "problemMatcher": []
     }
   ]
