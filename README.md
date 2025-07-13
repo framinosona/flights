@@ -24,6 +24,7 @@ A modern, robust 3D globe visualization built with Babylon.js that displays flig
 - **Fixed rendering artifacts** with improved mesh geometry and normals
 - **Solid black background** with proper alpha channel handling
 - **Enhanced texture filtering** and UV clamping for crisp visuals
+- **Real-time sun visualization** with astronomically accurate positioning
 - **Optimized lighting system** with realistic sun and fill lights
 
 ### ✈️ Advanced Flight Visualization
@@ -34,6 +35,15 @@ A modern, robust 3D globe visualization built with Babylon.js that displays flig
 - **Interactive airport points** with hover tooltips and visual feedback
 - **Comprehensive search utilities** for airports and flight data
 - **Glowing visual effects** with proper material handling
+
+### ☀️ Real-time Sun System
+
+- **Astronomically accurate positioning** based on current date and time
+- **Visual sun sphere** with realistic scaling and emissive materials
+- **Dynamic lighting** that follows real-world sun position
+- **Automatic updates** every 15 minutes for continuous accuracy
+- **Runtime controls** for visibility and size adjustments
+- **Proper cleanup** and resource management
 
 ### 🎮 Interactive Controls & UX
 
@@ -65,10 +75,10 @@ A modern, robust 3D globe visualization built with Babylon.js that displays flig
    ```bash
    # Using Python
    python -m http.server 8000
-   
+
    # Using Node.js
    npx serve .
-   
+
    # Using PHP
    php -S localhost:8000
    ```
@@ -89,8 +99,10 @@ flights/
 │   ├── scene.js                 # ⭐ Core engine with robust error handling
 │   ├── earth.js                 # 🌍 Earth rendering with artifact fixes
 │   ├── flights.js               # ✈️ Flight system with state management
+│   ├── lighting.js              # ☀️ Advanced lighting and fill lights
+│   ├── sun.js                   # ☀️ Real-time sun visualization system
+│   ├── space.js                 # 🌌 Space environment and skybox
 │   ├── tile-providers.js        # 🗺️ Map provider configurations
-│   ├── debug.js                 # 🔧 Advanced debugging utilities
 │   └── data/
 │       ├── airports_by_iata.json # Airport coordinates database
 │       └── flight_logs.json      # Flight history data
@@ -103,8 +115,10 @@ flights/
 - **`scene.js`**: Engine initialization, error handling, user overlays, performance optimization
 - **`earth.js`**: Globe geometry, tile loading, rendering pipeline, visual enhancements
 - **`flights.js`**: Flight data management, arc rendering, airport visualization, search utilities
+- **`lighting.js`**: Advanced lighting system with fill and camera lights
+- **`sun.js`**: Real-time sun visualization with astronomical positioning
+- **`space.js`**: Space environment, skybox rendering and cosmic backgrounds
 - **`tile-providers.js`**: Map tile configurations, provider switching, attribution handling
-- **`debug.js`**: Development utilities, system monitoring, data validation, reinitialization
 
 ## 🎯 Usage
 
@@ -131,13 +145,17 @@ useBingSatellite()         // Microsoft Bing satellite tiles
 getCurrentTileProvider()    // Returns active provider details
 ```
 
-#### 💡 Lighting System Controls
+#### 💡 Lighting & Sun System Controls
 
 ```javascript
 // Lighting presets for different viewing preferences
 setRealisticLighting()     // Natural sun + fill lighting
 setBrightLighting()        // Enhanced brightness for visibility
 setDarkLighting()          // Dim ambient lighting
+
+// Real-time sun visualization controls
+setSunVisibility(true)     // Show/hide the visual sun sphere
+setSunSize(2.0)           // Adjust sun sphere size (1.0 = default)
 ```
 
 #### ✈️ Flight & Airport Management
@@ -175,7 +193,6 @@ logCameraPosition()               // Log current camera position
 enableCameraLogging()             // Enable continuous position logging
 
 // Development and troubleshooting
-testTileUrl(0, 0, 1)             // Test tile loading for specific coordinates
 enableDebugMode()                // Enable additional debug output
 checkWebGLSupport()              // Verify WebGL capabilities
 ```
@@ -189,7 +206,7 @@ The project has been completely refactored with modern best practices:
 **Modular Design**: Each component has clear responsibilities and interfaces
 
 - **Scene Management**: Centralized engine and scene lifecycle
-- **Earth Rendering**: Dedicated tile system with performance optimizations  
+- **Earth Rendering**: Dedicated tile system with performance optimizations
 - **Flight System**: State-driven architecture with batch processing
 - **Debug Tools**: Comprehensive utilities for development and troubleshooting
 
@@ -390,7 +407,6 @@ testDataFiles()       // Validate data integrity
 
 ```javascript
 // Diagnose tile loading issues
-testTileUrl(0, 0, 1)           // Test specific tile coordinates
 getCurrentTileProvider()        // Check current provider status
 ```
 
@@ -457,6 +473,7 @@ If you encounter persistent issues, use `getSystemStatus()` to generate a compre
 - ✅ **Modular Architecture**: Complete refactoring with clean separation of concerns
 - ✅ **Error Handling**: Robust error recovery with user-friendly overlays
 - ✅ **Visual Improvements**: Fixed rendering artifacts and background issues
+- ✅ **Real-time Sun System**: Astronomically accurate sun positioning and visualization
 - ✅ **Performance**: Smart caching, batch processing, optimized rendering
 - ✅ **Debug Tools**: Comprehensive console utilities and system monitoring
 - ✅ **Logging**: Organized console groups with improved developer experience
