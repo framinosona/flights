@@ -51,7 +51,7 @@ async function setSkyboxSet(skyboxSet) {
   console.log(`🌌 ✅ Skybox set changed to: ${window.skyboxSet.name}`);
 
   // PARALLEL LOADING: Preload all skybox face textures concurrently
-  const faceNames = ["Right", "Top", "Front", "Left", "Bottom", "Back"];
+  const faceNames = ["right", "top", "front", "left", "bottom", "back"];
   const textureUrls = faceNames.map((dir) => `${window.skyboxSet.baseName}${dir}.png`);
 
   console.log("🌌 🚀 Starting parallel skybox texture preloading...");
