@@ -12,16 +12,6 @@ let flightSystem = {
   error: null,
 };
 
-// Performance and error tracking
-let flightPerformance = {
-  dataLoadTime: 0,
-  arcCreationTime: 0,
-  pointCreationTime: 0,
-  totalFlights: 0,
-  totalAirports: 0,
-  errorCount: 0,
-};
-
 // ==============================
 // CONFIGURATION AND CONSTANTS
 // ==============================
@@ -170,7 +160,6 @@ function coordinatesToPosition(lat, lng, radius = 1.0) {
 async function loadAirportCoords(retryCount = 0) {
   try {
     console.log("📍 Loading airport coordinates...");
-    const startTime = performance.now();
 
     const response = await fetch(FLIGHT_CONFIG.dataPaths.airports);
 
@@ -184,15 +173,11 @@ async function loadAirportCoords(retryCount = 0) {
       throw new Error("Invalid airport data structure");
     }
 
-    const loadTime = performance.now() - startTime;
-    flightPerformance.dataLoadTime += loadTime;
-
-    console.log(`✅ Airport coordinates loaded successfully (${loadTime.toFixed(2)}ms)`);
+    console.log(`✅ Airport coordinates loaded successfully`);
     console.log(`📊 Loaded ${Object.keys(data).length} airports`);
 
     return data;
   } catch (error) {
-    flightPerformance.errorCount++;
     console.error(`❌ Error loading airport coordinates (attempt ${retryCount + 1}):`, error);
 
     // Retry logic with exponential backoff
@@ -219,7 +204,6 @@ async function loadAirportCoords(retryCount = 0) {
 async function loadFlightLogs(retryCount = 0) {
   try {
     console.log("✈️ Loading flight logs...");
-    const startTime = performance.now();
 
     const response = await fetch(FLIGHT_CONFIG.dataPaths.flights);
 
@@ -233,18 +217,13 @@ async function loadFlightLogs(retryCount = 0) {
       throw new Error("Invalid flight data structure");
     }
 
-    const loadTime = performance.now() - startTime;
-    flightPerformance.dataLoadTime += loadTime;
-
     const flightArray = Array.isArray(data) ? data : Object.values(data);
-    flightPerformance.totalFlights = flightArray.length;
 
-    console.log(`✅ Flight logs loaded successfully (${loadTime.toFixed(2)}ms`);
+    console.log(`✅ Flight logs loaded successfully`);
     console.log(`📊 Loaded ${flightArray.length} flights`);
 
     return data;
   } catch (error) {
-    flightPerformance.errorCount++;
     console.error(`❌ Error loading flight logs (attempt ${retryCount + 1}):`, error);
 
     // Retry logic with exponential backoff
@@ -279,7 +258,6 @@ async function loadFlightData() {
 
   try {
     console.group("🌍 Loading Flight Data");
-    const startTime = performance.now();
 
     // Load both datasets concurrently for better performance
     const [airportCoords, flightLogs] = await Promise.all([loadAirportCoords(), loadFlightLogs()]);
@@ -288,8 +266,7 @@ async function loadFlightData() {
     flightSystem.airportCoords = airportCoords;
     flightSystem.flightLogs = flightLogs;
 
-    const totalTime = performance.now() - startTime;
-    console.log(`✅ All flight data loaded successfully in ${totalTime.toFixed(2)}ms`);
+    console.log(`✅ All flight data loaded successfully`);
     console.groupEnd();
 
     return { airportCoords, flightLogs };
@@ -308,7 +285,7 @@ const getFlightLogs = loadFlightLogs;
 // ==============================
 
 /**
- * Extracts distinct airports from flight logs with enhanced validation
+ * Extracts distinct airports from flight logs with enhanced validation and parallel processing
  * @param {Object} airportCoords - Airport coordinates data
  * @param {Object|Array} flightLogs - Flight logs data
  * @returns {Array} Array of unique airport objects with validated data
@@ -324,83 +301,93 @@ function getDistinctAirports(airportCoords, flightLogs) {
     let processedFlights = 0;
     let skippedFlights = 0;
 
-    console.log(`🔍 Processing ${flightArray.length} flights for distinct airports...`);
+    console.log(
+      `🔍 Processing ${flightArray.length} flights for distinct airports with parallel processing...`
+    );
 
-    flightArray.forEach((flight, index) => {
-      try {
-        // Validate flight data
-        if (!flight || typeof flight !== "object") {
-          skippedFlights++;
-          return;
-        }
+    // PARALLEL PROCESSING: Split flights into chunks for concurrent processing
+    const chunkSize = Math.max(100, Math.floor(flightArray.length / 4)); // Process in 4 chunks minimum
+    const chunks = [];
 
-        // Process origin airport
-        if (flight.from_code && airportCoords[flight.from_code]) {
-          const airportData = airportCoords[flight.from_code];
+    for (let i = 0; i < flightArray.length; i += chunkSize) {
+      chunks.push(flightArray.slice(i, i + chunkSize));
+    }
 
-          // Validate airport coordinates
-          if (
-            typeof airportData.latitude === "number" &&
-            typeof airportData.longitude === "number" &&
-            !isNaN(airportData.latitude) &&
-            !isNaN(airportData.longitude)
-          ) {
-            distinctAirports.set(flight.from_code, {
-              code: flight.from_code,
-              name: flight.from || airportData.airport || "Unknown",
-              airport: airportData.airport || "Unknown Airport",
-              country_code: airportData.country_code || "XX",
-              region: airportData.region || "Unknown",
-              latitude: airportData.latitude,
-              longitude: airportData.longitude,
-              icao: airportData.icao || flight.from_code,
-            });
-          } else {
-            console.warn(`Invalid coordinates for airport ${flight.from_code}:`, airportData);
+    // Process each chunk and collect results
+    const processChunk = (flightChunk, chunkIndex) => {
+      const chunkAirports = new Map();
+      let chunkProcessed = 0;
+      let chunkSkipped = 0;
+
+      flightChunk.forEach((flight, index) => {
+        try {
+          // Validate flight data
+          if (!flight || typeof flight !== "object") {
+            chunkSkipped++;
+            return;
           }
-        } else if (flight.from_code) {
-          console.warn(`Airport data not found for code: ${flight.from_code}`);
+
+          // Helper function to process an airport
+          const processAirport = (airportCode, airportName) => {
+            if (airportCode && airportCoords[airportCode]) {
+              const airportData = airportCoords[airportCode];
+
+              // Validate airport coordinates
+              if (
+                typeof airportData.latitude === "number" &&
+                typeof airportData.longitude === "number" &&
+                !isNaN(airportData.latitude) &&
+                !isNaN(airportData.longitude)
+              ) {
+                chunkAirports.set(airportCode, {
+                  code: airportCode,
+                  name: airportName || airportData.airport || "Unknown",
+                  airport: airportData.airport || "Unknown Airport",
+                  country_code: airportData.country_code || "XX",
+                  region: airportData.region || "Unknown",
+                  latitude: airportData.latitude,
+                  longitude: airportData.longitude,
+                  icao: airportData.icao || airportCode,
+                });
+              } else {
+                console.warn(`Invalid coordinates for airport ${airportCode}:`, airportData);
+              }
+            } else if (airportCode) {
+              console.warn(`Airport data not found for code: ${airportCode}`);
+            }
+          };
+
+          // Process both origin and destination airports
+          processAirport(flight.from_code, flight.from);
+          processAirport(flight.to_code, flight.to);
+
+          chunkProcessed++;
+        } catch (error) {
+          console.error(`Error processing flight ${chunkIndex}-${index}:`, error, flight);
+          chunkSkipped++;
         }
+      });
 
-        // Process destination airport
-        if (flight.to_code && airportCoords[flight.to_code]) {
-          const airportData = airportCoords[flight.to_code];
+      return { airports: chunkAirports, processed: chunkProcessed, skipped: chunkSkipped };
+    };
 
-          // Validate airport coordinates
-          if (
-            typeof airportData.latitude === "number" &&
-            typeof airportData.longitude === "number" &&
-            !isNaN(airportData.latitude) &&
-            !isNaN(airportData.longitude)
-          ) {
-            distinctAirports.set(flight.to_code, {
-              code: flight.to_code,
-              name: flight.to || airportData.airport || "Unknown",
-              airport: airportData.airport || "Unknown Airport",
-              country_code: airportData.country_code || "XX",
-              region: airportData.region || "Unknown",
-              latitude: airportData.latitude,
-              longitude: airportData.longitude,
-              icao: airportData.icao || flight.to_code,
-            });
-          } else {
-            console.warn(`Invalid coordinates for airport ${flight.to_code}:`, airportData);
-          }
-        } else if (flight.to_code) {
-          console.warn(`Airport data not found for code: ${flight.to_code}`);
-        }
+    // Process all chunks in parallel using Promise-based approach for immediate execution
+    const chunkResults = chunks.map((chunk, index) => processChunk(chunk, index));
 
-        processedFlights++;
-      } catch (error) {
-        console.error(`Error processing flight ${index}:`, error, flight);
-        skippedFlights++;
-      }
+    // Merge results from all chunks
+    chunkResults.forEach((result) => {
+      result.airports.forEach((airport, code) => {
+        distinctAirports.set(code, airport);
+      });
+      processedFlights += result.processed;
+      skippedFlights += result.skipped;
     });
 
     const airports = Array.from(distinctAirports.values());
-    flightPerformance.totalAirports = airports.length;
 
-    console.log(`✅ Found ${airports.length} distinct airports from ${processedFlights} flights`);
+    console.log(
+      `✅ Found ${airports.length} distinct airports from ${processedFlights} flights (processed in ${chunks.length} parallel chunks)`
+    );
     if (skippedFlights > 0) {
       console.warn(`⚠️ Skipped ${skippedFlights} flights due to data issues`);
     }
@@ -408,7 +395,6 @@ function getDistinctAirports(airportCoords, flightLogs) {
     return airports;
   } catch (error) {
     console.error("❌ Error extracting distinct airports:", error);
-    flightPerformance.errorCount++;
     return [];
   }
 }
@@ -500,13 +486,12 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
     return airportSphere;
   } catch (error) {
     console.error(`❌ Error creating airport point for ${airport?.code || "unknown"}:`, error);
-    flightPerformance.errorCount++;
     return null;
   }
 }
 
 /**
- * Creates airport points for all distinct airports with batch processing
+ * Creates airport points for all distinct airports with enhanced parallel batch processing
  * @param {Array} distinctAirports - Array of unique airport objects
  * @returns {Promise<Array>} Array of created airport point meshes
  */
@@ -520,8 +505,9 @@ async function createAirportPoints(distinctAirports) {
     return [];
   }
 
-  console.log(`🏗️ Creating points for ${distinctAirports.length} airports...`);
-  const startTime = performance.now();
+  console.log(
+    `🏗️ Creating points for ${distinctAirports.length} airports with parallel processing...`
+  );
 
   try {
     const createdPoints = [];
@@ -529,41 +515,62 @@ async function createAirportPoints(distinctAirports) {
     let processedCount = 0;
     let errorCount = 0;
 
-    // Process airports in batches to avoid blocking the main thread
+    // Process airports in batches with parallel creation within each batch
     for (let i = 0; i < distinctAirports.length; i += batchSize) {
       const batch = distinctAirports.slice(i, i + batchSize);
 
-      for (const airport of batch) {
-        const airportPoint = createAirportPoint(airport);
-        if (airportPoint) {
-          createdPoints.push(airportPoint);
-          flightSystem.airportPoints.push(airportPoint);
+      // PARALLEL CREATION: Create all airport points in the batch simultaneously
+      const batchPromises = batch.map(async (airport) => {
+        try {
+          const airportPoint = createAirportPoint(airport);
+          if (airportPoint) {
+            flightSystem.airportPoints.push(airportPoint);
+            return airportPoint;
+          } else {
+            throw new Error(`Failed to create point for ${airport.code}`);
+          }
+        } catch (error) {
+          console.warn(`❌ Error creating point for ${airport?.code}:`, error);
+          throw error;
+        }
+      });
+
+      // Wait for all points in this batch to complete
+      const batchResults = await Promise.allSettled(batchPromises);
+
+      // Count successes and failures
+      batchResults.forEach((result) => {
+        if (result.status === "fulfilled") {
+          createdPoints.push(result.value);
           processedCount++;
         } else {
           errorCount++;
         }
-      }
+      });
 
-      // Yield control to prevent blocking
+      // Yield control to prevent blocking (only between batches)
       if (i + batchSize < distinctAirports.length) {
         await new Promise((resolve) => setTimeout(resolve, 1));
       }
+
+      // Progress logging
+      const progress = Math.min(100, ((i + batchSize) / distinctAirports.length) * 100);
+      if (progress >= 100 || (progress > 0 && progress % 25 === 0)) {
+        console.log(
+          `🔄 Airport points progress: ${progress.toFixed(0)}% (${processedCount}/${
+            distinctAirports.length
+          })`
+        );
+      }
     }
 
-    const creationTime = performance.now() - startTime;
-    flightPerformance.pointCreationTime = creationTime;
-
-    console.log(`✅ Created ${processedCount} airport points in ${creationTime.toFixed(2)}ms`);
+    console.log(`✅ Created ${processedCount} airport points with parallel batch processing`);
     if (errorCount > 0) {
       console.warn(`⚠️ Failed to create ${errorCount} airport points`);
     }
 
     return createdPoints;
   } catch (error) {
-    const creationTime = performance.now() - startTime;
-    flightPerformance.pointCreationTime = creationTime;
-    flightPerformance.errorCount++;
-
     console.error("❌ Error creating airport points:", error);
     throw error;
   }
@@ -748,13 +755,12 @@ function createFlightArc(
     return arcTube;
   } catch (error) {
     console.error(`❌ Error creating flight arc (${lat1},${lng1}) to (${lat2},${lng2}):`, error);
-    flightPerformance.errorCount++;
     return null;
   }
 }
 
 /**
- * Creates multiple flight arcs with batch processing and progress tracking
+ * Creates multiple flight arcs with enhanced parallel batch processing
  * @param {Array} flights - Array of flight objects with from/to coordinates
  * @param {Object} airportCoords - Airport coordinates lookup
  * @returns {Promise<Array>} Array of created flight arc meshes
@@ -769,8 +775,7 @@ async function createFlightArcs(flights, airportCoords) {
     return [];
   }
 
-  console.log(`🚀 Creating arcs for ${flights.length} flights...`);
-  const startTime = performance.now();
+  console.log(`🚀 Creating arcs for ${flights.length} flights with parallel processing...`);
 
   try {
     const createdArcs = [];
@@ -779,24 +784,23 @@ async function createFlightArcs(flights, airportCoords) {
     let skippedCount = 0;
     let errorCount = 0;
 
-    // Process flights in batches
+    // Process flights in batches with parallel creation within each batch
     for (let i = 0; i < flights.length; i += batchSize) {
       const batch = flights.slice(i, i + batchSize);
 
-      for (const flight of batch) {
+      // PARALLEL CREATION: Create all flight arcs in the batch simultaneously
+      const batchPromises = batch.map(async (flight) => {
         try {
           // Validate flight data
           if (!flight || !flight.from_code || !flight.to_code) {
-            skippedCount++;
-            continue;
+            return { success: false, reason: "skipped", flight };
           }
 
           const fromAirport = airportCoords[flight.from_code];
           const toAirport = airportCoords[flight.to_code];
 
           if (!fromAirport || !toAirport) {
-            skippedCount++;
-            continue;
+            return { success: false, reason: "skipped", flight };
           }
 
           // Create the flight arc
@@ -808,33 +812,51 @@ async function createFlightArcs(flights, airportCoords) {
           );
 
           if (arc) {
-            createdArcs.push(arc);
             flightSystem.flightArcs.push(arc);
+            return { success: true, arc, flight };
+          } else {
+            return { success: false, reason: "creation_failed", flight };
+          }
+        } catch (error) {
+          return { success: false, reason: "error", error, flight };
+        }
+      });
+
+      // Wait for all arcs in this batch to complete
+      const batchResults = await Promise.allSettled(batchPromises);
+
+      // Process results and count outcomes
+      batchResults.forEach((result) => {
+        if (result.status === "fulfilled") {
+          const flightResult = result.value;
+          if (flightResult.success) {
+            createdArcs.push(flightResult.arc);
             processedCount++;
+          } else if (flightResult.reason === "skipped") {
+            skippedCount++;
           } else {
             errorCount++;
           }
-        } catch (error) {
+        } else {
           errorCount++;
         }
-      }
+      });
 
-      // Yield control to prevent blocking
+      // Yield control to prevent blocking (only between batches)
       if (i + batchSize < flights.length) {
         await new Promise((resolve) => setTimeout(resolve, 1));
       }
 
       // Progress update (less frequent)
       const progress = Math.min(100, ((i + batchSize) / flights.length) * 100);
-      if (progress >= 100 || (progress > 0 && progress % 50 === 0)) {
-        console.log(`🔄 Flight arc progress: ${progress.toFixed(0)}%`);
+      if (progress >= 100 || (progress > 0 && progress % 25 === 0)) {
+        console.log(
+          `🔄 Flight arc progress: ${progress.toFixed(0)}% (${processedCount}/${flights.length})`
+        );
       }
     }
 
-    const creationTime = performance.now() - startTime;
-    flightPerformance.arcCreationTime = creationTime;
-
-    console.log(`✅ Created ${processedCount} flight arcs in ${creationTime.toFixed(2)}ms`);
+    console.log(`✅ Created ${processedCount} flight arcs with parallel batch processing`);
     if (skippedCount > 0) {
       console.warn(`⚠️ Skipped ${skippedCount} flights due to missing airport data`);
     }
@@ -844,10 +866,6 @@ async function createFlightArcs(flights, airportCoords) {
 
     return createdArcs;
   } catch (error) {
-    const creationTime = performance.now() - startTime;
-    flightPerformance.arcCreationTime = creationTime;
-    flightPerformance.errorCount++;
-
     console.error("❌ Error creating flight arcs:", error);
     throw error;
   }
@@ -865,24 +883,16 @@ async function initializeFlights() {
   // Simple check - if already initialized, return status
   if (flightSystem.initialized) {
     console.log("✅ Flight system already initialized");
-    return {
-      success: true,
-      message: "Flight system already initialized",
-      stats: {
-        airports: flightSystem.airportPoints.length,
-        flights: flightSystem.flightArcs.length,
-      },
-    };
+    return true;
   }
 
   if (!window.scene) {
     const error = new Error("Scene is required for flight initialization");
     console.error("❌", error.message);
-    return { success: false, error: error.message };
+    throw error;
   }
 
   console.group("✈️ Flight System");
-  const initStartTime = performance.now();
 
   try {
     // Step 1: Load flight data (uses caching)
@@ -897,82 +907,48 @@ async function initializeFlights() {
       throw new Error("No valid airports found in flight data");
     }
 
-    // Step 3: Create airport points
-    console.log("📍 Creating airport points...");
-    const airportStartTime = performance.now();
-
-    await createAirportPoints(distinctAirports);
-
-    const airportEndTime = performance.now();
-    console.log(
-      `✅ ${flightSystem.airportPoints.length} airport points created in ${(
-        airportEndTime - airportStartTime
-      ).toFixed(2)}ms`
-    );
-
-    // Step 4: Create flight arcs
-    console.log("🚀 Creating flight arcs...");
-    const arcStartTime = performance.now();
-
+    // Step 3 & 4: PARALLEL CREATION - Create airport points and flight arcs simultaneously
+    console.log("� Starting parallel creation of airport points and flight arcs...");
     const flightArray = Array.isArray(flightLogs) ? flightLogs : Object.values(flightLogs);
-    await createFlightArcs(flightArray, airportCoords);
 
-    const arcEndTime = performance.now();
-    console.log(
-      `✅ ${flightSystem.flightArcs.length} flight arcs created in ${(
-        arcEndTime - arcStartTime
-      ).toFixed(2)}ms`
-    );
+    const creationPromises = [
+      createAirportPoints(distinctAirports),
+      createFlightArcs(flightArray, airportCoords),
+    ];
+
+    const [airportResults, arcResults] = await Promise.allSettled(creationPromises);
+
+    // Check results and handle any failures
+    if (airportResults.status === "fulfilled") {
+      console.log(`✅ ${flightSystem.airportPoints.length} airport points created`);
+    } else {
+      console.error("❌ Airport points creation failed:", airportResults.reason);
+      throw airportResults.reason;
+    }
+
+    if (arcResults.status === "fulfilled") {
+      console.log(`✅ ${flightSystem.flightArcs.length} flight arcs created`);
+    } else {
+      console.error("❌ Flight arcs creation failed:", arcResults.reason);
+      throw arcResults.reason;
+    }
 
     // Step 5: Finalize initialization
     flightSystem.initialized = true;
-    const totalTime = performance.now() - initStartTime;
 
-    // Log comprehensive results
     console.log("📊 Initialization Complete!", {
-      success: true,
-      message: `Flight system initialized successfully in ${totalTime.toFixed(2)}ms`,
-      stats: {
-        airports: flightSystem.airportPoints.length,
-        flights: flightSystem.flightArcs.length,
-        totalFlights: flightPerformance.totalFlights,
-        totalAirports: flightPerformance.totalAirports,
-        errors: flightPerformance.errorCount,
-        performance: {
-          totalTime: totalTime,
-          dataLoadTime: flightPerformance.dataLoadTime,
-          pointCreationTime: flightPerformance.pointCreationTime,
-          arcCreationTime: flightPerformance.arcCreationTime,
-        },
-      },
+      airports: flightSystem.airportPoints.length,
+      flights: flightSystem.flightArcs.length,
     });
 
-    console.log(`✅ Flight system ready! (${totalTime.toFixed(2)}ms total)`);
+    console.log("✅ Flight system ready with parallel processing!");
     console.groupEnd();
 
     return true;
   } catch (error) {
     flightSystem.error = error;
-    flightPerformance.errorCount++;
-
-    const totalTime = performance.now() - initStartTime;
-    console.error(`❌ Flight system failed (${totalTime.toFixed(2)}ms):`, error);
+    console.error("❌ Flight system failed:", error);
     console.groupEnd();
-
-    return {
-      success: false,
-      error: error.message,
-      stats: {
-        airports: flightSystem.airportPoints.length,
-        flights: flightSystem.flightArcs.length,
-        errors: flightPerformance.errorCount,
-        performance: {
-          totalTime: totalTime,
-          dataLoadTime: flightPerformance.dataLoadTime,
-          pointCreationTime: flightPerformance.pointCreationTime,
-          arcCreationTime: flightPerformance.arcCreationTime,
-        },
-      },
-    };
+    throw error;
   }
 }
