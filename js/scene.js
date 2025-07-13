@@ -64,7 +64,7 @@ function initCamera() {
     0,
     0,
     0,
-    new BABYLON.Vector3(0, 0, 0), // Look at the center of the Earth
+    BABYLON.Vector3.Zero(), // Look at the center of the Earth
     window.scene
   );
 

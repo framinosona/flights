@@ -28,7 +28,7 @@ function initCameraLight() {
   var camera = window.scene.activeCamera;
   if (!camera) {
     console.warn("💡 ⚠️ No active camera found, using default direction");
-    var cameraDirection = new BABYLON.Vector3(0, 0, 1);
+    var cameraDirection = BABYLON.Vector3.Forward();
   } else {
     // Calculate direction from camera position towards the target (Earth center)
     var cameraPosition = camera.position;

@@ -2,7 +2,24 @@
 // EARTH TILE SYSTEM AND RENDERING
 // ==============================
 
-tileDefinition = 4;
+const tileDefinition = 4;
+
+let sharedEarthResources = {
+  baseEarthMaterial: null,
+};
+
+function initSharedResources() {
+  sharedEarthResources.baseEarthMaterial = new BABYLON.StandardMaterial(
+    "baseMaterial",
+    window.scene
+  );
+  sharedEarthResources.baseEarthMaterial.wireframe = false;
+  sharedEarthResources.baseEarthMaterial.backFaceCulling = false;
+  sharedEarthResources.baseEarthMaterial.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3); // Slightly increased ambient
+  sharedEarthResources.baseEarthMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1); // Keep diffuse at full for texture
+  sharedEarthResources.baseEarthMaterial.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Very low specular
+  sharedEarthResources.baseEarthMaterial.specularPower = 64; // Higher specular power for tighter highlights
+}
 
 /**
  * Represents a tile identifier in the hierarchical tile system
@@ -143,8 +160,8 @@ function getVertexDataForTile(tileY, tileZ) {
  * @returns {Promise<BABYLON.Mesh>} Promise that resolves to the tile mesh
  */
 function getMeshForTile(tileId) {
-  // Vector pointing up for tile rotation calculations
-  var up = new BABYLON.Vector3(0, 1, 0);
+  // Vector pointing up' for tile rotation calculations
+  var up = BABYLON.Vector3.Up();
 
   // Calculate tile positioning parameters
   var tileR = 2 ** tileId.zoom;
@@ -163,13 +180,7 @@ function getMeshForTile(tileId) {
   vertexData.applyToMesh(mesh);
 
   // Create material from tile imagery
-  var mat = new BABYLON.StandardMaterial("mat " + tileId, window.scene);
-  mat.wireframe = false;
-  mat.backFaceCulling = false;
-  mat.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3); // Slightly increased ambient
-  mat.diffuseColor = new BABYLON.Color3(1, 1, 1); // Keep diffuse at full for texture
-  mat.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Very low specular
-  mat.specularPower = 64; // Higher specular power for tighter highlights
+  var tileMaterial = sharedEarthResources.baseEarthMaterial.clone("tileMaterial " + tileId);
 
   // Get tile URL using the current tile provider
   const tileUrl = getTileUrl(tileId.x, tileId.y, tileId.zoom, window.tileProvider);
@@ -184,12 +195,12 @@ function getMeshForTile(tileId) {
       BABYLON.Texture.TRILINEAR_SAMPLINGMODE, // Better filtering
       async () => {
         // Texture loaded successfully - configure and optimize mesh
-        mat.diffuseTexture = texture;
-        mat.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
-        mat.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
-        mat.diffuseTexture.anisotropicFilteringLevel = 4; // Improve texture quality at angles
-        mat.freeze(); // Freeze material for performance
-        mesh.material = mat;
+        tileMaterial.diffuseTexture = texture;
+        tileMaterial.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
+        tileMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE; // Prevent wrapping artifacts
+        tileMaterial.diffuseTexture.anisotropicFilteringLevel = 4; // Improve texture quality at angles
+        tileMaterial.freeze(); // Freeze material for performance
+        mesh.material = tileMaterial;
         window.scene.addMesh(mesh);
         mesh.freezeWorldMatrix(); // Freeze transformations for performance
         mesh.freezeNormals();
@@ -248,7 +259,7 @@ function initPoleCaps() {
     },
     window.scene
   );
-  northPoleCap.position = new BABYLON.Vector3(0, 0, 0); // Position at north pole
+  northPoleCap.position = BABYLON.Vector3.Zero(); // Position at north pole
 
   // South pole cap - create as a separate sphere and flip it
   const southPoleCap = BABYLON.MeshBuilder.CreateSphere(
@@ -260,26 +271,19 @@ function initPoleCaps() {
     },
     window.scene
   );
-  southPoleCap.position = new BABYLON.Vector3(0, 0, 0); // Position at south pole
+  southPoleCap.position = BABYLON.Vector3.Zero(); // Position at south pole
   southPoleCap.rotation.z = Math.PI; // Flip upside down for south pole
+  var northCapColor = window.tileProvider.northCapColor || "#ffffff";
+  var southCapColor = window.tileProvider.southCapColor || "#000000";
 
   // Create a dark material for the polar caps
-  var northPoleMat = new BABYLON.StandardMaterial("northPoleMat", window.scene);
-  northPoleMat.wireframe = false;
-  northPoleMat.backFaceCulling = false;
-  northPoleMat.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.1); // Very dark for polar regions
-  northPoleMat.diffuseColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Almost black
-  northPoleMat.specularColor = new BABYLON.Color3(0.02, 0.02, 0.02); // Minimal specular
-  northPoleMat.specularPower = 32;
-
+  var northPoleMat = sharedEarthResources.baseEarthMaterial.clone("northPoleMat");
+  northPoleMat.diffuseColor = BABYLON.Color3.FromHexString(northCapColor);
   northPoleCap.material = northPoleMat;
 
-  var southPoleMat = northPoleMat.clone("southPoleMat");
+  var southPoleMat = sharedEarthResources.baseEarthMaterial.clone("southPoleMat");
   southPoleMat.ambientColor = new BABYLON.Color3(0.8, 0.8, 0.8); // Lighter for south pole
-  southPoleMat.diffuseColor = new BABYLON.Color3(0.5, 0.5, 0.5); // Lighter for south pole
-  southPoleMat.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1); // Minimal specular for south pole
-  southPoleMat.specularPower = 32;
-
+  southPoleMat.diffuseColor = BABYLON.Color3.FromHexString(southCapColor);
   southPoleCap.material = southPoleMat;
 
   console.log("🌍 ✅ Spherical polar caps created");
@@ -369,6 +373,7 @@ async function initializeEarth() {
 
   // PARALLEL PHASE 1: Independent Earth components that can load simultaneously
   const independentPromises = [
+    tryInitializeAsync("🌍", "📚 Shared Resources", initSharedResources),
     tryInitializeAsync("🌍", "🔄 Tile Refinement", initTileRefinement),
     tryInitializeAsync("🌍", "🧊 Polar Caps", initPoleCaps),
   ];
@@ -380,12 +385,18 @@ async function initializeEarth() {
   await tryInitializeAsync("🌍", "Earth Tiles", initEarthTiles);
 
   // Log results of independent components
-  const componentLabels = ["🔄 Tile Refinement", "🧊 Polar Caps"];
+  const componentEmojis = ["📚", "🔄", "🧊"];
+  const componentLabels = ["Shared Resources", "Tile Refinement", "Polar Caps"];
   independentResults.forEach((result, index) => {
     if (result.status === "rejected") {
-      console.warn(`🌍 ⚠️ ${componentLabels[index]} failed:`, result.reason);
+      console.warn(
+        `🌍 ${componentEmojis[index]} ⚠️ ${componentLabels[index]} failed:`,
+        result.reason
+      );
     } else {
-      console.log(`🌍 ✅ ${componentLabels[index]} initialized successfully`);
+      console.log(
+        `🌍 ${componentEmojis[index]} ✅ ${componentLabels[index]} initialized successfully`
+      );
     }
   });
 
