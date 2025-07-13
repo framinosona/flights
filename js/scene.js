@@ -4,9 +4,6 @@
 
 // Global variables
 var canvas = document.getElementById("renderCanvas");
-var engine = null;
-var scene = null;
-var sceneToRender = null;
 
 // Validate canvas element exists
 if (!canvas) {
@@ -14,222 +11,76 @@ if (!canvas) {
   throw new Error("Required canvas element is missing");
 }
 
-/**
- * Creates a default Babylon.js engine with optimized settings
- * @returns {BABYLON.Engine} Configured Babylon.js engine
- */
-var createDefaultEngine = function () {
-  try {
-    return new BABYLON.Engine(canvas, true, {
-      preserveDrawingBuffer: true,
-      stencil: true,
-      disableWebGL2Support: false,
-      adaptToDeviceRatio: true, // Better for high-DPI displays
-      antialias: true, // Enable antialiasing
-      powerPreference: "high-performance", // Request high-performance GPU
-    });
-  } catch (error) {
-    console.error("Failed to create Babylon.js engine:", error);
-    throw error;
+async function initEngineAsync() {
+  window.engine ||= new BABYLON.Engine(canvas, true, {
+    preserveDrawingBuffer: true,
+    stencil: true,
+    disableWebGL2Support: false,
+    adaptToDeviceRatio: true, // Better for high-DPI displays
+    antialias: true, // Enable antialiasing
+    powerPreference: "high-performance", // Request high-performance GPU
+  });
+  // Validate engine creation
+  if (!window.engine) {
+    throw new Error("Engine creation failed - engine should not be null");
   }
-};
+}
 
-/**
- * Starts the main render loop for the Babylon.js engine
- * @param {BABYLON.Engine} engine - The Babylon.js engine instance
- * @param {HTMLCanvasElement} canvas - The canvas element to render to
- */
-var startRenderLoop = function (engine, canvas) {
-  if (!engine) {
-    console.error("Cannot start render loop: engine is null");
-    return;
-  }
-
-  engine.runRenderLoop(function () {
-    if (sceneToRender && sceneToRender.activeCamera) {
-      sceneToRender.render();
+function initRenderLoop() {
+  window.engine.runRenderLoop(function () {
+    if (window.scene && window.scene.activeCamera) {
+      window.scene.render();
     }
   });
-
-  console.log("✅ Render loop started successfully");
-};
+}
 
 /**
  * Creates and configures the main scene with lighting and camera
- * @param {BABYLON.Engine} engine - The Babylon.js engine instance
- * @returns {BABYLON.Scene} The configured scene
  */
-var createScene = function (engine) {
-  if (!engine) {
-    throw new Error("Cannot create scene: engine is null");
+function initScene() {
+  window.scene ||= new BABYLON.Scene(window.engine);
+  // Validate scene creation
+  if (!window.scene) {
+    throw new Error("Scene creation failed - scene should not be null");
   }
-
-  // ==============================
-  // SCENE SETUP AND LIGHTING
-  // ==============================
-
-  var scene = new BABYLON.Scene(engine);
-  scene.ambientColor = new BABYLON.Color3(0.2, 0.2, 0.3); // Reduced ambient light for more realistic look
-  scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Ensure solid black background
+  console.log("✅ Scene created successfully");
+  window.scene.ambientColor = new BABYLON.Color3(0.2, 0.2, 0.3); // Reduced ambient light for more realistic look
+  window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Ensure solid black background
 
   // Performance optimizations (but keep auto-clear enabled for proper background)
-  scene.freezeActiveMeshes(); // Optimize rendering for static meshes
-  scene.autoClear = true; // Enable automatic clearing for proper background
-  scene.autoClearDepthAndStencil = true;
+  window.scene.freezeActiveMeshes(); // Optimize rendering for static meshes
+  window.scene.autoClear = true; // Enable automatic clearing for proper background
+  window.scene.autoClearDepthAndStencil = true;
+  console.log("✅ Scene properties configured");
+}
 
-  // ==============================
-  // CAMERA SETUP AND CONTROLS
-  // ==============================
-
-  var camera = new BABYLON.ArcRotateCamera(
+/**
+ * Creates and configures the main scene with lighting and camera
+ */
+function initCamera() {
+  var initCameraPosition = new BABYLON.Vector3(-1.949, 1.861, -0.225); // Europe centric position
+  window.camera ||= new BABYLON.ArcRotateCamera(
     "camera1",
     0,
     0,
     0,
-    new BABYLON.Vector3(0, 0, 0),
-    scene
+    new BABYLON.Vector3(0, 0, 0), // Look at the center of the Earth
+    window.scene
   );
-  camera.setPosition(new BABYLON.Vector3(-1.949, 1.861, -0.225)); // Europe centric position
-  camera.lowerRadiusLimit = 1.05;
-  camera.upperRadiusLimit = 3;
-  camera.wheelDeltaPercentage = 0.01;
-  camera.minZ = 0.01;
-  camera.maxZ = 5;
-  camera.attachControl(canvas, true);
 
-  // Setup camera sensitivity and debug logging
-  setupCameraControls(camera, scene);
-
-  console.log("✅ Scene created successfully with camera");
-  return scene;
-};
-
-/**
- * Sets up camera controls and debug logging system
- * @param {BABYLON.ArcRotateCamera} camera - The camera to configure
- * @param {BABYLON.Scene} scene - The scene containing the camera
- */
-var setupCameraControls = function (camera, scene) {
-  // Track camera radius for sensitivity adjustments
-  var oldRadius = -1;
-
-  /**
-   * Register after-render callback for camera updates and debug logging
-   */
-  scene.registerAfterRender(() => {
-    // Debug camera position logging
-    if (window.debugCameraLogging) {
-      const currentPosition = camera.position.clone();
-      const currentTarget = camera.getTarget().clone();
-
-      // Only log if camera has moved significantly
-      if (
-        !window.lastLoggedPosition ||
-        BABYLON.Vector3.Distance(currentPosition, window.lastLoggedPosition) >
-          (window.cameraLogThreshold || 0.1)
-      ) {
-        console.log("Camera Debug Info:", {
-          position: {
-            x: currentPosition.x.toFixed(3),
-            y: currentPosition.y.toFixed(3),
-            z: currentPosition.z.toFixed(3),
-          },
-          target: {
-            x: currentTarget.x.toFixed(3),
-            y: currentTarget.y.toFixed(3),
-            z: currentTarget.z.toFixed(3),
-          },
-          radius: camera.radius.toFixed(3),
-          alpha: ((camera.alpha * 180) / Math.PI).toFixed(1) + "°",
-          beta: ((camera.beta * 180) / Math.PI).toFixed(1) + "°",
-        });
-
-        window.lastLoggedPosition = currentPosition;
-      }
-    }
-
-    // Update camera sensitivity based on zoom level for better user experience
-    if (camera.radius != oldRadius) {
-      oldRadius = camera.radius;
-      camera.angularSensibilityX = camera.angularSensibilityY =
-        6000 / Math.log2(camera.radius);
-      camera.wheelPrecision = 1000 / Math.log2(camera.radius);
-    }
-  });
-};
-
-// ==============================
-// LIGHTING CONTROL UTILITIES
-// ==============================
-
-/**
- * Gets the main lights from the scene
- * @returns {Object} Object containing sunLight and fillLight references
- */
-var getSceneLights = function () {
-  const sunLight =
-    window.sunLight || (window.scene && window.scene.getLightByName("sun"));
-  const fillLight =
-    window.fillLight || (window.scene && window.scene.getLightByName("fill"));
-
-  if (!sunLight || !fillLight) {
-    console.warn("Scene lights not found. Make sure scene is initialized.");
-    return { sunLight: null, fillLight: null };
+  // Validate camera creation
+  if (!window.camera) {
+    throw new Error("Camera creation failed - camera should not be null");
   }
-
-  return { sunLight, fillLight };
-};
-
-/**
- * Lighting control functions
- */
-window.setRealisticLighting = function () {
-  const { sunLight, fillLight } = getSceneLights();
-
-  if (sunLight && fillLight && window.scene) {
-    // Realistic earth lighting
-    sunLight.intensity = 0.8;
-    fillLight.intensity = 0.3;
-    window.scene.ambientColor = new BABYLON.Color3(0.2, 0.2, 0.3);
-    console.log("✅ Applied realistic lighting");
-  } else {
-    console.warn(
-      "⚠️ Could not apply realistic lighting - scene or lights not available"
-    );
-  }
-};
-
-window.setBrightLighting = function () {
-  const { sunLight, fillLight } = getSceneLights();
-
-  if (sunLight && fillLight && window.scene) {
-    // Bright, even lighting
-    sunLight.intensity = 1.2;
-    fillLight.intensity = 0.8;
-    window.scene.ambientColor = new BABYLON.Color3(0.6, 0.6, 0.6);
-    console.log("✅ Applied bright lighting");
-  } else {
-    console.warn(
-      "⚠️ Could not apply bright lighting - scene or lights not available"
-    );
-  }
-};
-
-window.setDarkLighting = function () {
-  const { sunLight, fillLight } = getSceneLights();
-
-  if (sunLight && fillLight && window.scene) {
-    // Dark, moody lighting
-    sunLight.intensity = 0.4;
-    fillLight.intensity = 0.1;
-    window.scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.15);
-    console.log("✅ Applied dark lighting");
-  } else {
-    console.warn(
-      "⚠️ Could not apply dark lighting - scene or lights not available"
-    );
-  }
-};
+  window.camera.setPosition(initCameraPosition);
+  console.log(" Camera created at position:", window.camera.position);
+  window.camera.lowerRadiusLimit = 1.05;
+  window.camera.upperRadiusLimit = 3;
+  window.camera.wheelDeltaPercentage = 0.01;
+  window.camera.minZ = 0.01;
+  window.camera.maxZ = 100; // Extended range to accommodate sun sphere at distance 50
+  window.camera.attachControl(window.canvas, true);
+}
 
 // ==============================
 // ERROR HANDLING UTILITIES
@@ -290,164 +141,48 @@ function showErrorMessage(title, message) {
 // ==============================
 // APPLICATION INITIALIZATION
 // ==============================
+async function tryInitializeAsync(label, initFn) {
+  console.group(label);
+  if (typeof initFn === "function") {
+    console.log(`${label} - Initializing...`);
+    try {
+      await initFn();
+      console.log(`${label} - ✅ Initialization successful`);
+    } catch (error) {
+      console.error(`❌ ${label} - Initialization error:`, error);
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  } else {
+    console.warn(`⚠️ ${label} - Function not found, skipping...`);
+    console.groupEnd();
+    return null;
+  }
+}
 
 /**
  * Main initialization function that sets up the Babylon.js engine and scene
  * Handles engine creation, error recovery, and starts the render loop
  */
-window.initFunction = async function () {
+async function initFunction() {
   console.group("🚀 3D Flight Visualization - Initialization");
 
   try {
     console.log("Starting application initialization...");
 
-    /**
-     * Attempts to create the Babylon.js engine with error handling
-     * Falls back to default engine creation if custom creation fails
-     * @returns {Promise<BABYLON.Engine>} The created engine instance
-     */
-    var asyncEngineCreation = async function () {
-      try {
-        return createDefaultEngine();
-      } catch (e) {
-        console.log(
-          "the available createEngine function failed. Creating the default engine instead"
-        );
-        return createDefaultEngine();
-      }
-    };
+    // In this file :
+    await tryInitializeAsync("🔧 Engine Creation", initEngineAsync);
+    await tryInitializeAsync("🔧 Scene Creation", initScene);
+    await tryInitializeAsync("🔄 Render Loop", initRenderLoop);
+    await tryInitializeAsync("🎥 Camera Creation", initCamera);
 
-    // Create the engine instance
-    console.group("🔧 Engine Creation");
-    window.engine = await asyncEngineCreation();
-
-    // Configure audio engine if available
-    const engineOptions = window.engine.getCreationOptions?.();
-    if (!engineOptions || engineOptions.audioEngine !== false) {
-      // Audio engine configuration would go here
-    }
-
-    // Validate engine creation
-    if (!window.engine) {
-      throw new Error("Engine creation failed - engine should not be null");
-    }
-
-    console.log("✅ Babylon.js engine created successfully");
-    console.groupEnd(); // End Engine Creation group
-
-    // Start the render loop and create the scene
-    startRenderLoop(window.engine, canvas);
-
-    // Create the main scene
-    console.group("🎬 Scene Creation");
-    window.scene = createScene(window.engine);
-
-    if (!window.scene) {
-      throw new Error("Scene creation failed - scene should not be null");
-    }
-    console.log("✅ Scene setup completed");
-    console.groupEnd(); // End Scene Creation group
-
-    // Initialize the Lighting System first
-    console.group("☀️ Lighting System Initialization");
-    if (typeof initializeLighting === "function") {
-      console.log("Setting up realistic lighting...");
-      var lightingSystem = initializeLighting(window.scene, {
-        enableSunTracking: true,
-        trackingInterval: 15,
-      });
-      if (lightingSystem) {
-        console.log("✅ Lighting system ready");
-      } else {
-        console.warn("⚠️ Lighting system initialization failed");
-      }
-    } else {
-      console.warn("⚠️ initializeLighting function not found");
-    }
-    console.groupEnd(); // End Lighting System group
-
-    // Initialize the Space Environment
-    console.group("🌌 Space Environment Initialization");
-    if (typeof initializeSpaceEnvironment === "function") {
-      console.log("Creating space environment...");
-      var spaceEnv = initializeSpaceEnvironment(window.scene);
-      if (spaceEnv) {
-        console.log("✅ Space environment ready");
-      } else {
-        console.warn("⚠️ Space environment initialization failed");
-      }
-    } else {
-      console.warn("⚠️ initializeSpaceEnvironment function not found");
-    }
-    console.groupEnd(); // End Space Environment group
-
-    // Initialize the Earth (this will be called from earth.js)
-    console.group("🌍 Earth Initialization");
-    if (typeof initializeEarth === "function") {
-      console.log("Starting Earth tile system...");
-      initializeEarth(window.scene);
-      console.log("✅ Earth tile system ready");
-    } else {
-      console.warn("⚠️ initializeEarth function not found");
-    }
-    console.groupEnd(); // End Earth Initialization group
-
-    // Initialize flights (enhanced async version with error handling)
-    console.group("✈️ Flight System Initialization");
-    if (typeof initializeFlights === "function") {
-      console.log("Starting flight visualization...");
-
-      try {
-        // Call the function and handle both Promise and non-Promise returns
-        const result = initializeFlights(window.scene);
-
-        // Check if the result is a Promise
-        if (result && typeof result.then === "function") {
-          // Handle as Promise
-          result
-            .then((initResult) => {
-              if (initResult && initResult.success) {
-                console.log(
-                  "✅ Flight system initialized:",
-                  initResult.message
-                );
-                if (initResult.stats) {
-                  console.log(
-                    `📊 Loaded ${initResult.stats.airports} airports, ${initResult.stats.flights} flights`
-                  );
-                }
-              } else if (initResult && !initResult.success) {
-                console.error("❌ Flight system failed:", initResult.error);
-                showErrorMessage(
-                  "Flight System Error",
-                  `Failed to initialize flight visualization: ${initResult.error}`
-                );
-              } else {
-                console.log("✅ Flight system initialized successfully");
-              }
-            })
-            .catch((error) => {
-              console.error("❌ Flight initialization error:", error);
-              showErrorMessage(
-                "Flight System Error",
-                `Unexpected error initializing flights: ${error.message}`
-              );
-            });
-        } else {
-          // Handle as synchronous function (legacy mode)
-          console.log("✅ Flight system initialized (legacy synchronous mode)");
-        }
-      } catch (error) {
-        console.error("❌ Error calling initializeFlights:", error);
-        showErrorMessage(
-          "Flight System Error",
-          `Error initializing flights: ${error.message}`
-        );
-      }
-    } else {
-      console.warn("⚠️ initializeFlights function not found");
-    }
-    console.groupEnd(); // End Flight System Initialization group
+    // In other files (using async version for potentially async functions):
+    await tryInitializeAsync("💡 Lights", initializeLighting);
+    await tryInitializeAsync("☀️ Sun", initSun);
+    await tryInitializeAsync("🌌 Space", initializeSpaceEnvironment);
+    await tryInitializeAsync("🌍 Earth", initializeEarth);
+    await tryInitializeAsync("✈️ Flights", initializeFlights);
 
     console.log("🎉 Application initialized successfully!");
   } catch (error) {
@@ -463,17 +198,7 @@ window.initFunction = async function () {
   } finally {
     console.groupEnd(); // End main initialization group
   }
-};
-
-// Initialize the application and set up scene rendering
-initFunction()
-  .then(() => {
-    sceneToRender = window.scene; // Use window.scene for consistency
-    console.log("🎬 Scene ready for rendering");
-  })
-  .catch((error) => {
-    console.error("💥 Application startup failed:", error);
-  });
+}
 
 // ==============================
 // CLEANUP AND DISPOSAL
@@ -482,8 +207,13 @@ initFunction()
 /**
  * Properly disposes of all Babylon.js resources
  */
-window.disposeScene = function () {
+function disposeScene() {
   try {
+    // Dispose sun resources first
+    if (typeof window.disposeSun === "function") {
+      window.disposeSun();
+    }
+
     if (window.scene) {
       window.scene.dispose();
       window.scene = null;
@@ -496,32 +226,11 @@ window.disposeScene = function () {
       console.log("✅ Engine disposed");
     }
 
-    sceneToRender = null;
     console.log("🧹 All resources cleaned up");
   } catch (error) {
     console.error("❌ Error during cleanup:", error);
   }
-};
-
-/**
- * Gets current performance statistics
- */
-window.getPerformanceInfo = function () {
-  if (window.engine && window.scene) {
-    return {
-      fps: window.engine.getFps().toFixed(2),
-      deltaTime: window.engine.getDeltaTime().toFixed(2),
-      activeMeshes: window.scene.getActiveMeshes().length,
-      totalMeshes: window.scene.meshes.length,
-      materials: window.scene.materials.length,
-      textures: window.scene.textures.length,
-      drawCalls: window.engine.getGlInfo().drawCalls,
-    };
-  } else {
-    console.warn("Performance info not available - scene not initialized");
-    return null;
-  }
-};
+}
 
 // ==============================
 // EVENT HANDLERS
@@ -546,7 +255,7 @@ document.addEventListener("visibilitychange", function () {
       window.engine.stopRenderLoop();
       console.log("⏸️ Render loop paused (tab hidden)");
     } else {
-      startRenderLoop(window.engine, canvas);
+      initRenderLoop();
       console.log("▶️ Render loop resumed (tab visible)");
     }
   }
@@ -554,7 +263,15 @@ document.addEventListener("visibilitychange", function () {
 
 // Handle page unload to cleanup resources
 window.addEventListener("beforeunload", function () {
-  if (typeof window.disposeScene === "function") {
-    window.disposeScene();
-  }
+  console.log("🗑️ Cleaning up resources before page unload");
+  disposeScene();
 });
+
+// Initialize the application and set up scene rendering
+initFunction()
+  .then(() => {
+    console.log("🎬 Scene ready for rendering");
+  })
+  .catch((error) => {
+    console.error("💥 Application startup failed:", error);
+  });
