@@ -702,7 +702,7 @@ function createFlightArc(
     }
 
     // Create enhanced arc mesh
-    const arcName = `flightArc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const arcName = `flightArc_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
     const arcTube = BABYLON.MeshBuilder.CreateTube(
       arcName,
       {
@@ -719,7 +719,7 @@ function createFlightArc(
     }
 
     // Create enhanced material
-    const materialName = `arcMaterial_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const materialName = `arcMaterial_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
     const arcMaterial = new BABYLON.StandardMaterial(materialName, window.scene);
 
     if (!arcMaterial) {
