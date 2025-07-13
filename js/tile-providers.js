@@ -69,7 +69,7 @@ window.tileProviders = {
     maxZoom: 19,
   },
 };
-window.tileProvider = window.tileProviders.BING_SATELLITE;
+window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;
 
 /**
  * Sets the active Earth tile provider
