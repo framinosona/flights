@@ -2,12 +2,13 @@
 // SUN VISUAL RENDERING
 // ==============================
 
+const sunDistance = 200; // Realistic distance from Earth center for visibility
+
 function initSun() {
   var sunPosition = calculateSunPosition();
   console.log("☀️ Calculated sun position:", sunPosition);
 
   // Scale the sun position to a realistic astronomical distance for visibility
-  var sunDistance = 50; // Realistic distance from Earth center
   var scaledSunPosition = sunPosition.scale(sunDistance);
 
   initSunSphere(scaledSunPosition);
@@ -15,7 +16,7 @@ function initSun() {
   var sunDirection = sunPosition.normalize();
   sunDirection.scaleInPlace(-1);
   console.log(`☀️ Adjusted sun direction:`, sunDirection);
-  initSunLight(sunDirection);
+  initSunLight(scaledSunPosition, sunDirection);
 
   // Set up periodic updates
   window.sunUpdateInterval = setInterval(() => {
@@ -26,7 +27,7 @@ function initSun() {
 
     var sunDirection = sunPosition.normalize();
     sunDirection.scaleInPlace(-1);
-    updateSunLight(sunDirection);
+    updateSunLight(sunPosition, sunDirection);
   }, 15 * 60 * 1000); // Update every 15 minutes
   console.log("☀️ Sun tracking set up with 15-minute intervals");
 }
@@ -81,10 +82,18 @@ function calculateSunPosition() {
  * Creates a distant Sun that provides realistic lighting
  * @param {BABYLON.Vector3} sunDirection - The new direction vector for the sun light
  */
-function initSunLight(sunDirection) {
+function initSunLight(sunPosition, sunDirection) {
   // Create directional light to simulate the Sun
   console.log("☀️ Creating sun lighting...");
-  window.sunLight ||= new BABYLON.DirectionalLight("sunlight", sunDirection, window.scene);
+  //window.sunLight ||= new BABYLON.DirectionalLight("sunlight", sunDirection, window.scene);
+  window.sunLight ||= new BABYLON.SpotLight(
+    "sunlight",
+    sunPosition,
+    sunDirection,
+    Math.PI / 3,
+    2,
+    window.scene
+  );
 
   // Configure sun properties
   window.sunLight.intensity = 1.2; // Bright sunlight

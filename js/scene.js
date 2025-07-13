@@ -78,7 +78,7 @@ function initCamera() {
   window.camera.upperRadiusLimit = 3;
   window.camera.wheelDeltaPercentage = 0.01;
   window.camera.minZ = 0.01;
-  window.camera.maxZ = 100; // Extended range to accommodate sun sphere at distance 50
+  window.camera.maxZ = 300; // Extended range to accommodate sun sphere at distance 100
   window.camera.attachControl(window.canvas, true);
 }
 
