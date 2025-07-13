@@ -199,7 +199,7 @@ function getMeshForTile(tileId) {
       },
       () => {
         // Texture loading failed
-        console.warn(`Failed to load texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`);
+        console.warn(`🌍 ⚠️ Failed to load texture for tile:`, tileId);
         reject();
       }
     );
@@ -282,14 +282,14 @@ function initPoleCaps() {
 
   southPoleCap.material = southPoleMat;
 
-  console.log("✅ Spherical polar caps created");
+  console.log("🌍 ✅ Spherical polar caps created");
 }
 
 /**
  * Sets up the progressive tile refinement system
  */
 function initTileRefinement() {
-  console.log("Setting up progressive refinement...");
+  console.log("🌍 🔄 Setting up progressive refinement...");
 
   // Simple camera-based refinement trigger
   window.scene.registerAfterRender(() => {
@@ -305,8 +305,8 @@ function initTileRefinement() {
     }
   });
 
-  console.log("✅ Progressive refinement system ready");
-  console.log(`🔄 Tile refinement will process up to ${tileDefinition} zoom levels`);
+  console.log("🌍 ✅ Progressive refinement system ready");
+  console.log(`🌍 🔄 Tile refinement will process up to ${tileDefinition} zoom levels`);
 }
 
 /**
@@ -344,7 +344,7 @@ async function refineTile(mesh) {
       }
     });
   } catch (error) {
-    console.warn("Error refining tile:", error);
+    console.warn("🌍 ⚠️ Error refining tile:", error);
   }
 }
 
@@ -356,38 +356,38 @@ async function refineTile(mesh) {
  * Initializes the initial Earth tiles
  */
 async function initEarthTiles() {
-  console.log("Loading initial tiles...");
+  console.log("🌍 📊 Loading initial tiles...");
   await getMeshes(new TileId(0, 0, 0));
-  console.log("✅ Initial tiles loaded");
+  console.log("🌍 ✅ Initial tiles loaded");
 }
 
 /**
  * Initializes the Earth tile system in the given scene
  */
 async function initializeEarth() {
-  console.log("🚀 Starting parallel Earth initialization...");
+  console.log("🌍 🚀 Starting parallel Earth initialization...");
 
   // PARALLEL PHASE 1: Independent Earth components that can load simultaneously
   const independentPromises = [
-    tryInitializeAsync("🔄 Tile Refinement", initTileRefinement),
-    tryInitializeAsync("🧊 Polar Caps", initPoleCaps),
+    tryInitializeAsync("🌍", "🔄 Tile Refinement", initTileRefinement),
+    tryInitializeAsync("🌍", "🧊 Polar Caps", initPoleCaps),
   ];
 
   // PARALLEL PHASE 2: Core tiles (must complete before refinement can work effectively)
   const independentResults = await Promise.allSettled(independentPromises);
 
   // Initialize core tiles (this needs to complete before other systems can use loadedTiles)
-  await tryInitializeAsync("🌍 Earth Tiles", initEarthTiles);
+  await tryInitializeAsync("🌍", "Earth Tiles", initEarthTiles);
 
   // Log results of independent components
   const componentLabels = ["🔄 Tile Refinement", "🧊 Polar Caps"];
   independentResults.forEach((result, index) => {
     if (result.status === "rejected") {
-      console.warn(`⚠️ ${componentLabels[index]} failed:`, result.reason);
+      console.warn(`🌍 ⚠️ ${componentLabels[index]} failed:`, result.reason);
     } else {
-      console.log(`✅ ${componentLabels[index]} initialized successfully`);
+      console.log(`🌍 ✅ ${componentLabels[index]} initialized successfully`);
     }
   });
 
-  console.log("✅ Parallel Earth initialization complete");
+  console.log("🌍 ✅ Parallel Earth initialization complete");
 }

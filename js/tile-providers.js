@@ -8,42 +8,36 @@ window.tileProviders = {
     name: "OpenStreetMap",
     urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "© OpenStreetMap contributors",
-    maxZoom: 19,
   },
   OPENTOPOMAP: {
     // Load time from last test = 1389ms
     name: "OpenTopoMap",
     urlTemplate: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: "© OpenTopoMap contributors",
-    maxZoom: 17,
   },
   CARTODB_POSITRON: {
     // Load time from last test = 18ms
     name: "CartoDB Positron",
     urlTemplate: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    maxZoom: 19,
   },
   CARTODB_DARK: {
     // Load time from last test = 15ms
     name: "CartoDB Dark",
     urlTemplate: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    maxZoom: 19,
   },
   CARTODB_VOYAGER: {
     // Load time from last test = 13ms
     name: "CartoDB Voyager",
     urlTemplate: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    maxZoom: 19,
   },
   // TEST FAILED :
   // OPENSTREETMAP_DARK: {
   //   name: "OpenStreetMap Dark",
   //   urlTemplate: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
   //   attribution: "© Stadia Maps © OpenMapTiles © OpenStreetMap contributors",
-  //   maxZoom: 19,
   // },
   ESRI_WORLD_IMAGERY: {
     // Load time from last test = 54ms
@@ -51,7 +45,6 @@ window.tileProviders = {
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
-    maxZoom: 19,
   },
   ESRI_WORLD_TOPO_MAP: {
     // Load time from last test = 54ms
@@ -59,14 +52,12 @@ window.tileProviders = {
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
-    maxZoom: 19,
   },
   BING_SATELLITE: {
     // Load time from last test = 83ms
     name: "Bing Satellite",
     urlTemplate: null, // Special handling for quadkey system
     attribution: "© Microsoft",
-    maxZoom: 19,
   },
 };
 window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;
@@ -77,7 +68,7 @@ window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;
  */
 window.setTileProvider = function (provider) {
   window.tileProvider = provider;
-  console.log(`Switched to earth tile provider: ${provider.name}`);
+  console.log(`🌍 ✅ Switched to earth tile provider: ${provider.name}`);
 
   // Update the Earth scene with the new provider
   updateTilesWithNewProvider();
@@ -88,7 +79,7 @@ window.setTileProvider = function (provider) {
  * @returns {Promise<Object>} The selected tile provider
  */
 window.setBestTileProvider = async function () {
-  console.log("🔍 Finding best tile provider...");
+  console.log("🌍 🔍 Finding best tile provider...");
   const bestProvider = await findBestTileProvider();
   window.setTileProvider(bestProvider);
   return bestProvider;
@@ -99,7 +90,7 @@ window.setBestTileProvider = async function () {
  * @returns {Promise<Object>} The best performing tile provider
  */
 async function findBestTileProvider() {
-  console.log("🚀 Testing all tile providers in parallel...");
+  console.log("🌍 Testing all tile providers in parallel...");
 
   const providers = Object.values(window.tileProviders);
   const testPromises = providers.map(
@@ -116,26 +107,26 @@ async function findBestTileProvider() {
       .sort((a, b) => a.loadTime - b.loadTime);
 
     if (successfulResults.length === 0) {
-      console.warn("⚠️ No tile providers are working, using default");
+      console.warn("🌍 ⚠️ No tile providers are working, using default");
       return window.tileProviders.OPENSTREETMAP;
     }
 
     const fastest = successfulResults[0];
-    console.log(`✅ Best tile provider: ${fastest.provider} (${fastest.loadTime}ms)`);
+    console.log(`🌍 ✅ Best tile provider: ${fastest.provider} (${fastest.loadTime}ms)`);
 
     // Log all results for debugging
     results.forEach((result, index) => {
       if (result.status === "fulfilled") {
         const r = result.value;
-        console.log(`${r.success ? "✅" : "❌"} ${r.provider}: ${r.loadTime}ms`);
+        console.log(`🌍 ${r.success ? "✅" : "❌"} ${r.provider}: ${r.loadTime}ms`);
       } else {
-        console.log(`❌ ${providers[index].name}: ${result.reason}`);
+        console.log(`🌍 ❌ ${providers[index].name}: ${result.reason}`);
       }
     });
 
     return providers.find((p) => p.name === fastest.provider);
   } catch (error) {
-    console.error("❌ Error testing tile providers:", error);
+    console.error("🌍 ❌ Error testing tile providers:", error);
     return window.tileProviders.OPENSTREETMAP;
   }
 }
@@ -146,12 +137,12 @@ async function findBestTileProvider() {
  */
 function updateTilesWithNewProvider() {
   if (!window.scene || !window.loadedTiles || window.loadedTiles.length === 0) {
-    console.warn("⚠️ No Earth tiles loaded or scene not available for provider update");
+    console.warn("🌍 ⚠️ No Earth tiles loaded or scene not available for provider update");
     return;
   }
 
   console.log(
-    `🔄 Updating ${window.loadedTiles.length} tiles with new provider: ${window.tileProvider.name}`
+    `🌍 🔄 Updating ${window.loadedTiles.length} tiles with new provider: ${window.tileProvider.name}`
   );
 
   // Create a copy of the tiles array to avoid modification during iteration
@@ -195,7 +186,7 @@ function updateTilesWithNewProvider() {
               () => {
                 // Texture loading failed
                 console.warn(
-                  `⚠️ Failed to load new texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`
+                  `🌍 ⚠️ Failed to load new texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`
                 );
                 newTexture.dispose(); // Clean up failed texture
                 reject(new Error("Texture load failed"));
@@ -203,7 +194,7 @@ function updateTilesWithNewProvider() {
             );
           });
         } catch (error) {
-          console.error(`❌ Error updating tile:`, error);
+          console.error(`🌍 ❌ Error updating tile:`, error);
           return Promise.reject(error);
         }
       }
@@ -293,8 +284,8 @@ function testTileProviderAtCoordinates(tileProvider, x = 0, y = 0, z = 1) {
     const startTime = Date.now();
     const testUrl = getTileUrl(x, y, z, tileProvider);
 
-    console.log(`Testing tile provider: ${tileProvider.name}`);
-    console.log(`Test URL: ${testUrl}`);
+    console.log(`🌍 Testing tile provider: ${tileProvider.name}`);
+    console.log(`🌍 Test URL: ${testUrl}`);
 
     const img = new Image();
 
@@ -357,7 +348,7 @@ function testTileProviderAtCoordinates(tileProvider, x = 0, y = 0, z = 1) {
  * @returns {Promise<Object>} Promise that resolves with test results for the provider
  */
 async function testTileProvider(provider, zoomLevels, samplesPerZoom) {
-  console.log(`\n📍 Testing provider: ${provider.name}`);
+  console.log(`🌍 📍 Testing provider: ${provider.name}`);
   const providerResults = {
     provider: provider.name,
     tests: [],
@@ -400,7 +391,7 @@ async function testTileProvider(provider, zoomLevels, samplesPerZoom) {
         }
         providerResults.summary.total++;
       } catch (error) {
-        console.error(`Error testing ${provider.name} at ${coord.x},${coord.y},${coord.z}:`, error);
+        console.error(`🌍 Error testing ${provider.name} at:`, coord, error);
         providerResults.summary.failed++;
         providerResults.summary.total++;
       }

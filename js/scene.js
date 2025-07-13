@@ -7,7 +7,7 @@ var canvas = document.getElementById("renderCanvas");
 
 // Validate canvas element exists
 if (!canvas) {
-  console.error("Canvas element 'renderCanvas' not found!");
+  console.error("🔧 ❌ Canvas element 'renderCanvas' not found!");
   throw new Error("Required canvas element is missing");
 }
 
@@ -43,7 +43,7 @@ function initScene() {
   if (!window.scene) {
     throw new Error("Scene creation failed - scene should not be null");
   }
-  console.log("✅ Scene created successfully");
+  console.log("🔧 ✅ Scene created successfully");
   window.scene.ambientColor = new BABYLON.Color3(0.2, 0.2, 0.3); // Reduced ambient light for more realistic look
   window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Ensure solid black background
 
@@ -51,7 +51,7 @@ function initScene() {
   window.scene.freezeActiveMeshes(); // Optimize rendering for static meshes
   window.scene.autoClear = true; // Enable automatic clearing for proper background
   window.scene.autoClearDepthAndStencil = true;
-  console.log("✅ Scene properties configured");
+  console.log("🔧 ✅ Scene properties configured");
 }
 
 /**
@@ -73,7 +73,7 @@ function initCamera() {
     throw new Error("Camera creation failed - camera should not be null");
   }
   window.camera.setPosition(initCameraPosition);
-  console.log(" Camera created at position:", window.camera.position);
+  console.log("🎥 ✅ Camera created at position:", window.camera.position);
   window.camera.lowerRadiusLimit = 1.05;
   window.camera.upperRadiusLimit = 3;
   window.camera.wheelDeltaPercentage = 0.01;
@@ -132,7 +132,7 @@ function showErrorMessage(title, message) {
       }
     }, 10000);
   } catch (error) {
-    console.error("Error showing error message:", error);
+    console.error("❌ Error showing error message:", error);
     // Fallback to alert if DOM manipulation fails
     alert(`${title}: ${message}`);
   }
@@ -141,22 +141,18 @@ function showErrorMessage(title, message) {
 // ==============================
 // APPLICATION INITIALIZATION
 // ==============================
-async function tryInitializeAsync(label, initFn) {
-  console.group(label);
+async function tryInitializeAsync(emoji, label, initFn) {
   if (typeof initFn === "function") {
-    console.log(`${label} - Initializing...`);
+    console.log(`${emoji} 🏗️ ${label} - Initializing...`);
     try {
       await initFn();
-      console.log(`${label} - ✅ Initialization successful`);
+      console.log(`${emoji} ✅ ${label} - Initialization successful`);
     } catch (error) {
-      console.error(`❌ ${label} - Initialization error:`, error);
+      console.error(`${emoji} ❌ ${label} - Initialization error:`, error);
       throw error;
-    } finally {
-      console.groupEnd();
     }
   } else {
-    console.warn(`⚠️ ${label} - Function not found, skipping...`);
-    console.groupEnd();
+    console.warn(`${emoji} ⚠️ ${label} - Function not found, skipping...`);
     return null;
   }
 }
@@ -169,56 +165,58 @@ async function initFunction() {
   console.group("🚀 3D Flight Visualization - Initialization");
 
   try {
-    console.log("Starting application initialization...");
+    console.log("🔧 🚀 Starting application initialization...");
 
     // In this file :
-    await tryInitializeAsync("🔧 Engine Creation", initEngineAsync);
-    await tryInitializeAsync("🔧 Scene Creation", initScene);
-    await tryInitializeAsync("🔄 Render Loop", initRenderLoop);
-    await tryInitializeAsync("🎥 Camera Creation", initCamera);
+    await tryInitializeAsync("🔧", "Engine Creation", initEngineAsync);
+    await tryInitializeAsync("🔧", "Scene Creation", initScene);
+    await tryInitializeAsync("🔄", "Render Loop", initRenderLoop);
+    await tryInitializeAsync("🎥", "Camera Creation", initCamera);
 
     // PARALLEL PHASE 1: Independent visual systems (can run simultaneously)
-    console.log("🚀 Starting parallel initialization of visual systems...");
+    console.log("🔧 🚀 Starting parallel initialization of visual systems...");
     const visualSystemsPromises = [
-      tryInitializeAsync("💡 Lights", initializeLighting),
-      tryInitializeAsync("☀️ Sun", initSun),
-      tryInitializeAsync("🌌 Space", initializeSpaceEnvironment),
+      tryInitializeAsync("💡", "Lights", initializeLighting),
+      tryInitializeAsync("☀️", "Sun", initSun),
+      tryInitializeAsync("🌌", "Space", initializeSpaceEnvironment),
     ];
 
     const visualResults = await Promise.allSettled(visualSystemsPromises);
 
     // Log any failures but continue
-    const visualLabels = ["💡 Lights", "☀️ Sun", "🌌 Space"];
+    const visualEmojis = ["💡", "☀️", "🌌"];
+    const visualLabels = ["Lights", "Sun", "Space"];
     visualResults.forEach((result, index) => {
       if (result.status === "rejected") {
-        console.warn(`⚠️ ${visualLabels[index]} failed:`, result.reason);
+        console.warn(`${visualEmojis[index]} ⚠️ ${visualLabels[index]} failed:`, result.reason);
       } else {
-        console.log(`✅ ${visualLabels[index]} initialized successfully`);
+        console.log(`${visualEmojis[index]} ✅ ${visualLabels[index]} initialized successfully`);
       }
     });
 
     // PARALLEL PHASE 2: Data-heavy systems (Earth and Flights can load concurrently)
-    console.log("🚀 Starting parallel initialization of data systems...");
+    console.log("🔧 🚀 Starting parallel initialization of data systems...");
     const dataSystemsPromises = [
-      tryInitializeAsync("🌍 Earth", initializeEarth),
-      tryInitializeAsync("✈️ Flights", initializeFlights),
+      tryInitializeAsync("🌍", "Earth", initializeEarth),
+      tryInitializeAsync("🔧", "Flights", initializeFlights),
     ];
 
     const dataResults = await Promise.allSettled(dataSystemsPromises);
 
     // Handle data system results
-    const dataLabels = ["🌍 Earth", "✈️ Flights"];
+    const dataEmojis = ["🌍", "✈️"];
+    const dataLabels = ["Earth", "Flights"];
     dataResults.forEach((result, index) => {
       if (result.status === "rejected") {
-        console.error(`❌ ${dataLabels[index]} failed:`, result.reason);
+        console.error(`${dataEmojis[index]} ❌ ${dataLabels[index]} failed:`, result.reason);
       } else {
-        console.log(`✅ ${dataLabels[index]} initialized successfully`);
+        console.log(`${dataEmojis[index]} ✅ ${dataLabels[index]} initialized successfully`);
       }
     });
 
-    console.log("🎉 Application initialized successfully!");
+    console.log("🚀 ✅ Application initialized successfully!");
   } catch (error) {
-    console.error("❌ Failed to initialize application:", error);
+    console.error("🚀 ❌ Failed to initialize application:", error);
 
     // Display user-friendly error message
     showErrorMessage(
@@ -227,8 +225,6 @@ async function initFunction() {
     );
 
     throw error;
-  } finally {
-    console.groupEnd(); // End main initialization group
   }
 }
 
@@ -249,18 +245,17 @@ function disposeScene() {
     if (window.scene) {
       window.scene.dispose();
       window.scene = null;
-      console.log("✅ Scene disposed");
+      console.log("🔧 ✅ Scene disposed");
     }
 
     if (window.engine) {
       window.engine.dispose();
       window.engine = null;
-      console.log("✅ Engine disposed");
+      console.log("🔧 ✅ Engine disposed");
     }
-
-    console.log("🧹 All resources cleaned up");
+    console.log("🔧 ✅ All resources cleaned up");
   } catch (error) {
-    console.error("❌ Error during cleanup:", error);
+    console.error("🔧 ❌ Error during cleanup:", error);
   }
 }
 
@@ -273,9 +268,9 @@ window.addEventListener("resize", function () {
   if (window.engine) {
     try {
       window.engine.resize();
-      console.log("📐 Engine resized for new window dimensions");
+      console.log("📐 ✅ Engine resized for new window dimensions");
     } catch (error) {
-      console.warn("⚠️ Error during engine resize:", error);
+      console.warn("📐 ⚠️ Error during engine resize:", error);
     }
   }
 });
@@ -302,8 +297,8 @@ window.addEventListener("beforeunload", function () {
 // Initialize the application and set up scene rendering
 initFunction()
   .then(() => {
-    console.log("🎬 Scene ready for rendering");
+    console.log("🎬 ✅ Scene ready for rendering");
   })
   .catch((error) => {
-    console.error("💥 Application startup failed:", error);
+    console.error("🚀 ❌ Application startup failed:", error);
   });

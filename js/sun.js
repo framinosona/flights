@@ -6,7 +6,7 @@ const sunDistance = 200; // Realistic distance from Earth center for visibility
 
 function initSun() {
   var sunPosition = calculateSunPosition();
-  console.log("☀️ Calculated sun position:", sunPosition);
+  console.log("☀️ 📊 Calculated sun position:", sunPosition);
 
   // Scale the sun position to a realistic astronomical distance for visibility
   var scaledSunPosition = sunPosition.scale(sunDistance);
@@ -15,7 +15,7 @@ function initSun() {
 
   var sunDirection = sunPosition.normalize();
   sunDirection.scaleInPlace(-1);
-  console.log(`☀️ Adjusted sun direction:`, sunDirection);
+  console.log(`☀️ 📊 Adjusted sun direction:`, sunDirection);
   initSunLight(scaledSunPosition, sunDirection);
 
   // Initialize volumetric light scattering effect
@@ -35,7 +35,7 @@ function initSun() {
     // Update volumetric light scattering position
     updateVolumetricLightScattering(scaledSunPosition);
   }, 15 * 60 * 1000); // Update every 15 minutes
-  console.log("☀️ Sun tracking set up with 15-minute intervals");
+  console.log("☀️ 🔄 Sun tracking set up with 15-minute intervals");
 }
 
 /**
@@ -43,7 +43,7 @@ function initSun() {
  * @returns {BABYLON.Vector3} The sun's direction vector
  */
 function calculateSunPosition() {
-  console.log("☀️ Calculating sun position based on current time...");
+  console.log("☀️ 📊 Calculating sun position based on current time...");
   // Get current date and time
   var now = new Date();
   var dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
@@ -57,7 +57,7 @@ function calculateSunPosition() {
   var utcHours = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
   var hourAngle = (utcHours - 12) * 15 * (Math.PI / 180); // Convert to radians
   console.log(
-    `☀️ Sun declination: ${declination.toFixed(4)} rad, Hour angle: ${hourAngle.toFixed(4)} rad`
+    `☀️ 📊 Sun declination: ${declination.toFixed(4)} rad, Hour angle: ${hourAngle.toFixed(4)} rad`
   );
 
   // Calculate sun position in 3D space
@@ -75,7 +75,7 @@ function calculateSunPosition() {
   var adjustedSunX = -sunX; // Flip X to account for coordinate system offset
   var adjustedSunZ = -sunZ; // Flip Z to maintain proper lighting direction
   var sunPosition = new BABYLON.Vector3(adjustedSunX, sunY, adjustedSunZ);
-  console.log(`☀️ Calculated sun position:`, sunPosition);
+  console.log(`☀️ 📊 Calculated sun position:`, sunPosition);
 
   return sunPosition;
 }
@@ -90,7 +90,7 @@ function calculateSunPosition() {
  */
 function initSunLight(sunPosition, sunDirection) {
   // Create directional light to simulate the Sun
-  console.log("☀️ Creating sun lighting...");
+  console.log("☀️ 🏗️ Creating sun lighting...");
   //window.sunLight ||= new BABYLON.DirectionalLight("sunlight", sunDirection, window.scene);
   window.sunLight ||= new BABYLON.SpotLight(
     "sunlight",
@@ -108,7 +108,7 @@ function initSunLight(sunPosition, sunDirection) {
 
   // Enable shadows (optional)
   window.sunLight.setEnabled(true);
-  console.log("☀️ Sun lighting created with realistic position");
+  console.log("☀️ ✅ Sun lighting created with realistic position");
 }
 
 /**
@@ -117,7 +117,7 @@ function initSunLight(sunPosition, sunDirection) {
  */
 function updateSunLight(sunDirection) {
   if (!window.sunLight) {
-    console.warn("☀️ Sun light not found, cannot update direction");
+    console.warn("☀️ ⚠️ Sun light not found, cannot update direction");
     return;
   }
 
@@ -135,17 +135,19 @@ function updateSunLight(sunDirection) {
  * @param {BABYLON.Vector3} sunPosition - The position of the sun
  */
 function initVolumetricLightScattering(sunPosition) {
-  console.log("☀️ Creating volumetric light scattering effect...");
+  console.log("☀️ 🏗️ Creating volumetric light scattering effect...");
 
   // Validate scene and camera exist
   if (!window.scene || !window.scene.activeCamera) {
-    console.error("Scene or camera not found - volumetric light scattering cannot be created");
+    console.error(
+      "☀️ ⚠️ Scene or camera not found - volumetric light scattering cannot be created"
+    );
     return false;
   }
 
   // Check if VolumetricLightScatteringPostProcess is available
   if (!BABYLON.VolumetricLightScatteringPostProcess) {
-    console.warn("☀️ VolumetricLightScatteringPostProcess not available - skipping effect");
+    console.warn("☀️ ⚠️ VolumetricLightScatteringPostProcess not available - skipping effect");
     return false;
   }
 
@@ -169,10 +171,10 @@ function initVolumetricLightScattering(sunPosition) {
     window.volumetricLightScattering.weight = 0.4; // Effect strength
     window.volumetricLightScattering.density = 0.8; // Atmospheric density
 
-    console.log("☀️ Volumetric light scattering effect created successfully");
+    console.log("☀️ ✅ Volumetric light scattering effect created successfully");
     return true;
   } catch (error) {
-    console.error("☀️ Failed to create volumetric light scattering:", error);
+    console.error("☀️ ❌ Failed to create volumetric light scattering:", error);
     return false;
   }
 }
@@ -200,11 +202,11 @@ function updateVolumetricLightScattering(sunPosition) {
  * Positioned according to real-time astronomical calculations
  */
 function initSunSphere(sunPosition) {
-  console.log("☀️ Creating visual sun sphere...");
+  console.log("☀️ 🏗️ Creating visual sun sphere...");
 
   // Validate scene exists
   if (!window.scene) {
-    console.error("Scene not found - sun cannot be created");
+    console.error("☀️ ⚠️ Scene not found - sun cannot be created");
     return false;
   }
 
@@ -220,11 +222,11 @@ function initSunSphere(sunPosition) {
 
   // Validate sun sphere creation
   if (!window.sunSphere) {
-    console.error("Sun sphere creation failed");
+    console.error("☀️ ⚠️ Sun sphere creation failed");
     return false;
   }
 
-  console.log("☀️ Sun sphere mesh created successfully");
+  console.log("☀️ ✅ Sun sphere mesh created successfully");
 
   // Create glowing sun material using StandardMaterial with emissive properties
   window.sunMaterial = new BABYLON.StandardMaterial("sunMaterial", window.scene);
@@ -241,13 +243,13 @@ function initSunSphere(sunPosition) {
   // Position sun based on current astronomical position
   window.sunSphere.position = sunPosition;
 
-  console.log("☀️ Visual sun sphere created and positioned");
+  console.log("☀️ ✅ Visual sun sphere created and positioned");
   return true;
 }
 
 function updateSunSphere(sunPosition) {
   if (!window.sunSphere) {
-    console.warn("☀️ Sun sphere not found, cannot update position");
+    console.warn("☀️ ⚠️ Sun sphere not found, cannot update position");
     return;
   }
 
@@ -265,12 +267,12 @@ function updateSunSphere(sunPosition) {
  */
 window.setSunVisibility = function (visible) {
   if (!window.sunSphere) {
-    console.warn("☀️ Sun sphere not found, cannot set visibility");
+    console.warn("☀️ ⚠️ Sun sphere not found, cannot set visibility");
     return;
   }
 
   window.sunSphere.setEnabled(visible);
-  console.log(`☀️ Sun sphere visibility set to: ${visible}`);
+  console.log(`☀️ ✅ Sun sphere visibility set to: ${visible}`);
 };
 
 /**
@@ -279,12 +281,12 @@ window.setSunVisibility = function (visible) {
  */
 window.setSunSize = function (diameter) {
   if (!window.sunSphere) {
-    console.warn("☀️ Sun sphere not found, cannot set size");
+    console.warn("☀️ ⚠️ Sun sphere not found, cannot set size");
     return;
   }
 
   window.sunSphere.scaling = new BABYLON.Vector3(diameter, diameter, diameter);
-  console.log(`☀️ Sun sphere size set to: ${diameter}`);
+  console.log(`☀️ ✅ Sun sphere size set to: ${diameter}`);
 };
 
 /**
@@ -293,12 +295,12 @@ window.setSunSize = function (diameter) {
  */
 window.setVolumetricLightExposure = function (exposure) {
   if (!window.volumetricLightScattering) {
-    console.warn("☀️ Volumetric light scattering not found, cannot set exposure");
+    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot set exposure");
     return;
   }
 
   window.volumetricLightScattering.exposure = exposure;
-  console.log(`☀️ Volumetric light exposure set to: ${exposure}`);
+  console.log(`☀️ ✅ Volumetric light exposure set to: ${exposure}`);
 };
 
 /**
@@ -307,12 +309,12 @@ window.setVolumetricLightExposure = function (exposure) {
  */
 window.setVolumetricLightWeight = function (weight) {
   if (!window.volumetricLightScattering) {
-    console.warn("☀️ Volumetric light scattering not found, cannot set weight");
+    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot set weight");
     return;
   }
 
   window.volumetricLightScattering.weight = weight;
-  console.log(`☀️ Volumetric light weight set to: ${weight}`);
+  console.log(`☀️ ✅ Volumetric light weight set to: ${weight}`);
 };
 
 /**
@@ -321,7 +323,7 @@ window.setVolumetricLightWeight = function (weight) {
  */
 window.setVolumetricLightEnabled = function (enabled) {
   if (!window.volumetricLightScattering) {
-    console.warn("☀️ Volumetric light scattering not found, cannot toggle");
+    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot toggle");
     return;
   }
 
@@ -330,7 +332,7 @@ window.setVolumetricLightEnabled = function (enabled) {
   } else {
     window.volumetricLightScattering.setCamera(null);
   }
-  console.log(`☀️ Volumetric light scattering enabled: ${enabled}`);
+  console.log(`☀️ ✅ Volumetric light scattering enabled: ${enabled}`);
 };
 
 // ==============================
@@ -345,36 +347,36 @@ window.disposeSun = function () {
   if (window.sunUpdateInterval) {
     clearInterval(window.sunUpdateInterval);
     window.sunUpdateInterval = null;
-    console.log("☀️ Sun update interval cleared");
+    console.log("☀️ ✅ Sun update interval cleared");
   }
 
   // Dispose of sun sphere
   if (window.sunSphere) {
     window.sunSphere.dispose();
     window.sunSphere = null;
-    console.log("☀️ Sun sphere disposed");
+    console.log("☀️ ✅ Sun sphere disposed");
   }
 
   // Dispose of sun material
   if (window.sunMaterial) {
     window.sunMaterial.dispose();
     window.sunMaterial = null;
-    console.log("☀️ Sun material disposed");
+    console.log("☀️ ✅ Sun material disposed");
   }
 
   // Dispose of sun light
   if (window.sunLight) {
     window.sunLight.dispose();
     window.sunLight = null;
-    console.log("☀️ Sun light disposed");
+    console.log("☀️ ✅ Sun light disposed");
   }
 
   // Dispose of volumetric light scattering effect
   if (window.volumetricLightScattering) {
     window.volumetricLightScattering.dispose();
     window.volumetricLightScattering = null;
-    console.log("☀️ Volumetric light scattering disposed");
+    console.log("☀️ ✅ Volumetric light scattering disposed");
   }
 
-  console.log("☀️ All sun resources cleaned up");
+  console.log("☀️ ✅ All sun resources cleaned up");
 };

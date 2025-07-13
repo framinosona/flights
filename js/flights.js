@@ -59,7 +59,7 @@ const FLIGHT_CONFIG = {
  */
 function validateAirportData(data) {
   if (!data || typeof data !== "object") {
-    console.error("Airport data is null or not an object");
+    console.error("✈️ ❌ Airport data is null or not an object");
     return false;
   }
 
@@ -72,7 +72,7 @@ function validateAirportData(data) {
       typeof airport.latitude !== "number" ||
       typeof airport.longitude !== "number"
     ) {
-      console.error(`Invalid airport data structure for ${key}:`, airport);
+      console.error(`✈️ ❌ Invalid airport data structure for ${key}:`, airport);
       return false;
     }
   }
@@ -87,20 +87,20 @@ function validateAirportData(data) {
  */
 function validateFlightData(data) {
   if (!Array.isArray(data) && typeof data !== "object") {
-    console.error("Flight data is not an array or object");
+    console.error("✈️ ❌ Flight data is not an array or object");
     return false;
   }
 
   const flights = Array.isArray(data) ? data : Object.values(data);
   if (flights.length === 0) {
-    console.warn("Flight data is empty");
+    console.warn("✈️ ⚠️ Flight data is empty");
     return false;
   }
 
   const sampleFlights = flights.slice(0, 5);
   for (const flight of sampleFlights) {
     if (!flight.from_code || !flight.to_code) {
-      console.error("Invalid flight data structure:", flight);
+      console.error("✈️ ❌ Invalid flight data structure:", flight);
       return false;
     }
   }
@@ -128,7 +128,7 @@ function coordinatesToPosition(lat, lng, radius = 1.0) {
       lng < -180 ||
       lng > 180
     ) {
-      console.warn(`Invalid coordinates: lat=${lat}, lng=${lng}`);
+      console.warn(`✈️ ⚠️ Invalid coordinates: lat=${lat}, lng=${lng}`);
       return null;
     }
 
@@ -143,7 +143,7 @@ function coordinatesToPosition(lat, lng, radius = 1.0) {
       radius * Math.sin(lngRad) * Math.cos(latRad)
     );
   } catch (error) {
-    console.error("Error converting coordinates to position:", error);
+    console.error("✈️ ❌ Error converting coordinates to position:", error);
     return null;
   }
 }
@@ -159,7 +159,7 @@ function coordinatesToPosition(lat, lng, radius = 1.0) {
  */
 async function loadAirportCoords(retryCount = 0) {
   try {
-    console.log("📍 Loading airport coordinates...");
+    console.log("✈️ 📍 Loading airport coordinates...");
 
     const response = await fetch(FLIGHT_CONFIG.dataPaths.airports);
 
@@ -173,17 +173,17 @@ async function loadAirportCoords(retryCount = 0) {
       throw new Error("Invalid airport data structure");
     }
 
-    console.log(`✅ Airport coordinates loaded successfully`);
-    console.log(`📊 Loaded ${Object.keys(data).length} airports`);
+    console.log(`✈️ ✅ Airport coordinates loaded successfully`);
+    console.log(`✈️ 📊 Loaded ${Object.keys(data).length} airports`);
 
     return data;
   } catch (error) {
-    console.error(`❌ Error loading airport coordinates (attempt ${retryCount + 1}):`, error);
+    console.error(`✈️ ❌ Error loading airport coordinates (attempt ${retryCount + 1}):`, error);
 
     // Retry logic with exponential backoff
     if (retryCount < FLIGHT_CONFIG.maxRetries) {
       const delay = FLIGHT_CONFIG.retryDelay * Math.pow(2, retryCount);
-      console.log(`🔄 Retrying in ${delay}ms...`);
+      console.log(`✈️ 🔄 Retrying in ${delay}ms...`);
 
       await new Promise((resolve) => setTimeout(resolve, delay));
       return loadAirportCoords(retryCount + 1);
@@ -219,17 +219,17 @@ async function loadFlightLogs(retryCount = 0) {
 
     const flightArray = Array.isArray(data) ? data : Object.values(data);
 
-    console.log(`✅ Flight logs loaded successfully`);
-    console.log(`📊 Loaded ${flightArray.length} flights`);
+    console.log(`✈️ ✅ Flight logs loaded successfully`);
+    console.log(`✈️ 📊 Loaded ${flightArray.length} flights`);
 
     return data;
   } catch (error) {
-    console.error(`❌ Error loading flight logs (attempt ${retryCount + 1}):`, error);
+    console.error(`✈️ ❌ Error loading flight logs (attempt ${retryCount + 1}):`, error);
 
     // Retry logic with exponential backoff
     if (retryCount < FLIGHT_CONFIG.maxRetries) {
       const delay = FLIGHT_CONFIG.retryDelay * Math.pow(2, retryCount);
-      console.log(`🔄 Retrying in ${delay}ms...`);
+      console.log(`✈️ 🔄 Retrying in ${delay}ms...`);
 
       await new Promise((resolve) => setTimeout(resolve, delay));
       return loadFlightLogs(retryCount + 1);
@@ -249,7 +249,7 @@ async function loadFlightLogs(retryCount = 0) {
 async function loadFlightData() {
   // Return cached data if already loaded
   if (flightSystem.airportCoords && flightSystem.flightLogs) {
-    console.log("✅ Using cached flight data");
+    console.log("✈️ ✅ Using cached flight data");
     return {
       airportCoords: flightSystem.airportCoords,
       flightLogs: flightSystem.flightLogs,
@@ -257,8 +257,6 @@ async function loadFlightData() {
   }
 
   try {
-    console.group("🌍 Loading Flight Data");
-
     // Load both datasets concurrently for better performance
     const [airportCoords, flightLogs] = await Promise.all([loadAirportCoords(), loadFlightLogs()]);
 
@@ -266,13 +264,11 @@ async function loadFlightData() {
     flightSystem.airportCoords = airportCoords;
     flightSystem.flightLogs = flightLogs;
 
-    console.log(`✅ All flight data loaded successfully`);
-    console.groupEnd();
+    console.log(`✈️ ✅ All flight data loaded successfully`);
 
     return { airportCoords, flightLogs };
   } catch (error) {
-    console.error("❌ Failed to load flight data:", error);
-    console.groupEnd();
+    console.error("✈️ ❌ Failed to load flight data:", error);
     throw error;
   }
 }
@@ -302,7 +298,7 @@ function getDistinctAirports(airportCoords, flightLogs) {
     let skippedFlights = 0;
 
     console.log(
-      `🔍 Processing ${flightArray.length} flights for distinct airports with parallel processing...`
+      `✈️ 🔍 Processing ${flightArray.length} flights for distinct airports with parallel processing...`
     );
 
     // PARALLEL PROCESSING: Split flights into chunks for concurrent processing
@@ -350,10 +346,10 @@ function getDistinctAirports(airportCoords, flightLogs) {
                   icao: airportData.icao || airportCode,
                 });
               } else {
-                console.warn(`Invalid coordinates for airport ${airportCode}:`, airportData);
+                console.warn(`✈️ ⚠️ Invalid coordinates for airport ${airportCode}:`, airportData);
               }
             } else if (airportCode) {
-              console.warn(`Airport data not found for code: ${airportCode}`);
+              console.warn(`✈️ ⚠️ Airport data not found for code: ${airportCode}`);
             }
           };
 
@@ -363,7 +359,7 @@ function getDistinctAirports(airportCoords, flightLogs) {
 
           chunkProcessed++;
         } catch (error) {
-          console.error(`Error processing flight ${chunkIndex}-${index}:`, error, flight);
+          console.error(`✈️ ❌ Error processing flight ${chunkIndex}-${index}:`, error, flight);
           chunkSkipped++;
         }
       });
@@ -386,15 +382,15 @@ function getDistinctAirports(airportCoords, flightLogs) {
     const airports = Array.from(distinctAirports.values());
 
     console.log(
-      `✅ Found ${airports.length} distinct airports from ${processedFlights} flights (processed in ${chunks.length} parallel chunks)`
+      `✈️ ✅ Found ${airports.length} distinct airports from ${processedFlights} flights (processed in ${chunks.length} parallel chunks)`
     );
     if (skippedFlights > 0) {
-      console.warn(`⚠️ Skipped ${skippedFlights} flights due to data issues`);
+      console.warn(`✈️ ⚠️ Skipped ${skippedFlights} flights due to data issues`);
     }
 
     return airports;
   } catch (error) {
-    console.error("❌ Error extracting distinct airports:", error);
+    console.error("✈️ ❌ Error extracting distinct airports:", error);
     return [];
   }
 }
@@ -485,7 +481,7 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
 
     return airportSphere;
   } catch (error) {
-    console.error(`❌ Error creating airport point for ${airport?.code || "unknown"}:`, error);
+    console.error(`✈️ ❌ Error creating airport point for ${airport?.code || "unknown"}:`, error);
     return null;
   }
 }
@@ -501,12 +497,12 @@ async function createAirportPoints(distinctAirports) {
   }
 
   if (!Array.isArray(distinctAirports) || distinctAirports.length === 0) {
-    console.warn("No airports provided for point creation");
+    console.warn("✈️ ⚠️ No airports provided for point creation");
     return [];
   }
 
   console.log(
-    `🏗️ Creating points for ${distinctAirports.length} airports with parallel processing...`
+    `✈️ 🏗️ Creating points for ${distinctAirports.length} airports with parallel processing...`
   );
 
   try {
@@ -530,7 +526,7 @@ async function createAirportPoints(distinctAirports) {
             throw new Error(`Failed to create point for ${airport.code}`);
           }
         } catch (error) {
-          console.warn(`❌ Error creating point for ${airport?.code}:`, error);
+          console.warn(`✈️ ❌ Error creating point for ${airport?.code}:`, error);
           throw error;
         }
       });
@@ -557,21 +553,21 @@ async function createAirportPoints(distinctAirports) {
       const progress = Math.min(100, ((i + batchSize) / distinctAirports.length) * 100);
       if (progress >= 100 || (progress > 0 && progress % 25 === 0)) {
         console.log(
-          `🔄 Airport points progress: ${progress.toFixed(0)}% (${processedCount}/${
+          `✈️ 🔄 Airport points progress: ${progress.toFixed(0)}% (${processedCount}/${
             distinctAirports.length
           })`
         );
       }
     }
 
-    console.log(`✅ Created ${processedCount} airport points with parallel batch processing`);
+    console.log(`✈️ ✅ Created ${processedCount} airport points with parallel batch processing`);
     if (errorCount > 0) {
-      console.warn(`⚠️ Failed to create ${errorCount} airport points`);
+      console.warn(`✈️ ⚠️ Failed to create ${errorCount} airport points`);
     }
 
     return createdPoints;
   } catch (error) {
-    console.error("❌ Error creating airport points:", error);
+    console.error("✈️ ❌ Error creating airport points:", error);
     throw error;
   }
 }
@@ -610,7 +606,7 @@ function safeSlerp(point1, point2, t) {
 
     return point1.scale(a).add(point2.scale(b));
   } catch (error) {
-    console.warn("Error in spherical interpolation:", error);
+    console.warn("✈️ ⚠️ Error in spherical interpolation:", error);
     // Fallback to linear interpolation
     return BABYLON.Vector3.Lerp(point1, point2, t);
   }
@@ -771,11 +767,11 @@ async function createFlightArcs(flights, airportCoords) {
   }
 
   if (!Array.isArray(flights) || flights.length === 0) {
-    console.warn("No flights provided for arc creation");
+    console.warn("✈️ ⚠️ No flights provided for arc creation");
     return [];
   }
 
-  console.log(`🚀 Creating arcs for ${flights.length} flights with parallel processing...`);
+  console.log(`✈️ 🚀 Creating arcs for ${flights.length} flights with parallel processing...`);
 
   try {
     const createdArcs = [];
@@ -851,22 +847,22 @@ async function createFlightArcs(flights, airportCoords) {
       const progress = Math.min(100, ((i + batchSize) / flights.length) * 100);
       if (progress >= 100 || (progress > 0 && progress % 25 === 0)) {
         console.log(
-          `🔄 Flight arc progress: ${progress.toFixed(0)}% (${processedCount}/${flights.length})`
+          `✈️ 🔄 Flight arc progress: ${progress.toFixed(0)}% (${processedCount}/${flights.length})`
         );
       }
     }
 
-    console.log(`✅ Created ${processedCount} flight arcs with parallel batch processing`);
+    console.log(`✈️ ✅ Created ${processedCount} flight arcs with parallel batch processing`);
     if (skippedCount > 0) {
-      console.warn(`⚠️ Skipped ${skippedCount} flights due to missing airport data`);
+      console.warn(`✈️ ⚠️ Skipped ${skippedCount} flights due to missing airport data`);
     }
     if (errorCount > 0) {
-      console.warn(`⚠️ Failed to create ${errorCount} flight arcs due to errors`);
+      console.warn(`✈️ ⚠️ Failed to create ${errorCount} flight arcs due to errors`);
     }
 
     return createdArcs;
   } catch (error) {
-    console.error("❌ Error creating flight arcs:", error);
+    console.error("✈️ ❌ Error creating flight arcs:", error);
     throw error;
   }
 }
@@ -882,25 +878,23 @@ async function createFlightArcs(flights, airportCoords) {
 async function initializeFlights() {
   // Simple check - if already initialized, return status
   if (flightSystem.initialized) {
-    console.log("✅ Flight system already initialized");
+    console.log("✈️ ✅ Flight system already initialized");
     return true;
   }
 
   if (!window.scene) {
     const error = new Error("Scene is required for flight initialization");
-    console.error("❌", error.message);
+    console.error("✈️ ❌", error.message);
     throw error;
   }
 
-  console.group("✈️ Flight System");
-
   try {
     // Step 1: Load flight data (uses caching)
-    console.log("📥 Loading flight data...");
+    console.log("✈️ 📥 Loading flight data...");
     const { airportCoords, flightLogs } = await loadFlightData();
 
     // Step 2: Process airports
-    console.log("🏗️ Processing airports...");
+    console.log("✈️ 🏗️ Processing airports...");
     const distinctAirports = getDistinctAirports(airportCoords, flightLogs);
 
     if (distinctAirports.length === 0) {
@@ -908,7 +902,7 @@ async function initializeFlights() {
     }
 
     // Step 3 & 4: PARALLEL CREATION - Create airport points and flight arcs simultaneously
-    console.log("� Starting parallel creation of airport points and flight arcs...");
+    console.log("✈️ 🚀 Starting parallel creation of airport points and flight arcs...");
     const flightArray = Array.isArray(flightLogs) ? flightLogs : Object.values(flightLogs);
 
     const creationPromises = [
@@ -920,35 +914,33 @@ async function initializeFlights() {
 
     // Check results and handle any failures
     if (airportResults.status === "fulfilled") {
-      console.log(`✅ ${flightSystem.airportPoints.length} airport points created`);
+      console.log(`✈️ ✅ ${flightSystem.airportPoints.length} airport points created`);
     } else {
-      console.error("❌ Airport points creation failed:", airportResults.reason);
+      console.error("✈️ ❌ Airport points creation failed:", airportResults.reason);
       throw airportResults.reason;
     }
 
     if (arcResults.status === "fulfilled") {
-      console.log(`✅ ${flightSystem.flightArcs.length} flight arcs created`);
+      console.log(`✈️ ✅ ${flightSystem.flightArcs.length} flight arcs created`);
     } else {
-      console.error("❌ Flight arcs creation failed:", arcResults.reason);
+      console.error("✈️ ❌ Flight arcs creation failed:", arcResults.reason);
       throw arcResults.reason;
     }
 
     // Step 5: Finalize initialization
     flightSystem.initialized = true;
 
-    console.log("📊 Initialization Complete!", {
+    console.log("✈️ 📊 Initialization Complete!", {
       airports: flightSystem.airportPoints.length,
       flights: flightSystem.flightArcs.length,
     });
 
-    console.log("✅ Flight system ready with parallel processing!");
-    console.groupEnd();
+    console.log("✈️ ✅ Flight system ready with parallel processing!");
 
     return true;
   } catch (error) {
     flightSystem.error = error;
-    console.error("❌ Flight system failed:", error);
-    console.groupEnd();
+    console.error("✈️ ❌ Flight system failed:", error);
     throw error;
   }
 }

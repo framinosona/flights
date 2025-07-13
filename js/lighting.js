@@ -27,7 +27,7 @@ function initCameraLight() {
   // Get the camera from the scene
   var camera = window.scene.activeCamera;
   if (!camera) {
-    console.warn("📷 No active camera found, using default direction");
+    console.warn("💡 ⚠️ No active camera found, using default direction");
     var cameraDirection = new BABYLON.Vector3(0, 0, 1);
   } else {
     // Calculate direction from camera position towards the target (Earth center)
@@ -48,12 +48,12 @@ function initCameraLight() {
   window.cameraLight.diffuse = new BABYLON.Color3(0.6, 0.7, 0.9); // Cool, atmospheric blue-white
   window.cameraLight.specular = new BABYLON.Color3(0.1, 0.1, 0.2); // Minimal specular for soft look
 
-  console.log("📷 Camera-following light created");
+  console.log("💡 ✅ Camera-following light created");
 
   // Set up camera light direction updates on camera movement
   window.scene.registerBeforeRender(() => {
     if (!window.cameraLight || !window.scene.activeCamera) {
-      console.warn("📷 Camera light or active camera not found, skipping update");
+      console.warn("💡 ⚠️ Camera light or active camera not found, skipping update");
       return;
     }
 
@@ -65,7 +65,7 @@ function initCameraLight() {
     window.cameraLight.direction = newDirection;
   });
 
-  console.log("📷 Camera-following light enabled with real-time updates");
+  console.log("💡 ✅ Camera-following light enabled with real-time updates");
   return window.cameraLight;
 }
 
@@ -78,24 +78,25 @@ function initCameraLight() {
  */
 async function initializeLighting() {
   // PARALLEL LIGHTING: Initialize both lights concurrently
-  console.log("🚀 Starting parallel lighting initialization...");
+  console.log("💡 🚀 Starting parallel lighting initialization...");
 
   const lightingPromises = [
-    tryInitializeAsync("🌙 Fill Light", initFillLight),
-    tryInitializeAsync("📷 Camera Light", initCameraLight),
+    tryInitializeAsync("🌙", "Fill Light", initFillLight),
+    tryInitializeAsync("📷", "Camera Light", initCameraLight),
   ];
 
   const results = await Promise.allSettled(lightingPromises);
 
   // Check results and log any failures
-  const lightLabels = ["🌙 Fill Light", "📷 Camera Light"];
+  const lightEmojis = ["🌙", "📷"];
+  const lightLabels = ["Fill Light", "Camera Light"];
   results.forEach((result, index) => {
     if (result.status === "rejected") {
-      console.warn(`⚠️ ${lightLabels[index]} failed:`, result.reason);
+      console.warn(`${lightEmojis[index]} ⚠️ ${lightLabels[index]} failed:`, result.reason);
     } else {
-      console.log(`✅ ${lightLabels[index]} initialized successfully`);
+      console.log(`${lightEmojis[index]} ✅ ${lightLabels[index]} initialized successfully`);
     }
   });
 
-  console.log("✅ Parallel lighting initialization complete");
+  console.log("💡 ✅ Parallel lighting initialization complete");
 }
