@@ -15,9 +15,9 @@ function initSharedResources() {
   );
   sharedEarthResources.baseEarthMaterial.wireframe = false;
   sharedEarthResources.baseEarthMaterial.backFaceCulling = false;
-  sharedEarthResources.baseEarthMaterial.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3); // Slightly increased ambient
-  sharedEarthResources.baseEarthMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1); // Keep diffuse at full for texture
-  sharedEarthResources.baseEarthMaterial.specularColor = new BABYLON.Color3(0.05, 0.05, 0.05); // Very low specular
+  sharedEarthResources.baseEarthMaterial.ambientColor = BABYLON.Color3.FromHexString("#4d4d4d"); // Slightly increased ambient
+  sharedEarthResources.baseEarthMaterial.diffuseColor = BABYLON.Color3.FromHexString("#ffffff"); // Keep diffuse at full for texture
+  sharedEarthResources.baseEarthMaterial.specularColor = BABYLON.Color3.FromHexString("#0d0d0d"); // Very low specular
   sharedEarthResources.baseEarthMaterial.specularPower = 64; // Higher specular power for tighter highlights
 }
 
@@ -282,7 +282,6 @@ function initPoleCaps() {
   northPoleCap.material = northPoleMat;
 
   var southPoleMat = sharedEarthResources.baseEarthMaterial.clone("southPoleMat");
-  southPoleMat.ambientColor = new BABYLON.Color3(0.8, 0.8, 0.8); // Lighter for south pole
   southPoleMat.diffuseColor = BABYLON.Color3.FromHexString(southCapColor);
   southPoleCap.material = southPoleMat;
 

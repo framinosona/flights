@@ -44,7 +44,7 @@ function initScene() {
     throw new Error("Scene creation failed - scene should not be null");
   }
   console.log("🔧 ✅ Scene created successfully");
-  window.scene.ambientColor = new BABYLON.Color3(0.2, 0.2, 0.3); // Reduced ambient light for more realistic look
+  window.scene.ambientColor = BABYLON.Color3.FromHexString("#333344"); // Reduced ambient light for more realistic look
   window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Ensure solid black background
 
   // Performance optimizations (but keep auto-clear enabled for proper background)

@@ -22,8 +22,8 @@ const FLIGHT_CONFIG = {
     diameter: 0.008,
     radius: 1,
     colors: {
-      default: { emissive: [1, 0.8, 0.2], diffuse: [1, 0.9, 0.4] },
-      hover: { emissive: [1, 1, 0.5], diffuse: [1, 1, 0.7] },
+      default: { emissive: "#ffcc33", diffuse: "#ffe666" },
+      hover: { emissive: "#ffff80", diffuse: "#ffffb3" },
     },
   },
   flightArc: {
@@ -33,7 +33,7 @@ const FLIGHT_CONFIG = {
     points: 50,
     height: 0.05,
     colors: {
-      default: { emissive: [0.3, 0.7, 2.5], diffuse: [0.2, 0.5, 1.8] },
+      default: { emissive: "#4db3ff", diffuse: "#3399e6" },
     },
     alpha: 0.4,
   },
@@ -442,9 +442,9 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
 
     // Set material properties
     const colors = FLIGHT_CONFIG.airportPoint.colors.default;
-    pointMaterial.emissiveColor = new BABYLON.Color3(...colors.emissive);
-    pointMaterial.diffuseColor = new BABYLON.Color3(...colors.diffuse);
-    pointMaterial.specularColor = new BABYLON.Color3(1, 1, 0.8);
+    pointMaterial.emissiveColor = BABYLON.Color3.FromHexString(colors.emissive);
+    pointMaterial.diffuseColor = BABYLON.Color3.FromHexString(colors.diffuse);
+    pointMaterial.specularColor = BABYLON.Color3.FromHexString("#ffffcc");
     pointMaterial.disableLighting = true;
     pointMaterial.alpha = 0.9;
 
@@ -467,8 +467,8 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
     airportSphere.actionManager.registerAction(
       new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, () => {
         const hoverColors = FLIGHT_CONFIG.airportPoint.colors.hover;
-        pointMaterial.emissiveColor = new BABYLON.Color3(...hoverColors.emissive);
-        pointMaterial.diffuseColor = new BABYLON.Color3(...hoverColors.diffuse);
+        pointMaterial.emissiveColor = BABYLON.Color3.FromHexString(hoverColors.emissive);
+        pointMaterial.diffuseColor = BABYLON.Color3.FromHexString(hoverColors.diffuse);
       })
     );
 
@@ -728,9 +728,9 @@ function createFlightArc(
 
     // Set material properties
     const colors = options.colors || FLIGHT_CONFIG.flightArc.colors.default;
-    arcMaterial.emissiveColor = new BABYLON.Color3(...colors.emissive);
-    arcMaterial.diffuseColor = new BABYLON.Color3(...colors.diffuse);
-    arcMaterial.specularColor = new BABYLON.Color3(0.8, 0.9, 1);
+    arcMaterial.emissiveColor = BABYLON.Color3.FromHexString(colors.emissive);
+    arcMaterial.diffuseColor = BABYLON.Color3.FromHexString(colors.diffuse);
+    arcMaterial.specularColor = BABYLON.Color3.FromHexString("#cce6ff");
     arcMaterial.disableLighting = true;
     arcMaterial.alpha = options.alpha || FLIGHT_CONFIG.flightArc.alpha;
 

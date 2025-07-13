@@ -8,43 +8,49 @@ window.tileProviders = {
     name: "OpenStreetMap",
     urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "© OpenStreetMap contributors",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   OPENTOPOMAP: {
     // Load time from last test = 1389ms
     name: "OpenTopoMap",
     urlTemplate: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: "© OpenTopoMap contributors",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   CARTODB_POSITRON: {
     // Load time from last test = 18ms
     name: "CartoDB Positron",
     urlTemplate: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   CARTODB_DARK: {
     // Load time from last test = 15ms
     name: "CartoDB Dark",
     urlTemplate: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   CARTODB_VOYAGER: {
     // Load time from last test = 13ms
     name: "CartoDB Voyager",
     urlTemplate: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
-  // TEST FAILED :
-  // OPENSTREETMAP_DARK: {
-  //   name: "OpenStreetMap Dark",
-  //   urlTemplate: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-  //   attribution: "© Stadia Maps © OpenMapTiles © OpenStreetMap contributors",
-  // },
   ESRI_WORLD_IMAGERY: {
     // Load time from last test = 54ms
     name: "ESRI World Imagery",
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   ESRI_WORLD_TOPO_MAP: {
     // Load time from last test = 54ms
@@ -52,12 +58,16 @@ window.tileProviders = {
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
   BING_SATELLITE: {
     // Load time from last test = 83ms
     name: "Bing Satellite",
     urlTemplate: null, // Special handling for quadkey system
     attribution: "© Microsoft",
+    northCapColor: "#ffffff",
+    southCapColor: "#000000",
   },
 };
 window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;

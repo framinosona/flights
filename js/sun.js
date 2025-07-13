@@ -103,8 +103,8 @@ function initSunLight(sunPosition, sunDirection) {
 
   // Configure sun properties
   window.sunLight.intensity = 1.2; // Bright sunlight
-  window.sunLight.diffuse = new BABYLON.Color3(1.0, 0.95, 0.8); // Slightly warm white
-  window.sunLight.specular = new BABYLON.Color3(1.0, 1.0, 0.9); // Bright specular highlights
+  window.sunLight.diffuse = BABYLON.Color3.FromHexString("#fff2cc"); // Slightly warm white
+  window.sunLight.specular = BABYLON.Color3.FromHexString("#ffffe6"); // Bright specular highlights
 
   // Enable shadows (optional)
   window.sunLight.setEnabled(true);
@@ -232,9 +232,9 @@ function initSunSphere(sunPosition) {
   window.sunMaterial = new BABYLON.StandardMaterial("sunMaterial", window.scene);
 
   // Configure sun appearance to be always bright and visible
-  window.sunMaterial.diffuseColor = new BABYLON.Color3(1.0, 0.8, 0.4); // Bright yellow-orange
-  window.sunMaterial.emissiveColor = new BABYLON.Color3(1.0, 0.8, 0.4); // Same emissive color for self-illumination
-  window.sunMaterial.specularColor = new BABYLON.Color3(0, 0, 0); // No specular reflection
+  window.sunMaterial.diffuseColor = BABYLON.Color3.FromHexString("#ffcc66"); // Bright yellow-orange
+  window.sunMaterial.emissiveColor = BABYLON.Color3.FromHexString("#ffcc66"); // Same emissive color for self-illumination
+  window.sunMaterial.specularColor = BABYLON.Color3.FromHexString("#000000"); // No specular reflection
   window.sunMaterial.disableLighting = true; // Sun is unaffected by scene lighting
 
   // Apply material to sphere

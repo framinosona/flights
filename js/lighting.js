@@ -13,7 +13,7 @@ function initFillLight() {
     window.scene
   );
   window.fillLight.intensity = 0.3; // Subtle fill
-  window.fillLight.diffuse = new BABYLON.Color3(0.2, 0.3, 0.5); // Cool blue fill light (Earth's atmosphere)
+  window.fillLight.diffuse = BABYLON.Color3.FromHexString("#335580"); // Cool blue fill light (Earth's atmosphere)
 }
 
 // ==============================
@@ -45,8 +45,8 @@ function initCameraLight() {
 
   // Configure for soft, diffused lighting
   window.cameraLight.intensity = 0.4; // Moderate intensity to not overpower the sun
-  window.cameraLight.diffuse = new BABYLON.Color3(0.6, 0.7, 0.9); // Cool, atmospheric blue-white
-  window.cameraLight.specular = new BABYLON.Color3(0.1, 0.1, 0.2); // Minimal specular for soft look
+  window.cameraLight.diffuse = BABYLON.Color3.FromHexString("#99b3e6"); // Cool, atmospheric blue-white
+  window.cameraLight.specular = BABYLON.Color3.FromHexString("#1a1a33"); // Minimal specular for soft look
 
   console.log("💡 ✅ Camera-following light created");
 
