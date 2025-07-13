@@ -250,7 +250,7 @@ var getMeshes = async function (tileId) {
 
 function initPoleCaps() {
   // North pole cap - using a sphere segment for proper curvature
-  const northPoleCap = BABYLON.MeshBuilder.CreateSphere(
+  window.northPoleCap = BABYLON.MeshBuilder.CreateSphere(
     "northCap",
     {
       diameter: 2,
@@ -259,10 +259,10 @@ function initPoleCaps() {
     },
     window.scene
   );
-  northPoleCap.position = BABYLON.Vector3.Zero(); // Position at north pole
+  window.northPoleCap.position = BABYLON.Vector3.Zero(); // Position at north pole
 
   // South pole cap - create as a separate sphere and flip it
-  const southPoleCap = BABYLON.MeshBuilder.CreateSphere(
+  window.southPoleCap = BABYLON.MeshBuilder.CreateSphere(
     "southCap",
     {
       diameter: 2,
@@ -271,22 +271,38 @@ function initPoleCaps() {
     },
     window.scene
   );
-  southPoleCap.position = BABYLON.Vector3.Zero(); // Position at south pole
-  southPoleCap.rotation.z = Math.PI; // Flip upside down for south pole
-  var northCapColor = window.tileProvider.northCapColor || "#ffffff";
-  var southCapColor = window.tileProvider.southCapColor || "#000000";
+  window.southPoleCap.position = BABYLON.Vector3.Zero(); // Position at south pole
+  window.southPoleCap.rotation.z = Math.PI; // Flip upside down for south pole
 
   // Create a dark material for the polar caps
   var northPoleMat = sharedEarthResources.baseEarthMaterial.clone("northPoleMat");
-  northPoleMat.diffuseColor = BABYLON.Color3.FromHexString(northCapColor);
-  northPoleCap.material = northPoleMat;
+  window.northPoleCap.material = northPoleMat;
+  window.setNorthPoleColor(window.tileProvider.northCapColor || "#aad3df"); // Default to light blue
 
   var southPoleMat = sharedEarthResources.baseEarthMaterial.clone("southPoleMat");
-  southPoleMat.diffuseColor = BABYLON.Color3.FromHexString(southCapColor);
-  southPoleCap.material = southPoleMat;
+  window.southPoleCap.material = southPoleMat;
+  window.setSouthPoleColor(window.tileProvider.southCapColor || "#f2efe9"); // Default to light gray
 
   console.log("🌍 ✅ Spherical polar caps created");
 }
+
+window.setNorthPoleColor = function (color) {
+  if (window.northPoleCap && window.northPoleCap.material) {
+    window.northPoleCap.material.diffuseColor = BABYLON.Color3.FromHexString(color);
+    console.log(`🌍 ✅ North pole cap color set to: ${color}`);
+  } else {
+    console.warn("🌍 ⚠️ North pole cap not found or material missing");
+  }
+};
+
+window.setSouthPoleColor = function (color) {
+  if (window.southPoleCap && window.southPoleCap.material) {
+    window.southPoleCap.material.diffuseColor = BABYLON.Color3.FromHexString(color);
+    console.log(`🌍 ✅ South pole cap color set to: ${color}`);
+  } else {
+    console.warn("🌍 ⚠️ South pole cap not found or material missing");
+  }
+};
 
 /**
  * Sets up the progressive tile refinement system

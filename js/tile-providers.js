@@ -8,31 +8,31 @@ window.tileProviders = {
     name: "OpenStreetMap",
     urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "© OpenStreetMap contributors",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#aad3df",
+    southCapColor: "#f2efe9",
   },
   OPENTOPOMAP: {
     // Load time from last test = 1389ms
     name: "OpenTopoMap",
     urlTemplate: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: "© OpenTopoMap contributors",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#97d2e3",
+    southCapColor: "#ae625a",
   },
   CARTODB_POSITRON: {
     // Load time from last test = 18ms
     name: "CartoDB Positron",
     urlTemplate: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#d4dadc",
+    southCapColor: "#fafaf8",
   },
   CARTODB_DARK: {
     // Load time from last test = 15ms
     name: "CartoDB Dark",
     urlTemplate: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    northCapColor: "#ffffff",
+    northCapColor: "#262626",
     southCapColor: "#000000",
   },
   CARTODB_VOYAGER: {
@@ -40,8 +40,8 @@ window.tileProviders = {
     name: "CartoDB Voyager",
     urlTemplate: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#d5e8eb",
+    southCapColor: "#fbf8f3",
   },
   ESRI_WORLD_IMAGERY: {
     // Load time from last test = 54ms
@@ -49,8 +49,8 @@ window.tileProviders = {
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#054355",
+    southCapColor: "#f6f8fe",
   },
   ESRI_WORLD_TOPO_MAP: {
     // Load time from last test = 54ms
@@ -58,16 +58,16 @@ window.tileProviders = {
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#bae7fe",
+    southCapColor: "#fdfdfd",
   },
   BING_SATELLITE: {
     // Load time from last test = 83ms
     name: "Bing Satellite",
     urlTemplate: null, // Special handling for quadkey system
     attribution: "© Microsoft",
-    northCapColor: "#ffffff",
-    southCapColor: "#000000",
+    northCapColor: "#01121f",
+    southCapColor: "#e2e5f2",
   },
 };
 window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;
@@ -230,6 +230,8 @@ function updateTilesWithNewProvider() {
       `🌍 Updated ${updatedCount}/${tilesToUpdate.length} tiles with parallel processing`
     );
   })();
+  window.setNorthPoleColor(window.tileProvider.northCapColor || "#aad3df");
+  window.setSouthPoleColor(window.tileProvider.southCapColor || "#f2efe9");
 }
 
 // ==============================
@@ -425,6 +427,293 @@ async function testTileProvider(provider, zoomLevels, samplesPerZoom) {
   );
 
   return providerResults;
+}
+
+/**
+ * Extracts the cap colors from a tile provider by analyzing top and bottom polar tiles
+ * @param {Object} provider - Tile provider configuration to test
+ * @param {number} [zoom=1] - Zoom level to test (default: 1)
+ * @returns {Promise<Object>} Promise that resolves with extracted cap colors
+ */
+async function extractCapColors(provider, zoom = 1) {
+  console.log(`🎨 Extracting cap colors for: ${provider.name}`);
+
+  const results = {
+    provider: provider.name,
+    zoom: zoom,
+    northCap: null,
+    southCap: null,
+    configuredNorthCap: provider.northCapColor,
+    configuredSouthCap: provider.southCapColor,
+    accuracy: {
+      northMatch: false,
+      southMatch: false,
+    },
+  };
+
+  try {
+    // For zoom level 1, we have 2x2 tiles (4 total)
+    // Top tiles: y=0 (north pole area)
+    // Bottom tiles: y=1 (south pole area)
+    const tilesAtZoom = Math.pow(2, zoom);
+
+    // Test north cap (top edge of northernmost tiles)
+    const northTileY = 0;
+    const northTileX = Math.floor(tilesAtZoom / 2); // Center tile
+
+    // Test south cap (bottom edge of southernmost tiles)
+    const southTileY = tilesAtZoom - 1;
+    const southTileX = Math.floor(tilesAtZoom / 2); // Center tile
+
+    console.log(`🎨 Testing north cap: tile ${northTileX},${northTileY},${zoom}`);
+    const northColor = await extractColorFromTileEdge(
+      provider,
+      northTileX,
+      northTileY,
+      zoom,
+      "top"
+    );
+
+    console.log(`🎨 Testing south cap: tile ${southTileX},${southTileY},${zoom}`);
+    const southColor = await extractColorFromTileEdge(
+      provider,
+      southTileX,
+      southTileY,
+      zoom,
+      "bottom"
+    );
+
+    results.northCap = northColor;
+    results.southCap = southColor;
+
+    // Check accuracy against configured values
+    if (northColor && provider.northCapColor) {
+      results.accuracy.northMatch = colorsMatch(northColor.hex, provider.northCapColor);
+    }
+    if (southColor && provider.southCapColor) {
+      results.accuracy.southMatch = colorsMatch(southColor.hex, provider.southCapColor);
+    }
+
+    // Log results
+    console.log(`🎨 ${provider.name} cap colors:`);
+    console.log(
+      `  North: ${northColor?.hex || "N/A"} (configured: ${provider.northCapColor}) ${
+        results.accuracy.northMatch ? "✅" : "❌"
+      }`
+    );
+    console.log(
+      `  South: ${southColor?.hex || "N/A"} (configured: ${provider.southCapColor}) ${
+        results.accuracy.southMatch ? "✅" : "❌"
+      }`
+    );
+  } catch (error) {
+    console.error(`🎨 ❌ Error extracting cap colors for ${provider.name}:`, error);
+    results.error = error.message;
+  }
+
+  return results;
+}
+
+/**
+ * Extracts the dominant color from a specific edge of a tile
+ * @param {Object} provider - Tile provider configuration
+ * @param {number} x - Tile X coordinate
+ * @param {number} y - Tile Y coordinate
+ * @param {number} z - Zoom level
+ * @param {string} edge - Edge to sample ('top' or 'bottom')
+ * @returns {Promise<Object>} Promise that resolves with color information
+ */
+function extractColorFromTileEdge(provider, x, y, z, edge) {
+  return new Promise((resolve, reject) => {
+    const tileUrl = getTileUrl(x, y, z, provider);
+    const img = new Image();
+
+    img.crossOrigin = "anonymous"; // Enable cross-origin for canvas
+
+    img.onload = function () {
+      try {
+        // Create canvas to analyze the image
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+
+        // Draw the image
+        ctx.drawImage(this, 0, 0);
+
+        // Sample pixels from the specified edge
+        const sampleY = edge === "top" ? 0 : canvas.height - 1;
+        const pixelSamples = [];
+
+        // Sample every 10th pixel across the width for performance
+        const sampleStep = Math.max(1, Math.floor(canvas.width / 50));
+
+        for (let x = 0; x < canvas.width; x += sampleStep) {
+          const pixelData = ctx.getImageData(x, sampleY, 1, 1).data;
+          pixelSamples.push({
+            r: pixelData[0],
+            g: pixelData[1],
+            b: pixelData[2],
+            a: pixelData[3],
+          });
+        }
+
+        // Calculate the average color
+        const avgColor = calculateAverageColor(pixelSamples);
+
+        resolve({
+          edge: edge,
+          tileCoords: { x, y, z },
+          tileUrl: tileUrl,
+          samplesCount: pixelSamples.length,
+          rgb: avgColor,
+          hex: rgbToHex(avgColor.r, avgColor.g, avgColor.b),
+          samples: pixelSamples.slice(0, 5), // Include first 5 samples for debugging
+        });
+      } catch (error) {
+        reject(new Error(`Canvas analysis failed: ${error.message}`));
+      }
+    };
+
+    img.onerror = function () {
+      reject(new Error(`Failed to load tile: ${tileUrl}`));
+    };
+
+    // Set timeout
+    setTimeout(() => {
+      if (!img.complete) {
+        reject(new Error(`Timeout loading tile: ${tileUrl}`));
+      }
+    }, 10000);
+
+    img.src = tileUrl;
+  });
+}
+
+/**
+ * Calculates the average color from an array of pixel samples
+ * @param {Array<Object>} samples - Array of pixel color objects with r, g, b properties
+ * @returns {Object} Average color with r, g, b properties
+ */
+function calculateAverageColor(samples) {
+  if (samples.length === 0) return { r: 0, g: 0, b: 0 };
+
+  const total = samples.reduce(
+    (acc, sample) => ({
+      r: acc.r + sample.r,
+      g: acc.g + sample.g,
+      b: acc.b + sample.b,
+    }),
+    { r: 0, g: 0, b: 0 }
+  );
+
+  return {
+    r: Math.round(total.r / samples.length),
+    g: Math.round(total.g / samples.length),
+    b: Math.round(total.b / samples.length),
+  };
+}
+
+/**
+ * Converts RGB values to hexadecimal color string
+ * @param {number} r - Red value (0-255)
+ * @param {number} g - Green value (0-255)
+ * @param {number} b - Blue value (0-255)
+ * @returns {string} Hexadecimal color string (e.g., "#ffffff")
+ */
+function rgbToHex(r, g, b) {
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+/**
+ * Compares two color values for similarity
+ * @param {string} color1 - First color in hex format
+ * @param {string} color2 - Second color in hex format
+ * @param {number} [tolerance=20] - Color difference tolerance (0-255)
+ * @returns {boolean} True if colors are similar within tolerance
+ */
+function colorsMatch(color1, color2, tolerance = 20) {
+  if (!color1 || !color2) return false;
+
+  // Convert hex to RGB
+  const rgb1 = hexToRgb(color1);
+  const rgb2 = hexToRgb(color2);
+
+  if (!rgb1 || !rgb2) return false;
+
+  // Calculate color difference using Euclidean distance
+  const diff = Math.sqrt(
+    Math.pow(rgb1.r - rgb2.r, 2) + Math.pow(rgb1.g - rgb2.g, 2) + Math.pow(rgb1.b - rgb2.b, 2)
+  );
+
+  return diff <= tolerance;
+}
+
+/**
+ * Converts hexadecimal color string to RGB values
+ * @param {string} hex - Hexadecimal color string (e.g., "#ffffff")
+ * @returns {Object|null} RGB object with r, g, b properties or null if invalid
+ */
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+}
+
+/**
+ * Tests cap colors for all tile providers
+ * @param {number} [zoom=1] - Zoom level to test
+ * @returns {Promise<Array<Object>>} Promise that resolves with cap color results for all providers
+ */
+async function testAllCapColors(zoom = 1) {
+  console.log("🎨 Testing cap colors for all tile providers...");
+  const results = [];
+
+  const providers = Object.values(window.tileProviders);
+
+  for (const provider of providers) {
+    try {
+      const capColors = await extractCapColors(provider, zoom);
+      results.push(capColors);
+    } catch (error) {
+      console.error(`🎨 ❌ Failed to test cap colors for ${provider.name}:`, error);
+      results.push({
+        provider: provider.name,
+        error: error.message,
+      });
+    }
+
+    // Small delay between providers to avoid overwhelming servers
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+
+  // Summary
+  const accurate = results.filter((r) => r.accuracy?.northMatch && r.accuracy?.southMatch).length;
+  const total = results.filter((r) => !r.error).length;
+
+  console.log(`\n🎨 Cap color testing complete!`);
+  console.log(`📊 Accuracy: ${accurate}/${total} providers have correct cap colors`);
+
+  // Show recommendations for incorrect colors
+  results.forEach((result) => {
+    if (result.accuracy && (!result.accuracy.northMatch || !result.accuracy.southMatch)) {
+      console.log(`\n🔧 Recommended updates for ${result.provider}:`);
+      if (!result.accuracy.northMatch && result.northCap) {
+        console.log(`  northCapColor: "${result.northCap.hex}",`);
+      }
+      if (!result.accuracy.southMatch && result.southCap) {
+        console.log(`  southCapColor: "${result.southCap.hex}",`);
+      }
+    }
+  });
+
+  return results;
 }
 
 /**
