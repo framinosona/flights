@@ -84,6 +84,63 @@ window.setTileProvider = function (provider) {
 };
 
 /**
+ * Automatically finds and sets the best performing tile provider
+ * @returns {Promise<Object>} The selected tile provider
+ */
+window.setBestTileProvider = async function () {
+  console.log("🔍 Finding best tile provider...");
+  const bestProvider = await findBestTileProvider();
+  window.setTileProvider(bestProvider);
+  return bestProvider;
+};
+
+/**
+ * Tests all tile providers in parallel to find the fastest available option
+ * @returns {Promise<Object>} The best performing tile provider
+ */
+async function findBestTileProvider() {
+  console.log("🚀 Testing all tile providers in parallel...");
+
+  const providers = Object.values(window.tileProviders);
+  const testPromises = providers.map(
+    (provider) => testTileProviderAtCoordinates(provider, 1, 1, 2) // Test with a sample tile
+  );
+
+  try {
+    const results = await Promise.allSettled(testPromises);
+
+    // Filter successful results and sort by load time
+    const successfulResults = results
+      .filter((result) => result.status === "fulfilled" && result.value.success)
+      .map((result) => result.value)
+      .sort((a, b) => a.loadTime - b.loadTime);
+
+    if (successfulResults.length === 0) {
+      console.warn("⚠️ No tile providers are working, using default");
+      return window.tileProviders.OPENSTREETMAP;
+    }
+
+    const fastest = successfulResults[0];
+    console.log(`✅ Best tile provider: ${fastest.provider} (${fastest.loadTime}ms)`);
+
+    // Log all results for debugging
+    results.forEach((result, index) => {
+      if (result.status === "fulfilled") {
+        const r = result.value;
+        console.log(`${r.success ? "✅" : "❌"} ${r.provider}: ${r.loadTime}ms`);
+      } else {
+        console.log(`❌ ${providers[index].name}: ${result.reason}`);
+      }
+    });
+
+    return providers.find((p) => p.name === fastest.provider);
+  } catch (error) {
+    console.error("❌ Error testing tile providers:", error);
+    return window.tileProviders.OPENSTREETMAP;
+  }
+}
+
+/**
  * Updates all loaded Earth tiles with the new tile provider
  * Refreshes all visible tiles to use the new imagery source
  */
@@ -101,54 +158,77 @@ function updateTilesWithNewProvider() {
   const tilesToUpdate = [...window.loadedTiles];
   let updatedCount = 0;
 
-  tilesToUpdate.forEach((mesh, index) => {
-    if (mesh && mesh.tileId && !mesh.isDisposed() && mesh.material) {
-      try {
-        const tileId = mesh.tileId;
-        const newTileUrl = getTileUrl(tileId.x, tileId.y, tileId.zoom, window.tileProvider);
+  // PARALLEL TEXTURE UPDATES: Process multiple tiles concurrently
+  const batchSize = 5; // Process 5 tiles at a time to avoid overwhelming the browser
 
-        // Create new texture with the new provider
-        const newTexture = new BABYLON.Texture(
-          newTileUrl,
-          window.scene,
-          false, // noMipmap
-          true, // invertY
-          BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
-          () => {
-            // Texture loaded successfully
-            if (mesh.material && mesh.material.diffuseTexture) {
-              // Dispose old texture
-              mesh.material.diffuseTexture.dispose();
+  async function updateTileBatch(batch) {
+    const updatePromises = batch.map(async (mesh, originalIndex) => {
+      if (mesh && mesh.tileId && !mesh.isDisposed() && mesh.material) {
+        try {
+          const tileId = mesh.tileId;
+          const newTileUrl = getTileUrl(tileId.x, tileId.y, tileId.zoom, window.tileProvider);
 
-              // Apply new texture
-              mesh.material.diffuseTexture = newTexture;
-              mesh.material.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
-              mesh.material.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
-              mesh.material.diffuseTexture.anisotropicFilteringLevel = 4;
+          return new Promise((resolve, reject) => {
+            // Create new texture with the new provider
+            const newTexture = new BABYLON.Texture(
+              newTileUrl,
+              window.scene,
+              false, // noMipmap
+              true, // invertY
+              BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
+              () => {
+                // Texture loaded successfully
+                if (mesh.material && mesh.material.diffuseTexture) {
+                  // Dispose old texture
+                  mesh.material.diffuseTexture.dispose();
 
-              updatedCount++;
+                  // Apply new texture
+                  mesh.material.diffuseTexture = newTexture;
+                  mesh.material.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
+                  mesh.material.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
+                  mesh.material.diffuseTexture.anisotropicFilteringLevel = 4;
 
-              // Log progress periodically
-              if (updatedCount === tilesToUpdate.length) {
-                console.log(`🌍 Updated ${tilesToUpdate.length} tiles`);
+                  updatedCount++;
+                  resolve(true);
+                }
+              },
+              () => {
+                // Texture loading failed
+                console.warn(
+                  `⚠️ Failed to load new texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`
+                );
+                newTexture.dispose(); // Clean up failed texture
+                reject(new Error("Texture load failed"));
               }
-            }
-          },
-          () => {
-            // Texture loading failed
-            console.warn(
-              `⚠️ Failed to load new texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`
             );
-            newTexture.dispose(); // Clean up failed texture
-          }
-        );
-      } catch (error) {
-        console.error(`❌ Error updating tile ${index}:`, error);
+          });
+        } catch (error) {
+          console.error(`❌ Error updating tile:`, error);
+          return Promise.reject(error);
+        }
+      }
+      return Promise.resolve(false);
+    });
+
+    await Promise.allSettled(updatePromises);
+  }
+
+  // Process tiles in batches
+  (async () => {
+    for (let i = 0; i < tilesToUpdate.length; i += batchSize) {
+      const batch = tilesToUpdate.slice(i, i + batchSize);
+      await updateTileBatch(batch);
+
+      // Small delay between batches to prevent overwhelming the browser
+      if (i + batchSize < tilesToUpdate.length) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
       }
     }
-  });
 
-  console.log(`✅ Started updating Earth tiles with ${window.tileProvider.name} provider`);
+    console.log(
+      `🌍 Updated ${updatedCount}/${tilesToUpdate.length} tiles with parallel processing`
+    );
+  })();
 }
 
 // ==============================
