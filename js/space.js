@@ -26,8 +26,8 @@ window.skyboxSet = window.skyboxSets.TYRO1;
 /**
  * Creates the main skybox mesh
  */
-function initializeSpaceEnvironment() {
-  setSkyboxSet(window.skyboxSet);
+async function initializeSpaceEnvironment() {
+  await setSkyboxSet(window.skyboxSet);
   console.log("✅ Skybox material applied");
   return true;
 }
@@ -46,17 +46,50 @@ window.setSkybox = function (skyboxSet) {
   return true;
 };
 
-function setSkyboxSet(skyboxSet) {
+async function setSkyboxSet(skyboxSet) {
   window.skyboxSet = skyboxSet;
   console.log(`🌌 Skybox set changed to: ${window.skyboxSet.name}`);
 
-  var skyboxTexture = new BABYLON.CubeTexture(
-    window.skyboxSet.baseName,
-    window.scene,
-    ["Right", "Top", "Front", "Left", "Bottom", "Back"].map((dir) => `${dir}.png`)
+  // PARALLEL LOADING: Preload all skybox face textures concurrently
+  const faceNames = ["Right", "Top", "Front", "Left", "Bottom", "Back"];
+  const textureUrls = faceNames.map((dir) => `${window.skyboxSet.baseName}${dir}.png`);
+
+  console.log("🚀 Starting parallel skybox texture preloading...");
+
+  // Preload all textures in parallel before creating the cube texture
+  const preloadPromises = textureUrls.map(
+    (url) =>
+      new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = () => reject(new Error(`Failed to load skybox texture: ${url}`));
+        img.src = url;
+      })
   );
 
-  window.scene.createDefaultSkybox(skyboxTexture);
-  console.log(`✅ Skybox textures updated for set: ${window.skyboxSet.name}`);
-  return true;
+  try {
+    await Promise.all(preloadPromises);
+    console.log("✅ All skybox textures preloaded successfully");
+
+    // Now create the cube texture with preloaded images
+    var skyboxTexture = new BABYLON.CubeTexture(
+      window.skyboxSet.baseName,
+      window.scene,
+      faceNames.map((dir) => `${dir}.png`)
+    );
+
+    window.scene.createDefaultSkybox(skyboxTexture);
+    console.log(`✅ Skybox textures updated for set: ${window.skyboxSet.name}`);
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to preload skybox textures:", error);
+    // Fallback to original behavior
+    var skyboxTexture = new BABYLON.CubeTexture(
+      window.skyboxSet.baseName,
+      window.scene,
+      faceNames.map((dir) => `${dir}.png`)
+    );
+    window.scene.createDefaultSkybox(skyboxTexture);
+    return false;
+  }
 }
