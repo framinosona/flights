@@ -77,6 +77,25 @@ function initCameraLight() {
  * Initializes the complete lighting system
  */
 async function initializeLighting() {
-  await tryInitializeAsync("🌙 Fill Light", initFillLight);
-  await tryInitializeAsync("📷 Camera Light", initCameraLight);
+  // PARALLEL LIGHTING: Initialize both lights concurrently
+  console.log("🚀 Starting parallel lighting initialization...");
+
+  const lightingPromises = [
+    tryInitializeAsync("🌙 Fill Light", initFillLight),
+    tryInitializeAsync("📷 Camera Light", initCameraLight),
+  ];
+
+  const results = await Promise.allSettled(lightingPromises);
+
+  // Check results and log any failures
+  const lightLabels = ["🌙 Fill Light", "📷 Camera Light"];
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      console.warn(`⚠️ ${lightLabels[index]} failed:`, result.reason);
+    } else {
+      console.log(`✅ ${lightLabels[index]} initialized successfully`);
+    }
+  });
+
+  console.log("✅ Parallel lighting initialization complete");
 }
