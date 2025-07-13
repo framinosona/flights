@@ -18,6 +18,9 @@ function initSun() {
   console.log(`☀️ Adjusted sun direction:`, sunDirection);
   initSunLight(scaledSunPosition, sunDirection);
 
+  // Initialize volumetric light scattering effect
+  initVolumetricLightScattering(scaledSunPosition);
+
   // Set up periodic updates
   window.sunUpdateInterval = setInterval(() => {
     var sunPosition = calculateSunPosition();
@@ -28,6 +31,9 @@ function initSun() {
     var sunDirection = sunPosition.normalize();
     sunDirection.scaleInPlace(-1);
     updateSunLight(sunPosition, sunDirection);
+
+    // Update volumetric light scattering position
+    updateVolumetricLightScattering(scaledSunPosition);
   }, 15 * 60 * 1000); // Update every 15 minutes
   console.log("☀️ Sun tracking set up with 15-minute intervals");
 }
@@ -118,6 +124,71 @@ function updateSunLight(sunDirection) {
   // Update sun light direction based on calculated position
   window.sunLight.direction = sunDirection;
   console.log(`☀️ Sun light direction updated to:`, sunDirection);
+}
+
+// ==============================
+// VOLUMETRIC LIGHT SCATTERING
+// ==============================
+
+/**
+ * Creates volumetric light scattering effect around the sun
+ * @param {BABYLON.Vector3} sunPosition - The position of the sun
+ */
+function initVolumetricLightScattering(sunPosition) {
+  console.log("☀️ Creating volumetric light scattering effect...");
+
+  // Validate scene and camera exist
+  if (!window.scene || !window.scene.activeCamera) {
+    console.error("Scene or camera not found - volumetric light scattering cannot be created");
+    return false;
+  }
+
+  // Check if VolumetricLightScatteringPostProcess is available
+  if (!BABYLON.VolumetricLightScatteringPostProcess) {
+    console.warn("☀️ VolumetricLightScatteringPostProcess not available - skipping effect");
+    return false;
+  }
+
+  try {
+    // Create volumetric light scattering post-process
+    window.volumetricLightScattering = new BABYLON.VolumetricLightScatteringPostProcess(
+      "volumetricLightScattering", // name
+      1.0, // ratio (1.0 = full resolution)
+      window.scene.activeCamera, // camera
+      window.sunSphere, // mesh to use as light source (our sun sphere)
+      50, // number of samples (reduced for better performance)
+      BABYLON.Texture.BILINEAR_SAMPLINGMODE, // sampling mode
+      window.scene.getEngine(), // engine
+      false, // reusable
+      window.scene // scene
+    );
+
+    // Configure volumetric light scattering properties
+    window.volumetricLightScattering.exposure = 0.2; // Light intensity
+    window.volumetricLightScattering.decay = 0.97; // Light decay rate
+    window.volumetricLightScattering.weight = 0.4; // Effect strength
+    window.volumetricLightScattering.density = 0.8; // Atmospheric density
+
+    console.log("☀️ Volumetric light scattering effect created successfully");
+    return true;
+  } catch (error) {
+    console.error("☀️ Failed to create volumetric light scattering:", error);
+    return false;
+  }
+}
+
+/**
+ * Updates the volumetric light scattering position
+ * @param {BABYLON.Vector3} sunPosition - The new position of the sun
+ */
+function updateVolumetricLightScattering(sunPosition) {
+  if (!window.volumetricLightScattering || !window.sunSphere) {
+    return;
+  }
+
+  // The volumetric light scattering automatically uses the sun sphere position
+  // since we passed it as the mesh parameter during creation
+  // No manual position updates needed
 }
 
 // ==============================
@@ -216,6 +287,52 @@ window.setSunSize = function (diameter) {
   console.log(`☀️ Sun sphere size set to: ${diameter}`);
 };
 
+/**
+ * Controls volumetric light scattering effect intensity
+ * @param {number} exposure - Light exposure (0.1-0.5 recommended)
+ */
+window.setVolumetricLightExposure = function (exposure) {
+  if (!window.volumetricLightScattering) {
+    console.warn("☀️ Volumetric light scattering not found, cannot set exposure");
+    return;
+  }
+
+  window.volumetricLightScattering.exposure = exposure;
+  console.log(`☀️ Volumetric light exposure set to: ${exposure}`);
+};
+
+/**
+ * Controls volumetric light scattering effect strength
+ * @param {number} weight - Effect weight (0.3-0.8 recommended)
+ */
+window.setVolumetricLightWeight = function (weight) {
+  if (!window.volumetricLightScattering) {
+    console.warn("☀️ Volumetric light scattering not found, cannot set weight");
+    return;
+  }
+
+  window.volumetricLightScattering.weight = weight;
+  console.log(`☀️ Volumetric light weight set to: ${weight}`);
+};
+
+/**
+ * Enables or disables volumetric light scattering effect
+ * @param {boolean} enabled - Whether the effect should be enabled
+ */
+window.setVolumetricLightEnabled = function (enabled) {
+  if (!window.volumetricLightScattering) {
+    console.warn("☀️ Volumetric light scattering not found, cannot toggle");
+    return;
+  }
+
+  if (enabled) {
+    window.volumetricLightScattering.setCamera(window.scene.activeCamera);
+  } else {
+    window.volumetricLightScattering.setCamera(null);
+  }
+  console.log(`☀️ Volumetric light scattering enabled: ${enabled}`);
+};
+
 // ==============================
 // SUN CLEANUP
 // ==============================
@@ -250,6 +367,13 @@ window.disposeSun = function () {
     window.sunLight.dispose();
     window.sunLight = null;
     console.log("☀️ Sun light disposed");
+  }
+
+  // Dispose of volumetric light scattering effect
+  if (window.volumetricLightScattering) {
+    window.volumetricLightScattering.dispose();
+    window.volumetricLightScattering = null;
+    console.log("☀️ Volumetric light scattering disposed");
   }
 
   console.log("☀️ All sun resources cleaned up");
