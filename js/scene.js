@@ -177,12 +177,44 @@ async function initFunction() {
     await tryInitializeAsync("🔄 Render Loop", initRenderLoop);
     await tryInitializeAsync("🎥 Camera Creation", initCamera);
 
-    // In other files (using async version for potentially async functions):
-    await tryInitializeAsync("💡 Lights", initializeLighting);
-    await tryInitializeAsync("☀️ Sun", initSun);
-    await tryInitializeAsync("🌌 Space", initializeSpaceEnvironment);
-    await tryInitializeAsync("🌍 Earth", initializeEarth);
-    await tryInitializeAsync("✈️ Flights", initializeFlights);
+    // PARALLEL PHASE 1: Independent visual systems (can run simultaneously)
+    console.log("🚀 Starting parallel initialization of visual systems...");
+    const visualSystemsPromises = [
+      tryInitializeAsync("💡 Lights", initializeLighting),
+      tryInitializeAsync("☀️ Sun", initSun),
+      tryInitializeAsync("🌌 Space", initializeSpaceEnvironment),
+    ];
+
+    const visualResults = await Promise.allSettled(visualSystemsPromises);
+
+    // Log any failures but continue
+    const visualLabels = ["💡 Lights", "☀️ Sun", "🌌 Space"];
+    visualResults.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.warn(`⚠️ ${visualLabels[index]} failed:`, result.reason);
+      } else {
+        console.log(`✅ ${visualLabels[index]} initialized successfully`);
+      }
+    });
+
+    // PARALLEL PHASE 2: Data-heavy systems (Earth and Flights can load concurrently)
+    console.log("🚀 Starting parallel initialization of data systems...");
+    const dataSystemsPromises = [
+      tryInitializeAsync("🌍 Earth", initializeEarth),
+      tryInitializeAsync("✈️ Flights", initializeFlights),
+    ];
+
+    const dataResults = await Promise.allSettled(dataSystemsPromises);
+
+    // Handle data system results
+    const dataLabels = ["🌍 Earth", "✈️ Flights"];
+    dataResults.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`❌ ${dataLabels[index]} failed:`, result.reason);
+      } else {
+        console.log(`✅ ${dataLabels[index]} initialized successfully`);
+      }
+    });
 
     console.log("🎉 Application initialized successfully!");
   } catch (error) {
