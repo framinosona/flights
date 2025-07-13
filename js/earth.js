@@ -230,12 +230,10 @@ var getMeshes = async function (tileId) {
     mesh.tileAngle = angle;
     window.loadedTiles.push(mesh);
   } else {
-    // Subdivide into higher detail tiles
+    // Subdivide into higher detail tiles - PARALLEL LOADING
     var children = tileId.children;
-    getMeshes(children[0]);
-    getMeshes(children[1]);
-    getMeshes(children[2]);
-    getMeshes(children[3]);
+    const childPromises = children.map((childId) => getMeshes(childId));
+    await Promise.allSettled(childPromises); // Load all child tiles in parallel
   }
 };
 
@@ -367,7 +365,29 @@ async function initEarthTiles() {
  * Initializes the Earth tile system in the given scene
  */
 async function initializeEarth() {
+  console.log("🚀 Starting parallel Earth initialization...");
+
+  // PARALLEL PHASE 1: Independent Earth components that can load simultaneously
+  const independentPromises = [
+    tryInitializeAsync("🔄 Tile Refinement", initTileRefinement),
+    tryInitializeAsync("🧊 Polar Caps", initPoleCaps),
+  ];
+
+  // PARALLEL PHASE 2: Core tiles (must complete before refinement can work effectively)
+  const independentResults = await Promise.allSettled(independentPromises);
+
+  // Initialize core tiles (this needs to complete before other systems can use loadedTiles)
   await tryInitializeAsync("🌍 Earth Tiles", initEarthTiles);
-  await tryInitializeAsync("🔄 Tile Refinement", initTileRefinement);
-  await tryInitializeAsync("🧊 Polar Caps", initPoleCaps);
+
+  // Log results of independent components
+  const componentLabels = ["🔄 Tile Refinement", "🧊 Polar Caps"];
+  independentResults.forEach((result, index) => {
+    if (result.status === "rejected") {
+      console.warn(`⚠️ ${componentLabels[index]} failed:`, result.reason);
+    } else {
+      console.log(`✅ ${componentLabels[index]} initialized successfully`);
+    }
+  });
+
+  console.log("✅ Parallel Earth initialization complete");
 }
