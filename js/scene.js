@@ -237,9 +237,7 @@ async function initFunction() {
  */
 function disposeScene() {
   try {
-    console.log("🔧 🗑️ Starting comprehensive scene cleanup...");
-
-    // Dispose all module resources in dependency order
+    console.log("🔧 🗑️ Starting comprehensive scene cleanup..."); // Dispose all module resources in dependency order
     // (Most dependent modules first, core modules last)
 
     if (typeof window.disposeFlights === "function") {
@@ -252,6 +250,10 @@ function disposeScene() {
 
     if (typeof window.disposeEarth === "function") {
       window.disposeEarth();
+    }
+
+    if (typeof window.disposeTileProviders === "function") {
+      window.disposeTileProviders();
     }
 
     if (typeof window.disposeLighting === "function") {

@@ -80,8 +80,10 @@ window.setTileProvider = function (provider) {
   window.tileProvider = provider;
   console.log(`🌍 ✅ Switched to earth tile provider: ${provider.name}`);
 
-  // Update the Earth scene with the new provider
-  updateTilesWithNewProvider();
+  // Reinitialize the Earth with the new provider
+  reinitializeEarthWithNewProvider().catch((error) => {
+    console.error("🌍 ❌ Failed to reinitialize Earth with new provider:", error);
+  });
 };
 
 /**
@@ -142,96 +144,47 @@ async function findBestTileProvider() {
 }
 
 /**
- * Updates all loaded Earth tiles with the new tile provider
- * Refreshes all visible tiles to use the new imagery source
+ * Reinitializes Earth with the new tile provider
+ * Disposes current Earth and recreates it with the new imagery source
  */
-function updateTilesWithNewProvider() {
-  if (!window.scene || !window.loadedTiles || window.loadedTiles.length === 0) {
-    console.warn("🌍 ⚠️ No Earth tiles loaded or scene not available for provider update");
-    return;
-  }
+async function reinitializeEarthWithNewProvider() {
+  console.log(`🌍 🔄 Reinitializing Earth with new provider: ${window.tileProvider.name}`);
 
-  console.log(
-    `🌍 🔄 Updating ${window.loadedTiles.length} tiles with new provider: ${window.tileProvider.name}`
-  );
-
-  // Create a copy of the tiles array to avoid modification during iteration
-  const tilesToUpdate = [...window.loadedTiles];
-  let updatedCount = 0;
-
-  // PARALLEL TEXTURE UPDATES: Process multiple tiles concurrently
-  const batchSize = 5; // Process 5 tiles at a time to avoid overwhelming the browser
-
-  async function updateTileBatch(batch) {
-    const updatePromises = batch.map(async (mesh, originalIndex) => {
-      if (mesh && mesh.tileId && !mesh.isDisposed() && mesh.material) {
-        try {
-          const tileId = mesh.tileId;
-          const newTileUrl = getTileUrl(tileId.x, tileId.y, tileId.zoom, window.tileProvider);
-
-          return new Promise((resolve, reject) => {
-            // Create new texture with the new provider
-            const newTexture = new BABYLON.Texture(
-              newTileUrl,
-              window.scene,
-              false, // noMipmap
-              true, // invertY
-              BABYLON.Texture.TRILINEAR_SAMPLINGMODE,
-              () => {
-                // Texture loaded successfully
-                if (mesh.material && mesh.material.diffuseTexture) {
-                  // Dispose old texture
-                  mesh.material.diffuseTexture.dispose();
-
-                  // Apply new texture
-                  mesh.material.diffuseTexture = newTexture;
-                  mesh.material.diffuseTexture.wrapU = BABYLON.Texture.CLAMP_ADDRESSMODE;
-                  mesh.material.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE;
-                  mesh.material.diffuseTexture.anisotropicFilteringLevel = 4;
-
-                  updatedCount++;
-                  resolve(true);
-                }
-              },
-              () => {
-                // Texture loading failed
-                console.warn(
-                  `🌍 ⚠️ Failed to load new texture for tile ${tileId.x},${tileId.y},${tileId.zoom}`
-                );
-                newTexture.dispose(); // Clean up failed texture
-                reject(new Error("Texture load failed"));
-              }
-            );
-          });
-        } catch (error) {
-          console.error(`🌍 ❌ Error updating tile:`, error);
-          return Promise.reject(error);
-        }
-      }
-      return Promise.resolve(false);
-    });
-
-    await Promise.allSettled(updatePromises);
-  }
-
-  // Process tiles in batches
-  (async () => {
-    for (let i = 0; i < tilesToUpdate.length; i += batchSize) {
-      const batch = tilesToUpdate.slice(i, i + batchSize);
-      await updateTileBatch(batch);
-
-      // Small delay between batches to prevent overwhelming the browser
-      if (i + batchSize < tilesToUpdate.length) {
-        await new Promise((resolve) => setTimeout(resolve, 50));
-      }
+  try {
+    // Step 1: Dispose current Earth resources
+    if (typeof window.disposeEarth === "function") {
+      console.log("🌍 🗑️ Disposing current Earth resources...");
+      window.disposeEarth();
+    } else {
+      console.warn("🌍 ⚠️ disposeEarth function not found, skipping disposal");
     }
 
-    console.log(
-      `🌍 Updated ${updatedCount}/${tilesToUpdate.length} tiles with parallel processing`
-    );
-  })();
-  window.setNorthPoleColor(window.tileProvider.northCapColor || "#aad3df");
-  window.setSouthPoleColor(window.tileProvider.southCapColor || "#f2efe9");
+    // Step 2: Small delay to ensure cleanup is complete
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Step 3: Reinitialize Earth with new provider
+    if (typeof initializeEarth === "function") {
+      console.log("🌍 🏗️ Reinitializing Earth with new tile provider...");
+      await initializeEarth();
+      console.log(`🌍 ✅ Earth reinitialized successfully with ${window.tileProvider.name}`);
+    } else {
+      console.error("🌍 ❌ initializeEarth function not found, cannot reinitialize");
+      throw new Error("Earth initialization function not available");
+    }
+
+    // Step 4: Update pole colors to match new provider
+    if (
+      typeof window.setNorthPoleColor === "function" &&
+      typeof window.setSouthPoleColor === "function"
+    ) {
+      window.setNorthPoleColor(window.tileProvider.northCapColor || "#aad3df");
+      window.setSouthPoleColor(window.tileProvider.southCapColor || "#f2efe9");
+      console.log("🌍 🎨 Pole colors updated to match new tile provider");
+    }
+  } catch (error) {
+    console.error("🌍 ❌ Error reinitializing Earth with new provider:", error);
+    throw error;
+  }
 }
 
 // ==============================
@@ -739,3 +692,22 @@ function testTileProviders(zoomLevels = [1, 2, 3], samplesPerZoom = 4) {
     resolve(results);
   });
 }
+
+// ==============================
+// TILE PROVIDERS CLEANUP
+// ==============================
+
+/**
+ * Disposes of tile provider-related resources and cleans up
+ */
+window.disposeTileProviders = function () {
+  console.log("🌍 🗑️ Disposing tile provider resources...");
+
+  // Clear tile provider references
+  window.tileProvider = null;
+
+  // Note: The actual tile providers configuration (window.tileProviders)
+  // is kept as it's just configuration data, not resources that need disposal
+
+  console.log("🌍 ✅ Tile provider resources cleaned up");
+};
