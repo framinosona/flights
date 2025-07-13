@@ -93,3 +93,54 @@ async function setSkyboxSet(skyboxSet) {
     return false;
   }
 }
+
+// ==============================
+// SPACE CLEANUP
+// ==============================
+
+/**
+ * Disposes of all space-related resources and cleans up
+ */
+window.disposeSpace = function () {
+  console.log("🌌 🗑️ Disposing space resources...");
+
+  // Dispose skybox
+  if (window.scene && window.scene.environmentTexture) {
+    window.scene.environmentTexture.dispose();
+    window.scene.environmentTexture = null;
+    console.log("🌌 ✅ Environment texture disposed");
+  }
+
+  // Dispose any skybox meshes
+  if (window.scene) {
+    const skyboxMeshes = window.scene.meshes.filter(
+      (mesh) =>
+        mesh.name &&
+        (mesh.name.includes("skybox") ||
+          mesh.name.includes("sky") ||
+          mesh.name === "BackgroundSkybox" ||
+          mesh.name === "hdrSkyBox")
+    );
+
+    skyboxMeshes.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material) {
+          if (mesh.material.reflectionTexture) {
+            mesh.material.reflectionTexture.dispose();
+          }
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+      }
+    });
+
+    if (skyboxMeshes.length > 0) {
+      console.log(`🌌 ✅ Disposed ${skyboxMeshes.length} skybox meshes`);
+    }
+  }
+
+  // Clear skybox references
+  window.skyboxSet = null;
+
+  console.log("🌌 ✅ All space resources cleaned up");
+};

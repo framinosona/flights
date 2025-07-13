@@ -944,3 +944,86 @@ async function initializeFlights() {
     throw error;
   }
 }
+
+// ==============================
+// FLIGHTS CLEANUP
+// ==============================
+
+/**
+ * Disposes of all flight-related resources and cleans up
+ */
+window.disposeFlights = function () {
+  console.log("✈️ 🗑️ Disposing flight resources...");
+
+  let disposedCount = 0;
+
+  // Dispose stored airport points
+  if (flightSystem.airportPoints && flightSystem.airportPoints.length > 0) {
+    flightSystem.airportPoints.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material) {
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+        disposedCount++;
+      }
+    });
+    flightSystem.airportPoints = [];
+    console.log(`✈️ ✅ Disposed ${disposedCount} airport points`);
+  }
+
+  // Dispose stored flight arcs
+  disposedCount = 0;
+  if (flightSystem.flightArcs && flightSystem.flightArcs.length > 0) {
+    flightSystem.flightArcs.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material) {
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+        disposedCount++;
+      }
+    });
+    flightSystem.flightArcs = [];
+    console.log(`✈️ ✅ Disposed ${disposedCount} flight arcs`);
+  }
+
+  // Also dispose any flight-related meshes that might be in the scene
+  if (window.scene) {
+    const flightMeshes = window.scene.meshes.filter(
+      (mesh) =>
+        mesh.name &&
+        (mesh.name.includes("flight") ||
+          mesh.name.includes("airport") ||
+          mesh.name.includes("arc") ||
+          mesh.isFlightSystemObject)
+    );
+
+    let sceneDisposedCount = 0;
+    flightMeshes.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material) {
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+        sceneDisposedCount++;
+      }
+    });
+
+    if (sceneDisposedCount > 0) {
+      console.log(`✈️ ✅ Disposed ${sceneDisposedCount} additional flight meshes from scene`);
+    }
+  }
+
+  // Reset flight system state
+  flightSystem = {
+    airportCoords: null,
+    flightLogs: null,
+    airportPoints: [],
+    flightArcs: [],
+    initialized: false,
+    error: null,
+  };
+
+  console.log("✈️ ✅ All flight resources cleaned up");
+};

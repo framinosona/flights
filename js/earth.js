@@ -417,3 +417,102 @@ async function initializeEarth() {
 
   console.log("🌍 ✅ Parallel Earth initialization complete");
 }
+
+// ==============================
+// EARTH CLEANUP
+// ==============================
+
+/**
+ * Disposes of all Earth-related resources and cleans up
+ */
+window.disposeEarth = function () {
+  console.log("🌍 🗑️ Disposing Earth resources...");
+
+  let disposedCount = 0;
+
+  // Dispose loaded tiles
+  if (window.loadedTiles && window.loadedTiles.length > 0) {
+    window.loadedTiles.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material && mesh.material.diffuseTexture) {
+          mesh.material.diffuseTexture.dispose();
+        }
+        if (mesh.material) {
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+        disposedCount++;
+      }
+    });
+    window.loadedTiles = [];
+    console.log(`🌍 ✅ Disposed ${disposedCount} Earth tiles`);
+  }
+
+  // Dispose polar caps
+  if (window.northPoleCap) {
+    if (window.northPoleCap.material) {
+      window.northPoleCap.material.dispose();
+    }
+    window.northPoleCap.dispose();
+    window.northPoleCap = null;
+    console.log("🌍 ✅ North pole cap disposed");
+  }
+
+  if (window.southPoleCap) {
+    if (window.southPoleCap.material) {
+      window.southPoleCap.material.dispose();
+    }
+    window.southPoleCap.dispose();
+    window.southPoleCap = null;
+    console.log("🌍 ✅ South pole cap disposed");
+  }
+
+  // Dispose shared Earth resources
+  if (typeof sharedEarthResources !== "undefined") {
+    if (sharedEarthResources.baseEarthMaterial) {
+      sharedEarthResources.baseEarthMaterial.dispose();
+      sharedEarthResources.baseEarthMaterial = null;
+    }
+    if (sharedEarthResources.northPoleMaterial) {
+      sharedEarthResources.northPoleMaterial.dispose();
+      sharedEarthResources.northPoleMaterial = null;
+    }
+    if (sharedEarthResources.southPoleMaterial) {
+      sharedEarthResources.southPoleMaterial.dispose();
+      sharedEarthResources.southPoleMaterial = null;
+    }
+    console.log("🌍 ✅ Shared Earth materials disposed");
+  }
+
+  // Dispose any remaining Earth-related meshes from scene
+  if (window.scene) {
+    const earthMeshes = window.scene.meshes.filter(
+      (mesh) =>
+        mesh.name &&
+        (mesh.name.includes("tile") ||
+          mesh.name.includes("earth") ||
+          mesh.name.includes("pole") ||
+          mesh.name.includes("cap"))
+    );
+
+    let sceneDisposedCount = 0;
+    earthMeshes.forEach((mesh) => {
+      if (mesh && !mesh.isDisposed()) {
+        if (mesh.material) {
+          if (mesh.material.diffuseTexture) {
+            mesh.material.diffuseTexture.dispose();
+          }
+          mesh.material.dispose();
+        }
+        mesh.dispose();
+        sceneDisposedCount++;
+      }
+    });
+
+    if (sceneDisposedCount > 0) {
+      console.log(`🌍 ✅ Disposed ${sceneDisposedCount} additional Earth meshes from scene`);
+    }
+  }
+
+  console.log("🌍 ✅ All Earth resources cleaned up");
+};

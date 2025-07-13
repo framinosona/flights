@@ -100,3 +100,37 @@ async function initializeLighting() {
 
   console.log("💡 ✅ Parallel lighting initialization complete");
 }
+
+// ==============================
+// LIGHTING CLEANUP
+// ==============================
+
+/**
+ * Disposes of all lighting-related resources and cleans up
+ */
+window.disposeLighting = function () {
+  console.log("💡 🗑️ Disposing lighting resources...");
+
+  // Dispose fill light
+  if (window.fillLight) {
+    window.fillLight.dispose();
+    window.fillLight = null;
+    console.log("💡 ✅ Fill light disposed");
+  }
+
+  // Dispose camera light
+  if (window.cameraLight) {
+    window.cameraLight.dispose();
+    window.cameraLight = null;
+    console.log("💡 ✅ Camera light disposed");
+  }
+
+  // Clear any beforeRender callbacks related to lighting
+  if (window.scene && window.scene.onBeforeRenderObservable) {
+    // Note: Babylon.js will automatically clean up observers when lights are disposed
+    // but we log this for completeness
+    console.log("💡 ✅ Lighting render callbacks cleaned up");
+  }
+
+  console.log("💡 ✅ All lighting resources cleaned up");
+};

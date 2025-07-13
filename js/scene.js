@@ -237,27 +237,81 @@ async function initFunction() {
  */
 function disposeScene() {
   try {
-    // Dispose sun resources first
+    console.log("🔧 🗑️ Starting comprehensive scene cleanup...");
+
+    // Dispose all module resources in dependency order
+    // (Most dependent modules first, core modules last)
+
+    if (typeof window.disposeFlights === "function") {
+      window.disposeFlights();
+    }
+
     if (typeof window.disposeSun === "function") {
       window.disposeSun();
     }
 
+    if (typeof window.disposeEarth === "function") {
+      window.disposeEarth();
+    }
+
+    if (typeof window.disposeLighting === "function") {
+      window.disposeLighting();
+    }
+
+    if (typeof window.disposeSpace === "function") {
+      window.disposeSpace();
+    }
+
+    // Dispose any remaining scene resources
     if (window.scene) {
+      // Dispose any remaining meshes
+      const remainingMeshes = window.scene.meshes.slice(); // Create copy
+      let remainingDisposed = 0;
+      remainingMeshes.forEach((mesh) => {
+        if (mesh && !mesh.isDisposed()) {
+          if (mesh.material) {
+            if (mesh.material.diffuseTexture) {
+              mesh.material.diffuseTexture.dispose();
+            }
+            mesh.material.dispose();
+          }
+          mesh.dispose();
+          remainingDisposed++;
+        }
+      });
+
+      if (remainingDisposed > 0) {
+        console.log(`🔧 ✅ Disposed ${remainingDisposed} remaining meshes`);
+      }
+
+      // Dispose scene
       window.scene.dispose();
       window.scene = null;
       console.log("🔧 ✅ Scene disposed");
     }
 
+    // Dispose engine
     if (window.engine) {
       window.engine.dispose();
       window.engine = null;
       console.log("🔧 ✅ Engine disposed");
     }
-    console.log("🔧 ✅ All resources cleaned up");
+
+    console.log("🔧 ✅ All resources cleaned up successfully");
   } catch (error) {
     console.error("🔧 ❌ Error during cleanup:", error);
   }
 }
+
+/**
+ * Master disposal function that can be called manually
+ * Disposes all application resources in the correct order
+ */
+window.disposeAll = function () {
+  console.log("🔧 🎯 Master disposal initiated...");
+  disposeScene();
+  console.log("🔧 🎯 Master disposal complete");
+};
 
 // ==============================
 // EVENT HANDLERS
