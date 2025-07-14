@@ -384,7 +384,7 @@ async function initEarthTiles() {
  * Initializes the Earth tile system in the given scene
  */
 async function initializeEarth() {
-  console.log("🌍 🚀 Starting parallel Earth initialization...");
+  console.log("🌍 🚀 Starting Earth initialization...");
 
   // PARALLEL PHASE 1: Independent Earth components that can load simultaneously
   const independentPromises = [
@@ -397,7 +397,7 @@ async function initializeEarth() {
   const independentResults = await Promise.allSettled(independentPromises);
 
   // Initialize core tiles (this needs to complete before other systems can use loadedTiles)
-  await tryInitializeAsync("🌍", "Earth Tiles", initEarthTiles);
+  await tryInitializeAsync("🌍", `Earth Tiles for ${window.tileProvider.name}`, initEarthTiles);
 
   // Log results of independent components
   const componentEmojis = ["📚", "🔄", "🧊"];

@@ -70,7 +70,7 @@ window.tileProviders = {
     southCapColor: "#e2e5f2",
   },
 };
-window.tileProvider = window.tileProviders.ESRI_WORLD_IMAGERY;
+window.tileProvider = window.tileProviders.BING_SATELLITE;
 
 /**
  * Sets the active Earth tile provider
@@ -154,7 +154,7 @@ async function reinitializeEarthWithNewProvider() {
     // Step 1: Dispose current Earth resources
     if (typeof window.disposeEarth === "function") {
       console.log("🌍 🗑️ Disposing current Earth resources...");
-      window.disposeEarth();
+      await window.disposeEarth();
     } else {
       console.warn("🌍 ⚠️ disposeEarth function not found, skipping disposal");
     }
