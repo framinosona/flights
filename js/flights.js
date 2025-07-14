@@ -34,6 +34,7 @@ const FLIGHT_CONFIG = {
     height: 0.05,
     colors: {
       default: { emissive: "#4db3ff", diffuse: "#3399e6" },
+      hover: { emissive: "#80b3ff", diffuse: "#66a3e6" },
     },
     alpha: 0.4,
   },
@@ -441,9 +442,22 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
     }
 
     // Set material properties
-    const colors = FLIGHT_CONFIG.airportPoint.colors.default;
-    pointMaterial.emissiveColor = BABYLON.Color3.FromHexString(colors.emissive);
-    pointMaterial.diffuseColor = BABYLON.Color3.FromHexString(colors.diffuse);
+    airportSphere.originalEmissive = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.airportPoint.colors.default.emissive
+    );
+    airportSphere.originalDiffuse = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.airportPoint.colors.default.diffuse
+    );
+    airportSphere.hoverEmissive = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.airportPoint.colors.hover.emissive
+    );
+    airportSphere.hoverDiffuse = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.airportPoint.colors.hover.diffuse
+    );
+
+    // Apply colors and properties
+    pointMaterial.emissiveColor = airportSphere.originalEmissive.clone();
+    pointMaterial.diffuseColor = airportSphere.originalDiffuse.clone();
     pointMaterial.specularColor = BABYLON.Color3.FromHexString("#ffffcc");
     pointMaterial.disableLighting = true;
     pointMaterial.alpha = 0.9;
@@ -459,16 +473,11 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
     airportSphere.isPickable = true;
     airportSphere.actionManager = new BABYLON.ActionManager(window.scene);
 
-    // Store original material properties for hover effects
-    airportSphere.originalEmissive = pointMaterial.emissiveColor.clone();
-    airportSphere.originalDiffuse = pointMaterial.diffuseColor.clone();
-
     // Add hover effects
     airportSphere.actionManager.registerAction(
       new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, () => {
-        const hoverColors = FLIGHT_CONFIG.airportPoint.colors.hover;
-        pointMaterial.emissiveColor = BABYLON.Color3.FromHexString(hoverColors.emissive);
-        pointMaterial.diffuseColor = BABYLON.Color3.FromHexString(hoverColors.diffuse);
+        pointMaterial.emissiveColor = airportSphere.hoverEmissive.clone();
+        pointMaterial.diffuseColor = airportSphere.hoverDiffuse.clone();
       })
     );
 
@@ -727,6 +736,19 @@ function createFlightArc(
     }
 
     // Set material properties
+    arcMaterial.originalEmissive = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.flightArc.colors.default.emissive
+    );
+    arcMaterial.originalDiffuse = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.flightArc.colors.default.diffuse
+    );
+    arcMaterial.hoverEmissive = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.flightArc.colors.hover.emissive
+    );
+    arcMaterial.hoverDiffuse = BABYLON.Color3.FromHexString(
+      FLIGHT_CONFIG.flightArc.colors.hover.diffuse
+    );
+
     const colors = options.colors || FLIGHT_CONFIG.flightArc.colors.default;
     arcMaterial.emissiveColor = BABYLON.Color3.FromHexString(colors.emissive);
     arcMaterial.diffuseColor = BABYLON.Color3.FromHexString(colors.diffuse);
@@ -735,6 +757,25 @@ function createFlightArc(
     arcMaterial.alpha = options.alpha || FLIGHT_CONFIG.flightArc.alpha;
 
     arcTube.material = arcMaterial;
+
+    // Configure interaction
+    arcTube.isPickable = true;
+    arcTube.actionManager = new BABYLON.ActionManager(window.scene);
+
+    // Add hover effects
+    arcTube.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, () => {
+        arcMaterial.emissiveColor = arcMaterial.hoverEmissive.clone();
+        arcMaterial.diffuseColor = arcMaterial.hoverDiffuse.clone();
+      })
+    );
+
+    arcTube.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, () => {
+        arcMaterial.emissiveColor = arcMaterial.originalEmissive.clone();
+        arcMaterial.diffuseColor = arcMaterial.originalDiffuse.clone();
+      })
+    );
 
     // Store metadata
     arcTube.isFlightSystemObject = true;
