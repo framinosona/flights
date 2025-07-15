@@ -23,21 +23,21 @@ body {
     position: fixed;
     left: 0;
     aspect-ratio: 1;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-#first-side-ui-block {
-    background-color: #0B3041;
-    /* @dark-blue */
-    height: 100vh;
-    top: 0;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
+#framinosona-top-side-ui-block {
+  background-color: #0b3041;
+  /* @dark-blue */
+  height: 100vh;
+  top: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
-#second-side-ui-block {
-    background-color: #215f9a;
-    /* @light-blue */
-    height: 50vh;
-    top: 50vh;
-    clip-path: polygon(0 0, 100% 100%, 0 100%);
+#framinosona-bottom-side-ui-block {
+  background-color: #215f9a;
+  /* @light-blue */
+  height: 50vh;
+  top: 50vh;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
 }
