@@ -87,63 +87,6 @@ window.setTileProvider = function (provider) {
 };
 
 /**
- * Automatically finds and sets the best performing tile provider
- * @returns {Promise<Object>} The selected tile provider
- */
-window.setBestTileProvider = async function () {
-  console.log("🌍 🔍 Finding best tile provider...");
-  const bestProvider = await findBestTileProvider();
-  window.setTileProvider(bestProvider);
-  return bestProvider;
-};
-
-/**
- * Tests all tile providers in parallel to find the fastest available option
- * @returns {Promise<Object>} The best performing tile provider
- */
-async function findBestTileProvider() {
-  console.log("🌍 Testing all tile providers in parallel...");
-
-  const providers = Object.values(window.tileProviders);
-  const testPromises = providers.map(
-    (provider) => testTileProviderAtCoordinates(provider, 1, 1, 2) // Test with a sample tile
-  );
-
-  try {
-    const results = await Promise.allSettled(testPromises);
-
-    // Filter successful results and sort by load time
-    const successfulResults = results
-      .filter((result) => result.status === "fulfilled" && result.value.success)
-      .map((result) => result.value)
-      .sort((a, b) => a.loadTime - b.loadTime);
-
-    if (successfulResults.length === 0) {
-      console.warn("🌍 ⚠️ No tile providers are working, using default");
-      return window.tileProviders.OPENSTREETMAP;
-    }
-
-    const fastest = successfulResults[0];
-    console.log(`🌍 ✅ Best tile provider: ${fastest.provider} (${fastest.loadTime}ms)`);
-
-    // Log all results for debugging
-    results.forEach((result, index) => {
-      if (result.status === "fulfilled") {
-        const r = result.value;
-        console.log(`🌍 ${r.success ? "✅" : "❌"} ${r.provider}: ${r.loadTime}ms`);
-      } else {
-        console.log(`🌍 ❌ ${providers[index].name}: ${result.reason}`);
-      }
-    });
-
-    return providers.find((p) => p.name === fastest.provider);
-  } catch (error) {
-    console.error("🌍 ❌ Error testing tile providers:", error);
-    return window.tileProviders.OPENSTREETMAP;
-  }
-}
-
-/**
  * Reinitializes Earth with the new tile provider
  * Disposes current Earth and recreates it with the new imagery source
  */

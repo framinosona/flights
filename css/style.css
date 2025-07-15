@@ -95,6 +95,61 @@ body {
   line-height: 1.6;
 }
 
+.tile-provider-selector h3 {
+  margin: 0 0 1.5em 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.tile-provider-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1em;
+}
+
+.tile-provider-option {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1em;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  font-family: inherit;
+}
+
+.tile-provider-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #87ceeb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tile-provider-option.active {
+  background: #215f9a;
+  border-color: #87ceeb;
+  box-shadow: 0 0 15px rgba(135, 206, 235, 0.3);
+}
+
+.tile-provider-option .provider-name {
+  font-weight: 500;
+  font-size: 0.95em;
+  margin-bottom: 0.3em;
+  color: white;
+}
+
+.tile-provider-option .provider-info {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+}
+
 #framinosona-menu .framinosona-menu-links {
   padding: 2em;
   padding-left: 5em; /* Adjusted padding for better alignment */
