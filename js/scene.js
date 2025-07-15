@@ -75,11 +75,12 @@ function initCamera() {
   window.camera.setPosition(initCameraPosition);
   console.log("🎥 ✅ Camera created at position:", window.camera.position);
   window.camera.lowerRadiusLimit = 1.05;
-  window.camera.upperRadiusLimit = 3;
-  window.camera.wheelDeltaPercentage = 0.01;
+  window.camera.upperRadiusLimit = 8;
+  window.camera.wheelPrecision = 50; // Adjusted for smoother zoom
+  //window.camera.wheelDeltaPercentage = 0.01;
   window.camera.minZ = 0.01;
   window.camera.maxZ = 300; // Extended range to accommodate sun sphere at distance 100
-  window.camera.attachControl(window.canvas, true);
+  window.camera.attachControl(window.canvas);
 }
 
 // ==============================
