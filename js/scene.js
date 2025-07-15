@@ -19,6 +19,7 @@ async function initEngineAsync() {
     adaptToDeviceRatio: true, // Better for high-DPI displays
     antialias: true, // Enable antialiasing
     powerPreference: "high-performance", // Request high-performance GPU
+    doNotHandleContextLost: true,
   });
   // Validate engine creation
   if (!window.engine) {
