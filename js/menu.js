@@ -111,12 +111,9 @@ function initializeSkyboxSelector() {
         button.classList.add("active");
       }
 
-      // Generate description based on skybox name
-      const info = generateSkyboxDescription(skyboxSet.name, key);
-
       button.innerHTML = `
         <span class="skybox-name">${skyboxSet.name}</span>
-        <span class="skybox-info">${info}</span>
+        <span class="skybox-info">${skyboxSet.description}</span>
       `;
 
       skyboxGrid.appendChild(button);
@@ -147,23 +144,6 @@ function initializeSkyboxSelector() {
   });
 
   console.log(`🌌 ✅ Generated ${skyboxOptions.length} skybox options`);
-}
-
-// Helper function to generate skybox descriptions
-function generateSkyboxDescription(name, key) {
-  // You can customize these descriptions or add a 'description' field to skyboxSets
-  const descriptions = {
-    TYRO1: "Deep space view",
-    TYRO2: "Nebula field",
-    TYRO3: "Galaxy cluster",
-    TYRO4: "Cosmic void",
-    TYRO5: "Star nursery",
-    TYRO6: "Stellar highway",
-    TYRO7: "Cosmic storm",
-    TYRO8: "Distant quasar",
-  };
-
-  return descriptions[key] || `Space environment ${key.replace("TYRO", "")}`;
 }
 
 // Lighting controls functionality
