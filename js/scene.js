@@ -36,7 +36,7 @@ function initRenderLoop() {
 }
 
 /**
- * Creates and configures the main scene with lighting and camera
+ * Creates and configures the main scene
  */
 function initScene() {
   window.scene ||= new BABYLON.Scene(window.engine);
@@ -53,35 +53,6 @@ function initScene() {
   window.scene.autoClear = true; // Enable automatic clearing for proper background
   window.scene.autoClearDepthAndStencil = true;
   console.log("🔧 ✅ Scene properties configured");
-}
-
-/**
- * Creates and configures the main scene with lighting and camera
- */
-function initCamera() {
-  var initCameraPosition = new BABYLON.Vector3(-1.949, 1.861, -0.225); // Europe centric position
-  window.camera ||= new BABYLON.ArcRotateCamera(
-    "camera1",
-    0,
-    0,
-    0,
-    BABYLON.Vector3.Zero(), // Look at the center of the Earth
-    window.scene
-  );
-
-  // Validate camera creation
-  if (!window.camera) {
-    throw new Error("Camera creation failed - camera should not be null");
-  }
-  window.camera.setPosition(initCameraPosition);
-  console.log("🎥 ✅ Camera created at position:", window.camera.position);
-  window.camera.lowerRadiusLimit = 1.05;
-  window.camera.upperRadiusLimit = 8;
-  window.camera.wheelPrecision = 50; // Adjusted for smoother zoom
-  //window.camera.wheelDeltaPercentage = 0.01;
-  window.camera.minZ = 0.01;
-  window.camera.maxZ = 300; // Extended range to accommodate sun sphere at distance 100
-  window.camera.attachControl(window.canvas);
 }
 
 // ==============================

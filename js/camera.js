@@ -1,19 +1,33 @@
 // ==============================
-// FILL LIGHT
+// CAMERA
 // ==============================
 
-/**
- * Creates a subtle fill light to prevent complete darkness on Earth's night side
- */
-function initFillLight() {
-  // Subtle fill light to prevent complete darkness
-  window.fillLight ||= new BABYLON.DirectionalLight(
-    "fillLight",
-    new BABYLON.Vector3(0.3, 0.2, 0.5), // Opposite side from sun
+async function initCamera() {
+  var initCameraPosition = new BABYLON.Vector3(-1.949, 1.861, -0.225); // Europe centric position
+  window.camera ||= new BABYLON.ArcRotateCamera(
+    "camera1",
+    0,
+    0,
+    0,
+    BABYLON.Vector3.Zero(), // Look at the center of the Earth
     window.scene
   );
-  window.fillLight.intensity = 0.3; // Subtle fill
-  window.fillLight.diffuse = BABYLON.Color3.FromHexString("#335580"); // Cool blue fill light (Earth's atmosphere)
+
+  // Validate camera creation
+  if (!window.camera) {
+    throw new Error("Camera creation failed - camera should not be null");
+  }
+  window.camera.setPosition(initCameraPosition);
+  console.log("🎥 ✅ Camera created at position:", window.camera.position);
+  window.camera.lowerRadiusLimit = 1.05;
+  window.camera.upperRadiusLimit = 8;
+  window.camera.wheelPrecision = 50; // Adjusted for smoother zoom
+  //window.camera.wheelDeltaPercentage = 0.01;
+  window.camera.minZ = 0.01;
+  window.camera.maxZ = 300; // Extended range to accommodate sun sphere at distance 100
+  window.camera.attachControl(window.canvas);
+
+  await tryInitializeAsync("🎥", "💡 Camera Light", initCameraLight);
 }
 
 // ==============================
@@ -44,7 +58,7 @@ function initCameraLight() {
   );
 
   // Configure for soft, diffused lighting
-  window.cameraLight.intensity = 0.4; // Moderate intensity to not overpower the sun
+  window.cameraLight.intensity = 0.6; // Moderate intensity to not overpower the sun
   window.cameraLight.diffuse = BABYLON.Color3.FromHexString("#99b3e6"); // Cool, atmospheric blue-white
   window.cameraLight.specular = BABYLON.Color3.FromHexString("#1a1a33"); // Minimal specular for soft look
 
@@ -80,10 +94,7 @@ async function initializeLighting() {
   // PARALLEL LIGHTING: Initialize both lights concurrently
   console.log("💡 🚀 Starting parallel lighting initialization...");
 
-  const lightingPromises = [
-    tryInitializeAsync("🌙", "Fill Light", initFillLight),
-    tryInitializeAsync("📷", "Camera Light", initCameraLight),
-  ];
+  const lightingPromises = [tryInitializeAsync("📷", "Camera Light", initCameraLight)];
 
   const results = await Promise.allSettled(lightingPromises);
 
@@ -111,13 +122,6 @@ async function initializeLighting() {
 window.disposeLighting = function () {
   console.log("💡 🗑️ Disposing lighting resources...");
 
-  // Dispose fill light
-  if (window.fillLight) {
-    window.fillLight.dispose();
-    window.fillLight = null;
-    console.log("💡 ✅ Fill light disposed");
-  }
-
   // Dispose camera light
   if (window.cameraLight) {
     window.cameraLight.dispose();
@@ -133,4 +137,36 @@ window.disposeLighting = function () {
   }
 
   console.log("💡 ✅ All lighting resources cleaned up");
+};
+
+// ==============================
+// LIGHTING CONTROLS
+// ==============================
+
+/**
+ * Enables or disables the camera light
+ * @param {boolean} enabled - Whether the camera light should be enabled
+ */
+window.setCameraLightEnabled = function (enabled) {
+  if (!window.cameraLight) {
+    console.warn("📷 ⚠️ Camera light not found, cannot toggle");
+    return;
+  }
+
+  window.cameraLight.setEnabled(enabled);
+  console.log(`📷 ${enabled ? "✅ Enabled" : "❌ Disabled"} camera light`);
+};
+
+/**
+ * Adjusts the camera light intensity
+ * @param {number} intensity - Light intensity (0.0-1.0 recommended)
+ */
+window.setCameraLightIntensity = function (intensity) {
+  if (!window.cameraLight) {
+    console.warn("📷 ⚠️ Camera light not found, cannot adjust intensity");
+    return;
+  }
+
+  window.cameraLight.intensity = Math.max(0, intensity);
+  console.log(`📷 ✅ Camera light intensity set to ${intensity}`);
 };

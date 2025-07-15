@@ -6,6 +6,9 @@ window.tileProviders = {
   OPENSTREETMAP: {
     // Load time from last test = 17ms
     name: "OpenStreetMap",
+    description:
+      "A collaborative mapping project that provides free geographic data and mapping to anyone who wants to use it.",
+    short: "Community maps",
     urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: "© OpenStreetMap contributors",
     northCapColor: "#aad3df",
@@ -14,6 +17,8 @@ window.tileProviders = {
   OPENTOPOMAP: {
     // Load time from last test = 1389ms
     name: "OpenTopoMap",
+    description: "A topographic map of the world, based on OpenStreetMap data.",
+    short: "Topographic map",
     urlTemplate: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
     attribution: "© OpenTopoMap contributors",
     northCapColor: "#97d2e3",
@@ -22,6 +27,8 @@ window.tileProviders = {
   CARTODB_POSITRON: {
     // Load time from last test = 18ms
     name: "CartoDB Positron",
+    description: "A light, neutral basemap designed for use with CartoDB's mapping platform.",
+    short: "Light theme",
     urlTemplate: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
     northCapColor: "#d4dadc",
@@ -30,6 +37,8 @@ window.tileProviders = {
   CARTODB_DARK: {
     // Load time from last test = 15ms
     name: "CartoDB Dark",
+    description: "A dark-themed basemap from CartoDB, suitable for night mode applications.",
+    short: "Dark theme",
     urlTemplate: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
     northCapColor: "#262626",
@@ -38,6 +47,8 @@ window.tileProviders = {
   CARTODB_VOYAGER: {
     // Load time from last test = 13ms
     name: "CartoDB Voyager",
+    description: "A modern, detailed basemap from CartoDB with a focus on urban areas.",
+    short: "Urban focus",
     urlTemplate: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
     attribution: "© CartoDB",
     northCapColor: "#d5e8eb",
@@ -46,6 +57,8 @@ window.tileProviders = {
   ESRI_WORLD_IMAGERY: {
     // Load time from last test = 54ms
     name: "ESRI World Imagery",
+    description: "High-resolution satellite imagery from ESRI, suitable for detailed mapping.",
+    short: "Satellite view",
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
@@ -55,6 +68,8 @@ window.tileProviders = {
   ESRI_WORLD_TOPO_MAP: {
     // Load time from last test = 54ms
     name: "ESRI World Topo Map",
+    description: "A topographic map from ESRI, providing detailed terrain information.",
+    short: "Topographic map",
     urlTemplate:
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
     attribution: "© ESRI",
@@ -64,6 +79,8 @@ window.tileProviders = {
   BING_SATELLITE: {
     // Load time from last test = 83ms
     name: "Bing Satellite",
+    description: "High-resolution satellite imagery from Microsoft Bing.",
+    short: "High-res imagery",
     urlTemplate: null, // Special handling for quadkey system
     attribution: "© Microsoft",
     northCapColor: "#01121f",

@@ -44,42 +44,72 @@
         <div class="tile-provider-selector">
           <h3>Earth Tile Provider</h3>
           <div class="tile-provider-grid">
-            <button class="tile-provider-option active" data-provider="BING_SATELLITE">
-              <span class="provider-name">Bing Satellite</span>
-              <span class="provider-info">High-res imagery</span>
-            </button>
-            <button class="tile-provider-option" data-provider="OPENSTREETMAP">
-              <span class="provider-name">OpenStreetMap</span>
-              <span class="provider-info">Community maps</span>
-            </button>
-            <button class="tile-provider-option" data-provider="CARTODB_DARK">
-              <span class="provider-name">CartoDB Dark</span>
-              <span class="provider-info">Dark theme</span>
-            </button>
-            <button class="tile-provider-option" data-provider="CARTODB_POSITRON">
-              <span class="provider-name">CartoDB Light</span>
-              <span class="provider-info">Light theme</span>
-            </button>
-            <button class="tile-provider-option" data-provider="ESRI_WORLD_IMAGERY">
-              <span class="provider-name">ESRI Imagery</span>
-              <span class="provider-info">Satellite view</span>
-            </button>
-            <button class="tile-provider-option" data-provider="OPENTOPOMAP">
-              <span class="provider-name">OpenTopoMap</span>
-              <span class="provider-info">Topographic</span>
-            </button>
+            <!-- Tile providers will be dynamically generated -->
+          </div>
+        </div>
+
+        <div class="skybox-controls">
+          <h3>Skybox Selection</h3>
+          <div class="skybox-grid">
+            <!-- Skyboxes will be dynamically generated -->
+          </div>
+        </div>
+
+        <div class="lighting-controls">
+          <h3>Lighting Controls</h3>
+
+          <div class="lighting-section">
+            <h4>Sun</h4>
+            <div class="control-group">
+              <div class="toggle-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="sun-enabled" checked title="Enable Sun">
+                  <span class="toggle-slider"></span>
+                </label>
+                <label class="control-label" for="sun-enabled">Enable Sun</label>
+              </div>
+              <div class="slider-control">
+                <label for="sun-intensity">Intensity</label>
+                <input type="range" id="sun-intensity" min="0" max="2" step="0.1" value="0.5">
+                <span class="slider-value">0.5</span>
+              </div>
+              <div class="toggle-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="sun-sphere-visible" checked title="Show Sun Sphere">
+                  <span class="toggle-slider"></span>
+                </label>
+                <label class="control-label" for="sun-sphere-visible">Show Sun Sphere</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="lighting-section">
+            <h4>Camera Light</h4>
+            <div class="control-group">
+              <div class="toggle-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="camera-light-enabled" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <label class="control-label" for="camera-light-enabled">Enable Camera Light</label>
+              </div>
+              <div class="slider-control">
+                <label for="camera-light-intensity">Intensity</label>
+                <input type="range" id="camera-light-intensity" min="0" max="1" step="0.1" value="0.4">
+                <span class="slider-value">0.4</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="framinosona-menu-links">
         <ul>
           <li><a href="https://francois.raminosona.com">Resume</a></li>
-          <li><a href="https://blog.francois.raminosona.com">Portfolio</a></li>
+          <li><a href="https://blog.francois.raminosona.com">Blog</a></li>
           <li><a href="https://gallery.francois.raminosona.com">Gallery</a></li>
           <li><a href="https://github.com/framinosona">GitHub</a></li>
           <li><a href="https://www.linkedin.com/in/framinosona/">LinkedIn</a></li>
           <li><a href="https://www.instagram.com/framinosona/">Instagram</a></li>
-          <li><a href="https://www.twitter.com/framinosona">Twitter</a></li>
         </ul>
       </div>
       <div class="framinosona-menu-footer">
@@ -95,7 +125,7 @@
     <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
     <script src="js/tile-providers.js"></script>
     <script src="js/earth.js"></script>
-    <script src="js/lighting.js"></script>
+    <script src="js/camera.js"></script>
     <script src="js/space.js"></script>
     <script src="js/sun.js"></script>
     <script src="js/flights.js"></script>

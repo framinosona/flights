@@ -102,7 +102,7 @@ function initSunLight(sunPosition, sunDirection) {
   );
 
   // Configure sun properties
-  window.sunLight.intensity = 1.2; // Bright sunlight
+  window.sunLight.intensity = 0.5; // Bright sunlight
   window.sunLight.diffuse = BABYLON.Color3.FromHexString("#fff2cc"); // Slightly warm white
   window.sunLight.specular = BABYLON.Color3.FromHexString("#ffffe6"); // Bright specular highlights
 
@@ -333,6 +333,81 @@ window.setVolumetricLightEnabled = function (enabled) {
     window.volumetricLightScattering.setCamera(null);
   }
   console.log(`☀️ ✅ Volumetric light scattering enabled: ${enabled}`);
+};
+
+// ==============================
+// SUN CONTROLS
+// ==============================
+
+/**
+ * Enables or disables the entire sun system (light and sphere)
+ * @param {boolean} enabled - Whether the sun should be enabled
+ */
+window.setSunEnabled = function (enabled) {
+  // Control sun light
+  if (window.sunLight) {
+    window.sunLight.setEnabled(enabled);
+    console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} sun light`);
+  } else {
+    console.warn("☀️ ⚠️ Sun light not found, cannot toggle");
+  }
+
+  // Control sun sphere visibility
+  if (window.sunSphere) {
+    window.sunSphere.setEnabled(enabled);
+    console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} sun sphere`);
+  } else {
+    console.warn("☀️ ⚠️ Sun sphere not found, cannot toggle");
+  }
+
+  // Control volumetric light scattering
+  if (window.volumetricLightScattering) {
+    window.setVolumetricLightEnabled(enabled);
+  }
+
+  console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} complete sun system`);
+};
+
+/**
+ * Enables or disables only the sun light (keeps sphere visible)
+ * @param {boolean} enabled - Whether the sun light should be enabled
+ */
+window.setSunLightEnabled = function (enabled) {
+  if (!window.sunLight) {
+    console.warn("☀️ ⚠️ Sun light not found, cannot toggle");
+    return;
+  }
+
+  window.sunLight.setEnabled(enabled);
+  console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} sun light only`);
+};
+
+/**
+ * Adjusts the sun light intensity
+ * @param {number} intensity - Light intensity (0.5-2.0 recommended)
+ */
+window.setSunLightIntensity = function (intensity) {
+  if (!window.sunLight) {
+    console.warn("☀️ ⚠️ Sun light not found, cannot adjust intensity");
+    return;
+  }
+
+  window.sunLight.intensity = Math.max(0, intensity);
+  console.log(`☀️ ✅ Sun light intensity set to ${intensity}`);
+};
+
+/**
+ * Shows or hides only the sun sphere (keeps light enabled)
+ * @param {boolean} visible - Whether the sun sphere should be visible
+ */
+window.setSunSphereVisible = function (visible) {
+  if (!window.sunSphere) {
+    console.warn("☀️ ⚠️ Sun sphere not found, cannot toggle visibility");
+    return;
+  }
+
+  window.sunSphere.setEnabled(visible);
+  console.log(`☀️ ${visible ? "✅ Shown" : "❌ Hidden"} sun sphere`);
 };
 
 // ==============================
