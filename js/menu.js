@@ -153,10 +153,6 @@ function initializeLightingControls() {
   const sunIntensitySlider = document.getElementById("sun-intensity");
   const sunSphereVisibleToggle = document.getElementById("sun-sphere-visible");
 
-  // Fill light controls
-  const fillLightEnabledToggle = document.getElementById("fill-light-enabled");
-  const fillLightIntensitySlider = document.getElementById("fill-light-intensity");
-
   // Camera light controls
   const cameraLightEnabledToggle = document.getElementById("camera-light-enabled");
   const cameraLightIntensitySlider = document.getElementById("camera-light-intensity");
@@ -191,26 +187,6 @@ function initializeLightingControls() {
     sunSphereVisibleToggle.addEventListener("change", function () {
       if (window.setSunSphereVisible) {
         window.setSunSphereVisible(this.checked);
-      }
-    });
-  }
-
-  // Fill light controls event listeners
-  if (fillLightEnabledToggle) {
-    fillLightEnabledToggle.addEventListener("change", function () {
-      if (window.setFillLightEnabled) {
-        window.setFillLightEnabled(this.checked);
-      }
-    });
-  }
-
-  if (fillLightIntensitySlider) {
-    const valueSpan = fillLightIntensitySlider.parentElement.querySelector(".slider-value");
-    fillLightIntensitySlider.addEventListener("input", function () {
-      const value = parseFloat(this.value);
-      updateSliderValue(this, valueSpan);
-      if (window.setFillLightIntensity) {
-        window.setFillLightIntensity(value);
       }
     });
   }
