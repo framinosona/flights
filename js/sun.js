@@ -289,52 +289,6 @@ window.setSunSize = function (diameter) {
   console.log(`☀️ ✅ Sun sphere size set to: ${diameter}`);
 };
 
-/**
- * Controls volumetric light scattering effect intensity
- * @param {number} exposure - Light exposure (0.1-0.5 recommended)
- */
-window.setVolumetricLightExposure = function (exposure) {
-  if (!window.volumetricLightScattering) {
-    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot set exposure");
-    return;
-  }
-
-  window.volumetricLightScattering.exposure = exposure;
-  console.log(`☀️ ✅ Volumetric light exposure set to: ${exposure}`);
-};
-
-/**
- * Controls volumetric light scattering effect strength
- * @param {number} weight - Effect weight (0.3-0.8 recommended)
- */
-window.setVolumetricLightWeight = function (weight) {
-  if (!window.volumetricLightScattering) {
-    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot set weight");
-    return;
-  }
-
-  window.volumetricLightScattering.weight = weight;
-  console.log(`☀️ ✅ Volumetric light weight set to: ${weight}`);
-};
-
-/**
- * Enables or disables volumetric light scattering effect
- * @param {boolean} enabled - Whether the effect should be enabled
- */
-window.setVolumetricLightEnabled = function (enabled) {
-  if (!window.volumetricLightScattering) {
-    console.warn("☀️ ⚠️ Volumetric light scattering not found, cannot toggle");
-    return;
-  }
-
-  if (enabled) {
-    window.volumetricLightScattering.setCamera(window.scene.activeCamera);
-  } else {
-    window.volumetricLightScattering.setCamera(null);
-  }
-  console.log(`☀️ ✅ Volumetric light scattering enabled: ${enabled}`);
-};
-
 // ==============================
 // SUN CONTROLS
 // ==============================
@@ -358,11 +312,6 @@ window.setSunEnabled = function (enabled) {
     console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} sun sphere`);
   } else {
     console.warn("☀️ ⚠️ Sun sphere not found, cannot toggle");
-  }
-
-  // Control volumetric light scattering
-  if (window.volumetricLightScattering) {
-    window.setVolumetricLightEnabled(enabled);
   }
 
   console.log(`☀️ ${enabled ? "✅ Enabled" : "❌ Disabled"} complete sun system`);
