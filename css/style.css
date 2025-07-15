@@ -40,7 +40,7 @@ body {
   height: 100vh;
   top: 0;
   clip-path: polygon(0 0, 100% 0, 0 100%);
-  transition: left 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
   cursor: pointer;
 }
@@ -62,19 +62,83 @@ body {
   background-color: #0b3041; /* @dark-blue */
   z-index: 1000;
   transition: left 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
 #framinosona-menu .framinosona-menu-header {
-  padding: 1em;
+  padding: 2em 2em 1em 2em;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #framinosona-menu .framinosona-menu-header h1 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.8em;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+#framinosona-menu .framinosona-menu-content {
+  flex: 1;
+  padding: 2em;
+  color: white;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+#framinosona-menu .framinosona-menu-links {
+  padding: 2em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#framinosona-menu .framinosona-menu-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1em;
+}
+
+#framinosona-menu .framinosona-menu-links li {
+  margin: 0;
+}
+
+#framinosona-menu .framinosona-menu-links a {
+  display: block;
+  color: #87ceeb;
+  text-decoration: none;
+  padding: 0.8em 1.2em;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  text-align: center;
+}
+
+#framinosona-menu .framinosona-menu-links a:hover {
+  background-color: #215f9a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+#framinosona-menu .framinosona-menu-footer {
+  padding: 1.5em 2em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#framinosona-menu .framinosona-menu-footer p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  text-align: center;
 }
 
 #framinosona-menu-icon {
@@ -90,4 +154,36 @@ body {
 
 #framinosona-top-side-ui-block.menu-open {
   left: 800px;
+  background-color: #06222f;
+}
+
+/* Responsive adjustments for the menu */
+@media (max-width: 900px) {
+  #framinosona-menu {
+    width: 100vw;
+    left: -100vw;
+  }
+
+  #framinosona-top-side-ui-block.menu-open {
+    left: 100vw;
+  }
+
+  #framinosona-menu .framinosona-menu-links ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  #framinosona-menu .framinosona-menu-header {
+    padding: 1.5em 1.5em 1em 1.5em;
+  }
+
+  #framinosona-menu .framinosona-menu-header h1 {
+    font-size: 1.4em;
+  }
+
+  #framinosona-menu .framinosona-menu-content,
+  #framinosona-menu .framinosona-menu-links {
+    padding: 1.5em;
+  }
 }
