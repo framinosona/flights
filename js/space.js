@@ -1,8 +1,4 @@
 // ==============================
-// SPACE TILE SYSTEM AND RENDERING
-// ==============================
-
-// ==============================
 // SKYBOX CONFIGURATION
 // ==============================
 window.skyboxSets = {
@@ -14,6 +10,30 @@ window.skyboxSets = {
   TYRO2: {
     name: "Tyro 2",
     baseName: "img/tyro2/",
+  },
+  TYRO3: {
+    name: "Tyro 3",
+    baseName: "img/tyro3/",
+  },
+  TYRO4: {
+    name: "Tyro 4",
+    baseName: "img/tyro4/",
+  },
+  TYRO5: {
+    name: "Tyro 5",
+    baseName: "img/tyro5/",
+  },
+  TYRO6: {
+    name: "Tyro 6",
+    baseName: "img/tyro6/",
+  },
+  TYRO7: {
+    name: "Tyro 7",
+    baseName: "img/tyro7/",
+  },
+  TYRO8: {
+    name: "Tyro 8",
+    baseName: "img/tyro8/",
   },
 };
 
