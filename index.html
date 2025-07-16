@@ -32,13 +32,22 @@
     <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/menu.css" />
 
   </head>
 
   <body>
-    <div id="framinosona-menu">
+    <!-- MENU PANEL -->
+    <div id="framinosona-menu-panel">
+      <button class="framinosona-menu-close-button" onclick="closeMenu()" aria-label="Close menu" title="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
       <div class="framinosona-menu-header">
-        <h1>Francois Raminosona Flights</h1>
+        <h1>Flights</h1>
+        <h2>by Francois Raminosona</h2>
       </div>
       <div class="framinosona-menu-content">
         <div class="tile-provider-selector">
@@ -70,12 +79,16 @@
         <p>© 2023 Francois Raminosona</p>
       </div>
     </div>
-    <div id="framinosona-top-side-ui-block" class="side-ui-block">
-      <img id="framinosona-menu-icon" src="favicon/icon.svg" alt="Francois Raminosona Flights Logo" />
+    <div id="framinosona-menu-mobile-toggle">
+      <img class="framinosona-menu-icon" src="favicon/icon.svg" alt="Francois Raminosona Flights Logo" />
     </div>
-    <div id="framinosona-bottom-side-ui-block" class="side-ui-block"></div>
+    <div id="framinosona-side-ui-block-top" class="framinosona-side-ui-block">
+      <img class="framinosona-menu-icon" src="favicon/icon.svg" alt="Francois Raminosona Flights Logo" />
+    </div>
+    <div id="framinosona-side-ui-block-bottom" class="framinosona-side-ui-block"></div>
     <script src="js/menu.js"></script>
 
+    <!-- CONTENT -->
     <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
     <script src="js/tile-providers.js"></script>
     <script src="js/earth.js"></script>

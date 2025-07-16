@@ -1,7 +1,8 @@
 // Menu control functions
 let isFraminosonaMenuOpen = false;
-const framinosonaMenu = document.getElementById("framinosona-menu");
-const framinosonaTopSideBlock = document.getElementById("framinosona-top-side-ui-block");
+const framinosonaMenu = document.getElementById("framinosona-menu-panel");
+const framinosonaTopSideBlock = document.getElementById("framinosona-side-ui-block-top");
+const framinosonaMenuCloseIconMobile = document.getElementById("framinosona-menu-mobile-toggle");
 
 function toggleMenu() {
   if (isFraminosonaMenuOpen) {
@@ -14,12 +15,14 @@ function toggleMenu() {
 function openMenu() {
   framinosonaMenu.classList.add("open");
   framinosonaTopSideBlock.classList.add("menu-open");
+  framinosonaMenuCloseIconMobile.classList.add("open");
   isFraminosonaMenuOpen = true;
 }
 
 function closeMenu() {
   framinosonaMenu.classList.remove("open");
   framinosonaTopSideBlock.classList.remove("menu-open");
+  framinosonaMenuCloseIconMobile.classList.remove("open");
   isFraminosonaMenuOpen = false;
 }
 
@@ -146,88 +149,33 @@ function initializeSkyboxSelector() {
   console.log(`🌌 ✅ Generated ${skyboxOptions.length} skybox options`);
 }
 
-// Lighting controls functionality
-function initializeLightingControls() {
-  // Sun controls
-  const sunEnabledToggle = document.getElementById("sun-enabled");
-  const sunIntensitySlider = document.getElementById("sun-intensity");
-  const sunSphereVisibleToggle = document.getElementById("sun-sphere-visible");
+function initializeMenu() {
+  console.log("💡 ✅ Initializing menu...");
 
-  // Camera light controls
-  const cameraLightEnabledToggle = document.getElementById("camera-light-enabled");
-  const cameraLightIntensitySlider = document.getElementById("camera-light-intensity");
+  // Initialize tile provider selector
+  initializeTileProviderSelector();
 
-  // Update slider value displays
-  function updateSliderValue(slider, valueSpan) {
-    const value = parseFloat(slider.value);
-    valueSpan.textContent = value.toFixed(1);
-  }
+  // Initialize skybox selector
+  initializeSkyboxSelector();
 
-  // Sun controls event listeners
-  if (sunEnabledToggle) {
-    sunEnabledToggle.addEventListener("change", function () {
-      if (window.setSunEnabled) {
-        window.setSunEnabled(this.checked);
-      }
-    });
-  }
-
-  if (sunIntensitySlider) {
-    const valueSpan = sunIntensitySlider.parentElement.querySelector(".slider-value");
-    sunIntensitySlider.addEventListener("input", function () {
-      const value = parseFloat(this.value);
-      updateSliderValue(this, valueSpan);
-      if (window.setSunLightIntensity) {
-        window.setSunLightIntensity(value);
-      }
-    });
-  }
-
-  if (sunSphereVisibleToggle) {
-    sunSphereVisibleToggle.addEventListener("change", function () {
-      if (window.setSunSphereVisible) {
-        window.setSunSphereVisible(this.checked);
-      }
-    });
-  }
-
-  // Camera light controls event listeners
-  if (cameraLightEnabledToggle) {
-    cameraLightEnabledToggle.addEventListener("change", function () {
-      if (window.setCameraLightEnabled) {
-        window.setCameraLightEnabled(this.checked);
-      }
-    });
-  }
-
-  if (cameraLightIntensitySlider) {
-    const valueSpan = cameraLightIntensitySlider.parentElement.querySelector(".slider-value");
-    cameraLightIntensitySlider.addEventListener("input", function () {
-      const value = parseFloat(this.value);
-      updateSliderValue(this, valueSpan);
-      if (window.setCameraLightIntensity) {
-        window.setCameraLightIntensity(value);
-      }
-    });
-  }
-
-  console.log("💡 ✅ Lighting controls initialized");
+  console.log("💡 ✅ Menu initialized successfully");
 }
+window.initializeMenu = initializeMenu;
 
 document.addEventListener("DOMContentLoaded", function () {
-  initializeTileProviderSelector();
-  initializeSkyboxSelector();
-  initializeLightingControls();
+  initializeMenu();
 });
 
 framinosonaTopSideBlock.addEventListener("click", toggleMenu);
+framinosonaMenuCloseIconMobile.addEventListener("click", toggleMenu);
 
 // Optional: Close menu when clicking outside
 document.addEventListener("click", function (event) {
   if (
     isFraminosonaMenuOpen &&
     !framinosonaMenu.contains(event.target) &&
-    !framinosonaTopSideBlock.contains(event.target)
+    !framinosonaTopSideBlock.contains(event.target) &&
+    !framinosonaMenuCloseIconMobile.contains(event.target)
   ) {
     closeMenu();
   }

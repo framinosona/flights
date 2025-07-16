@@ -6,9 +6,9 @@ async function initCamera() {
   var initCameraPosition = new BABYLON.Vector3(-1.949, 1.861, -0.225); // Europe centric position
   window.camera ||= new BABYLON.ArcRotateCamera(
     "camera1",
-    0,
-    0,
-    0,
+    0, // alpha
+    0, // beta
+    0, // radius
     BABYLON.Vector3.Zero(), // Look at the center of the Earth
     window.scene
   );
@@ -20,6 +20,7 @@ async function initCamera() {
   window.camera.setPosition(initCameraPosition);
   console.log("🎥 ✅ Camera created at position:", window.camera.position);
   window.camera.lowerRadiusLimit = 1.05;
+  window.camera.radius = 5; // Set initial radius
   window.camera.upperRadiusLimit = 8;
   window.camera.wheelPrecision = 50; // Adjusted for smoother zoom
   //window.camera.wheelDeltaPercentage = 0.01;
