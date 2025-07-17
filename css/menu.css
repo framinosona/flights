@@ -75,7 +75,7 @@
 #framinosona-menu-panel .framinosona-menu-header {
   padding: 1em;
   color: white;
-  height: 2em;
+  height: 4em;
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -188,6 +188,13 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   color: white;
+}
+
+#framinosona-menu-panel .framinosona-menu-link-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 #framinosona-menu-top-bar {
