@@ -19,13 +19,19 @@ async function initCamera() {
   }
   window.camera.setPosition(initCameraPosition);
   console.log("🎥 ✅ Camera created at position:", window.camera.position);
-  window.camera.lowerRadiusLimit = 1.05;
-  window.camera.radius = 5; // Set initial radius
+  // Radius limits
+  window.camera.lowerRadiusLimit = 2;
   window.camera.upperRadiusLimit = 8;
-  window.camera.wheelPrecision = 50; // Adjusted for smoother zoom
-  //window.camera.wheelDeltaPercentage = 0.01;
+  window.camera.radius = 5; // Set initial radius
+  // Navigation sensitivity
+  window.camera.wheelPrecision = 100;
+  window.camera.wheelDeltaPercentage = 0.005;
+  window.camera.angularSensibilityX = 4000;
+  window.camera.angularSensibilityY = 4000;
+  window.camera.panningSensibility = 2000;
+  // Render distance
   window.camera.minZ = 0.01;
-  window.camera.maxZ = 300; // Extended range to accommodate sun sphere at distance 100
+  window.camera.maxZ = 300;
   window.camera.attachControl(window.canvas);
 
   await tryInitializeAsync("🎥", "💡 Camera Light", initCameraLight);
