@@ -2,10 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "name": "http://localhost:8000",
+      "name": "Run Gallery Server",
+      "type": "debugpy",
       "request": "launch",
-      "url": "http://localhost:8000"
+      "module": "http.server",
+      "args": ["8001"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
     }
   ]
 }
