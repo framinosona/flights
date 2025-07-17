@@ -2,15 +2,35 @@
 <html lang="en">
 
   <head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+          'gtm.start':
+            new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-MZ7Z5K8');</script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
     <title>Francois Raminosona Flights</title>
+    <meta name="keywords" content="Flights, Francois Raminosona, 3D, WebGL, Babylon.js, Space, Earth">
+    <meta name="description"
+      content="Project showcasing 3D flights by Francois Raminosona using Babylon.js. Explore the universe with realistic Earth and space simulations.">
 
     <!-- FAVICON / WEBAPP -->
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
-    <link rel="manifest" href="favicon/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="favicon/icon.svg" color="#0b3041">
+    <meta name="apple-mobile-web-app-title" content="{{gallery.title}} - {{album.title}}">
+    <meta name="application-name" content="{{gallery.title}} - {{album.title}}">
+    <meta name="msapplication-TileColor" content="#0b3041">
+    <meta name="msapplication-TileImage" content="favicon/apple-touch-icon.png">
+    <meta name="theme-color" content="#0b3041">
+    <!-- End FAVICON / WEBAPP -->
 
     <!-- Babylon.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
@@ -30,6 +50,7 @@
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://cdn.babylonjs.com/addons/babylonjs.addons.min.js"></script>
     <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <!-- End Babylon.js -->
 
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/menu.css" />
@@ -37,14 +58,13 @@
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZ7Z5K8" height="0" width="0"
+        style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <!-- MENU PANEL -->
     <div id="framinosona-menu-panel">
-      <button class="framinosona-menu-close-button" onclick="closeMenu()" aria-label="Close menu" title="Close menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
-      </button>
       <div class="framinosona-menu-header">
         <h1>Flights</h1>
         <h2>by Francois Raminosona</h2>

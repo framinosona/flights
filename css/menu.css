@@ -97,29 +97,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* MENU PANEL - CLOSE BUTTON (MOBILE ONLY) */
-
-#framinosona-menu-panel .framinosona-menu-header .framinosona-menu-close-button {
-  display: none;
-  background: none;
-  border: none;
-  position: fixed;
-  top: 0em;
-  right: 0em;
-  color: white;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-  width: 4em;
-  height: 4em;
-  align-items: center;
-  justify-content: center;
-}
-
-#framinosona-menu-panel .framinosona-menu-header .framinosona-menu-close-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 /* MENU PANEL - CONTENT */
 
 #framinosona-menu-panel .framinosona-menu-content {
@@ -236,8 +213,5 @@
   }
   #framinosona-menu-panel .framinosona-menu-footer {
     padding: 1em;
-  }
-  #framinosona-menu-panel .framinosona-menu-header .framinosona-menu-close-button {
-    display: block;
   }
 }
