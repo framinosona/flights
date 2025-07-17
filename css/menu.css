@@ -37,8 +37,8 @@
 #framinosona-menu-panel {
   position: fixed;
   top: 0;
-  left: -800px;
-  width: 800px;
+  left: -600px;
+  width: 600px;
   height: 100vh;
   background-color: #0b3041; /* @dark-blue */
   z-index: 1000;
@@ -51,11 +51,11 @@
 /* MENU PANEL - OPEN */
 
 #framinosona-menu-panel.open {
-  left: 0; /* from -800px to 0 */
+  left: 0; /* from -600px to 0 */
 }
 
 #framinosona-side-ui-block-top.menu-open {
-  left: 800px; /* from 0 to 800px */
+  left: 600px; /* from 0 to 600px */
   background-color: #06222f; /* @darker-blue */
 }
 
@@ -149,7 +149,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1em;
 }
 
@@ -167,6 +167,9 @@
   transition: all 0.3s ease;
   font-weight: 500;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #framinosona-menu-panel .framinosona-menu-links a:hover {
@@ -200,7 +203,7 @@
   text-decoration: none;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
   #framinosona-side-ui-block-top.menu-open {
     left: 0;
   }
