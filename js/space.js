@@ -6,42 +6,42 @@ window.skyboxSets = {
   TYRO1: {
     name: "Tyro 1",
     description: "Deep space view",
-    baseName: "img/tyro1/",
+    baseName: "img/skybox/tyro1/",
   },
   TYRO2: {
     name: "Tyro 2",
     description: "Nebula field",
-    baseName: "img/tyro2/",
+    baseName: "img/skybox/tyro2/",
   },
   TYRO3: {
     name: "Tyro 3",
     description: "Blue/Green space",
-    baseName: "img/tyro3/",
+    baseName: "img/skybox/tyro3/",
   },
   TYRO4: {
     name: "Tyro 4",
     description: "Pink/Green space",
-    baseName: "img/tyro4/",
+    baseName: "img/skybox/tyro4/",
   },
   TYRO5: {
     name: "Tyro 5",
     description: "Purple space",
-    baseName: "img/tyro5/",
+    baseName: "img/skybox/tyro5/",
   },
   TYRO6: {
     name: "Tyro 6",
     description: "Light green space",
-    baseName: "img/tyro6/",
+    baseName: "img/skybox/tyro6/",
   },
   TYRO7: {
     name: "Tyro 7",
     description: "Green space",
-    baseName: "img/tyro7/",
+    baseName: "img/skybox/tyro7/",
   },
   TYRO8: {
     name: "Tyro 8",
     description: "Red space",
-    baseName: "img/tyro8/",
+    baseName: "img/skybox/tyro8/",
   },
 };
 
