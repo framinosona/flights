@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run Gallery Server",
+      "name": "Run Server",
       "type": "debugpy",
       "request": "launch",
       "module": "http.server",
