@@ -1,4 +1,32 @@
 {
+  "D82010_251001": {
+    "flight_id": "D8 2010",
+    "from": "Oslo",
+    "from_code": "OSL",
+    "to": "Tallinn",
+    "to_code": "TLL",
+    "departure_date": "2025-10-01",
+    "departure_time": "09:00:00",
+    "expected_departure_time": "nan",
+    "arrival_date": "2025-10-01",
+    "arrival_time": "11:30:00",
+    "expected_arrival_time": "nan",
+    "status": null
+  },
+  "DY525_251001": {
+    "flight_id": "DY 525",
+    "from": "Stavanger",
+    "from_code": "SVG",
+    "to": "Oslo",
+    "to_code": "OSL",
+    "departure_date": "2025-10-01",
+    "departure_time": "07:24:00",
+    "expected_departure_time": "07:30:00",
+    "arrival_date": "2025-10-01",
+    "arrival_time": "08:24:00",
+    "expected_arrival_time": "nan",
+    "status": null
+  },
   "SK983_250422": {
     "flight_id": "SK 983",
     "from": "Copenhagen",
@@ -8,7 +36,7 @@
     "departure_date": "2025-04-22",
     "departure_time": "12:45:00",
     "expected_departure_time": "12:57:00",
-    "arrival_date": "2025-05-23 00:00:00",
+    "arrival_date": "2025-05-23",
     "arrival_time": "07:55:00",
     "expected_arrival_time": "08:52:00",
     "status": null
@@ -22,7 +50,7 @@
     "departure_date": "2025-05-13",
     "departure_time": "09:20:00",
     "expected_departure_time": "09:17:00",
-    "arrival_date": "2025-05-13 00:00:00",
+    "arrival_date": "2025-05-13",
     "arrival_time": "10:20:00",
     "expected_arrival_time": "10:13:00",
     "status": null
@@ -36,7 +64,7 @@
     "departure_date": "2025-05-13",
     "departure_time": "12:00:00",
     "expected_departure_time": "11:54:00",
-    "arrival_date": "2025-05-13 00:00:00",
+    "arrival_date": "2025-05-13",
     "arrival_time": "12:55:00",
     "expected_arrival_time": "12:51:00",
     "status": null
@@ -50,7 +78,7 @@
     "departure_date": "2025-05-13",
     "departure_time": "00:30:00",
     "expected_departure_time": "00:45:00",
-    "arrival_date": "2025-05-13 00:00:00",
+    "arrival_date": "2025-05-13",
     "arrival_time": "07:15:00",
     "expected_arrival_time": "07:02:00",
     "status": null
@@ -64,7 +92,7 @@
     "departure_date": "2025-05-12",
     "departure_time": "14:30:00",
     "expected_departure_time": "14:46:00",
-    "arrival_date": "2025-05-12 00:00:00",
+    "arrival_date": "2025-05-12",
     "arrival_time": "18:30:00",
     "expected_arrival_time": "18:25:00",
     "status": null
@@ -78,7 +106,7 @@
     "departure_date": "2025-05-08",
     "departure_time": "12:15:00",
     "expected_departure_time": "11:58:00",
-    "arrival_date": "2025-05-08 00:00:00",
+    "arrival_date": "2025-05-08",
     "arrival_time": "13:40:00",
     "expected_arrival_time": "13:34:00",
     "status": null
@@ -92,7 +120,7 @@
     "departure_date": "2025-04-22",
     "departure_time": "10:05:00",
     "expected_departure_time": "10:17:00",
-    "arrival_date": "2025-04-22 00:00:00",
+    "arrival_date": "2025-04-22",
     "arrival_time": "11:15:00",
     "expected_arrival_time": "11:25:00",
     "status": null
@@ -106,7 +134,7 @@
     "departure_date": "2025-03-18",
     "departure_time": "20:50:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2025-03-18 00:00:00",
+    "arrival_date": "2025-03-18",
     "arrival_time": "23:30:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -120,7 +148,7 @@
     "departure_date": "2025-03-16",
     "departure_time": "09:05:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2025-03-16 00:00:00",
+    "arrival_date": "2025-03-16",
     "arrival_time": "11:45:00",
     "expected_arrival_time": "nan",
     "status": "Missed"
@@ -134,7 +162,7 @@
     "departure_date": "2025-03-13",
     "departure_time": "21:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2025-03-13 00:00:00",
+    "arrival_date": "2025-03-13",
     "arrival_time": "21:15:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -148,7 +176,7 @@
     "departure_date": "2025-03-12",
     "departure_time": "09:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2025-03-12 00:00:00",
+    "arrival_date": "2025-03-12",
     "arrival_time": "11:30:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -162,7 +190,7 @@
     "departure_date": "2024-08-12",
     "departure_time": "05:16:00",
     "expected_departure_time": "04:50:00",
-    "arrival_date": "2024-08-12 00:00:00",
+    "arrival_date": "2024-08-12",
     "arrival_time": "06:57:00",
     "expected_arrival_time": "06:55:00",
     "status": null
@@ -176,7 +204,7 @@
     "departure_date": "2024-08-12",
     "departure_time": "11:06:00",
     "expected_departure_time": "11:00:00",
-    "arrival_date": "2024-08-12 00:00:00",
+    "arrival_date": "2024-08-12",
     "arrival_time": "13:47:00",
     "expected_arrival_time": "13:40:00",
     "status": null
@@ -190,7 +218,7 @@
     "departure_date": "2024-08-11",
     "departure_time": "20:00:00",
     "expected_departure_time": "19:00:00",
-    "arrival_date": "2024-08-11 00:00:00",
+    "arrival_date": "2024-08-11",
     "arrival_time": "21:00:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -204,7 +232,7 @@
     "departure_date": "2024-08-03",
     "departure_time": "13:19:00",
     "expected_departure_time": "11:55:00",
-    "arrival_date": "2024-08-03 00:00:00",
+    "arrival_date": "2024-08-03",
     "arrival_time": "17:21:00",
     "expected_arrival_time": "16:20:00",
     "status": null
@@ -218,7 +246,7 @@
     "departure_date": "2024-07-30",
     "departure_time": "09:20:00",
     "expected_departure_time": "08:55:00",
-    "arrival_date": "2024-07-30 00:00:00",
+    "arrival_date": "2024-07-30",
     "arrival_time": "12:10:00",
     "expected_arrival_time": "11:30:00",
     "status": null
@@ -232,7 +260,7 @@
     "departure_date": "2024-07-27",
     "departure_time": "09:00:00",
     "expected_departure_time": "09:10:00",
-    "arrival_date": "2024-07-27 00:00:00",
+    "arrival_date": "2024-07-27",
     "arrival_time": "10:29:00",
     "expected_arrival_time": "10:50:00",
     "status": null
@@ -246,7 +274,7 @@
     "departure_date": "2024-06-26",
     "departure_time": "14:30:00",
     "expected_departure_time": "14:25:00",
-    "arrival_date": "2024-06-26 00:00:00",
+    "arrival_date": "2024-06-26",
     "arrival_time": "15:53:00",
     "expected_arrival_time": "15:50:00",
     "status": null
@@ -260,7 +288,7 @@
     "departure_date": "2024-06-25",
     "departure_time": "14:25:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2024-06-25 00:00:00",
+    "arrival_date": "2024-06-25",
     "arrival_time": "15:50:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -274,7 +302,7 @@
     "departure_date": "2024-06-24",
     "departure_time": "19:15:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2024-06-24 00:00:00",
+    "arrival_date": "2024-06-24",
     "arrival_time": "20:36:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -288,7 +316,7 @@
     "departure_date": "2024-06-24",
     "departure_time": "13:30:00",
     "expected_departure_time": "12:45:00",
-    "arrival_date": "2024-06-24 00:00:00",
+    "arrival_date": "2024-06-24",
     "arrival_time": "14:52:00",
     "expected_arrival_time": "14:05:00",
     "status": null
@@ -302,7 +330,7 @@
     "departure_date": "2024-06-24",
     "departure_time": "15:00:00",
     "expected_departure_time": "14:50:00",
-    "arrival_date": "2024-06-24 00:00:00",
+    "arrival_date": "2024-06-24",
     "arrival_time": "nan",
     "expected_arrival_time": "nan",
     "status": null
@@ -316,7 +344,7 @@
     "departure_date": "2024-06-24",
     "departure_time": "21:01:00",
     "expected_departure_time": "20:50:00",
-    "arrival_date": "2024-06-24 00:00:00",
+    "arrival_date": "2024-06-24",
     "arrival_time": "22:25:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -330,7 +358,7 @@
     "departure_date": "2024-06-19",
     "departure_time": "16:01:00",
     "expected_departure_time": "15:50:00",
-    "arrival_date": "2024-06-19 00:00:00",
+    "arrival_date": "2024-06-19",
     "arrival_time": "17:06:00",
     "expected_arrival_time": "17:00:00",
     "status": null
@@ -344,7 +372,7 @@
     "departure_date": "2024-06-19",
     "departure_time": "18:07:00",
     "expected_departure_time": "18:05:00",
-    "arrival_date": "2024-06-19 00:00:00",
+    "arrival_date": "2024-06-19",
     "arrival_time": "19:20:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -358,7 +386,7 @@
     "departure_date": "2024-06-16",
     "departure_time": "10:24:00",
     "expected_departure_time": "10:10:00",
-    "arrival_date": "2024-06-16 00:00:00",
+    "arrival_date": "2024-06-16",
     "arrival_time": "11:48:00",
     "expected_arrival_time": "11:45:00",
     "status": null
@@ -372,7 +400,7 @@
     "departure_date": "2024-06-16",
     "departure_time": "12:58:00",
     "expected_departure_time": "12:30:00",
-    "arrival_date": "2024-06-16 00:00:00",
+    "arrival_date": "2024-06-16",
     "arrival_time": "14:08:00",
     "expected_arrival_time": "13:45:00",
     "status": null
@@ -386,7 +414,7 @@
     "departure_date": "2024-03-14",
     "departure_time": "16:58:00",
     "expected_departure_time": "17:05:00",
-    "arrival_date": "2024-03-14 00:00:00",
+    "arrival_date": "2024-03-14",
     "arrival_time": "17:56:00",
     "expected_arrival_time": "18:00:00",
     "status": null
@@ -400,7 +428,7 @@
     "departure_date": "2024-03-14",
     "departure_time": "10:09:00",
     "expected_departure_time": "10:20:00",
-    "arrival_date": "2024-03-14 00:00:00",
+    "arrival_date": "2024-03-14",
     "arrival_time": "10:55:00",
     "expected_arrival_time": "11:10:00",
     "status": null
@@ -414,7 +442,7 @@
     "departure_date": "2024-01-11",
     "departure_time": "07:52:00",
     "expected_departure_time": "07:55:00",
-    "arrival_date": "2024-01-11 00:00:00",
+    "arrival_date": "2024-01-11",
     "arrival_time": "09:19:00",
     "expected_arrival_time": "09:25:00",
     "status": null
@@ -428,7 +456,7 @@
     "departure_date": "2024-01-10",
     "departure_time": "02:15:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2024-01-10 00:00:00",
+    "arrival_date": "2024-01-10",
     "arrival_time": "04:09:00",
     "expected_arrival_time": "04:30:00",
     "status": null
@@ -442,7 +470,7 @@
     "departure_date": "2024-01-10",
     "departure_time": "09:04:00",
     "expected_departure_time": "08:45:00",
-    "arrival_date": "2024-01-10 00:00:00",
+    "arrival_date": "2024-01-10",
     "arrival_time": "12:41:00",
     "expected_arrival_time": "12:25:00",
     "status": null
@@ -456,7 +484,7 @@
     "departure_date": "2024-01-10",
     "departure_time": "19:18:00",
     "expected_departure_time": "19:20:00",
-    "arrival_date": "2024-01-10 00:00:00",
+    "arrival_date": "2024-01-10",
     "arrival_time": "20:20:00",
     "expected_arrival_time": "20:35:00",
     "status": null
@@ -470,7 +498,7 @@
     "departure_date": "2024-01-07",
     "departure_time": "23:08:00",
     "expected_departure_time": "23:00:00",
-    "arrival_date": "2024-01-08 00:00:00",
+    "arrival_date": "2024-01-08",
     "arrival_time": "00:55:00",
     "expected_arrival_time": "00:15:00",
     "status": null
@@ -484,7 +512,7 @@
     "departure_date": "2023-12-30",
     "departure_time": "20:54:00",
     "expected_departure_time": "21:00:00",
-    "arrival_date": "2023-12-30 00:00:00",
+    "arrival_date": "2023-12-30",
     "arrival_time": "22:03:00",
     "expected_arrival_time": "22:15:00",
     "status": null
@@ -498,7 +526,7 @@
     "departure_date": "2023-12-27",
     "departure_time": "23:46:00",
     "expected_departure_time": "23:50:00",
-    "arrival_date": "2023-12-28 00:00:00",
+    "arrival_date": "2023-12-28",
     "arrival_time": "05:48:00",
     "expected_arrival_time": "06:15:00",
     "status": null
@@ -512,7 +540,7 @@
     "departure_date": "2023-12-27",
     "departure_time": "14:30:00",
     "expected_departure_time": "13:55:00",
-    "arrival_date": "2023-12-27 00:00:00",
+    "arrival_date": "2023-12-27",
     "arrival_time": "21:46:00",
     "expected_arrival_time": "21:30:00",
     "status": null
@@ -526,7 +554,7 @@
     "departure_date": "2023-12-19",
     "departure_time": "13:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2023-12-19 00:00:00",
+    "arrival_date": "2023-12-19",
     "arrival_time": "1900-01-04 18:44:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -540,7 +568,7 @@
     "departure_date": "2023-12-19",
     "departure_time": "14:34:00",
     "expected_departure_time": "14:25:00",
-    "arrival_date": "2023-12-19 00:00:00",
+    "arrival_date": "2023-12-19",
     "arrival_time": "16:07:00",
     "expected_arrival_time": "16:00:00",
     "status": null
@@ -554,7 +582,7 @@
     "departure_date": "2023-12-19",
     "departure_time": "17:38:00",
     "expected_departure_time": "17:35:00",
-    "arrival_date": "2023-12-19 00:00:00",
+    "arrival_date": "2023-12-19",
     "arrival_time": "18:45:00",
     "expected_arrival_time": "18:40:00",
     "status": null
@@ -568,7 +596,7 @@
     "departure_date": "2023-10-31",
     "departure_time": "11:49:00",
     "expected_departure_time": "11:50:00",
-    "arrival_date": "2023-10-31 00:00:00",
+    "arrival_date": "2023-10-31",
     "arrival_time": "13:28:00",
     "expected_arrival_time": "13:30:00",
     "status": null
@@ -582,7 +610,7 @@
     "departure_date": "2023-10-31",
     "departure_time": "15:13:00",
     "expected_departure_time": "15:05:00",
-    "arrival_date": "2023-10-31 00:00:00",
+    "arrival_date": "2023-10-31",
     "arrival_time": "16:39:00",
     "expected_arrival_time": "16:35:00",
     "status": null
@@ -596,7 +624,7 @@
     "departure_date": "2023-10-22",
     "departure_time": "11:40:00",
     "expected_departure_time": "11:25:00",
-    "arrival_date": "2023-10-22 00:00:00",
+    "arrival_date": "2023-10-22",
     "arrival_time": "15:04:00",
     "expected_arrival_time": "15:05:00",
     "status": null
@@ -610,7 +638,7 @@
     "departure_date": "2023-10-22",
     "departure_time": "16:21:00",
     "expected_departure_time": "16:00:00",
-    "arrival_date": "2023-10-22 00:00:00",
+    "arrival_date": "2023-10-22",
     "arrival_time": "17:41:00",
     "expected_arrival_time": "17:35:00",
     "status": null
@@ -624,7 +652,7 @@
     "departure_date": "2023-10-13",
     "departure_time": "10:21:00",
     "expected_departure_time": "10:10:00",
-    "arrival_date": "2023-10-13 00:00:00",
+    "arrival_date": "2023-10-13",
     "arrival_time": "11:49:00",
     "expected_arrival_time": "11:50:00",
     "status": null
@@ -638,7 +666,7 @@
     "departure_date": "2023-10-13",
     "departure_time": "14:16:00",
     "expected_departure_time": "14:00:00",
-    "arrival_date": "2023-10-13 00:00:00",
+    "arrival_date": "2023-10-13",
     "arrival_time": "15:55:00",
     "expected_arrival_time": "15:40:00",
     "status": null
@@ -652,7 +680,7 @@
     "departure_date": "2023-08-29",
     "departure_time": "20:35:00",
     "expected_departure_time": "20:20:00",
-    "arrival_date": "2023-08-29 00:00:00",
+    "arrival_date": "2023-08-29",
     "arrival_time": "22:06:00",
     "expected_arrival_time": "22:05:00",
     "status": null
@@ -666,7 +694,7 @@
     "departure_date": "2023-08-25",
     "departure_time": "13:57:00",
     "expected_departure_time": "14:05:00",
-    "arrival_date": "2023-08-25 00:00:00",
+    "arrival_date": "2023-08-25",
     "arrival_time": "15:23:00",
     "expected_arrival_time": "15:45:00",
     "status": null
@@ -680,7 +708,7 @@
     "departure_date": "2023-07-26",
     "departure_time": "20:45:00",
     "expected_departure_time": "20:30:00",
-    "arrival_date": "2023-07-26 00:00:00",
+    "arrival_date": "2023-07-26",
     "arrival_time": "22:43:00",
     "expected_arrival_time": "22:15:00",
     "status": null
@@ -694,7 +722,7 @@
     "departure_date": "2023-07-26",
     "departure_time": "13:38:00",
     "expected_departure_time": "12:05:00",
-    "arrival_date": "2023-07-26 00:00:00",
+    "arrival_date": "2023-07-26",
     "arrival_time": "17:30:00",
     "expected_arrival_time": "16:05:00",
     "status": null
@@ -708,7 +736,7 @@
     "departure_date": "2023-07-20",
     "departure_time": "13:41:00",
     "expected_departure_time": "13:15:00",
-    "arrival_date": "2023-07-20 00:00:00",
+    "arrival_date": "2023-07-20",
     "arrival_time": "15:50:00",
     "expected_arrival_time": "15:20:00",
     "status": null
@@ -722,7 +750,7 @@
     "departure_date": "2023-07-20",
     "departure_time": "06:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2023-07-20 00:00:00",
+    "arrival_date": "2023-07-20",
     "arrival_time": "08:48:00",
     "expected_arrival_time": "08:50:00",
     "status": null
@@ -736,7 +764,7 @@
     "departure_date": "2023-07-10",
     "departure_time": "14:44:00",
     "expected_departure_time": "14:25:00",
-    "arrival_date": "2023-07-10 00:00:00",
+    "arrival_date": "2023-07-10",
     "arrival_time": "15:49:00",
     "expected_arrival_time": "15:40:00",
     "status": null
@@ -750,7 +778,7 @@
     "departure_date": "2023-07-10",
     "departure_time": "20:21:00",
     "expected_departure_time": "20:10:00",
-    "arrival_date": "2023-07-10 00:00:00",
+    "arrival_date": "2023-07-10",
     "arrival_time": "22:09:00",
     "expected_arrival_time": "21:55:00",
     "status": null
@@ -764,7 +792,7 @@
     "departure_date": "2023-07-06",
     "departure_time": "15:34:00",
     "expected_departure_time": "14:50:00",
-    "arrival_date": "2023-07-06 00:00:00",
+    "arrival_date": "2023-07-06",
     "arrival_time": "16:48:00",
     "expected_arrival_time": "16:10:00",
     "status": null
@@ -778,7 +806,7 @@
     "departure_date": "2023-07-06",
     "departure_time": "18:15:00",
     "expected_departure_time": "17:20:00",
-    "arrival_date": "2023-07-06 00:00:00",
+    "arrival_date": "2023-07-06",
     "arrival_time": "19:26:00",
     "expected_arrival_time": "18:35:00",
     "status": null
@@ -792,7 +820,7 @@
     "departure_date": "2023-06-30",
     "departure_time": "19:55:00",
     "expected_departure_time": "19:30:00",
-    "arrival_date": "2023-06-30 00:00:00",
+    "arrival_date": "2023-06-30",
     "arrival_time": "21:22:00",
     "expected_arrival_time": "20:55:00",
     "status": null
@@ -806,7 +834,7 @@
     "departure_date": "2023-06-30",
     "departure_time": "13:20:00",
     "expected_departure_time": "12:40:00",
-    "arrival_date": "2023-06-30 00:00:00",
+    "arrival_date": "2023-06-30",
     "arrival_time": "15:04:00",
     "expected_arrival_time": "14:35:00",
     "status": null
@@ -820,7 +848,7 @@
     "departure_date": "2023-06-30",
     "departure_time": "16:30:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2023-06-30 00:00:00",
+    "arrival_date": "2023-06-30",
     "arrival_time": "17:45:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -834,7 +862,7 @@
     "departure_date": "2023-03-06",
     "departure_time": "15:20:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2023-03-06 00:00:00",
+    "arrival_date": "2023-03-06",
     "arrival_time": "17:20:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -848,7 +876,7 @@
     "departure_date": "2023-03-03",
     "departure_time": "18:26:00",
     "expected_departure_time": "17:45:00",
-    "arrival_date": "2023-03-03 00:00:00",
+    "arrival_date": "2023-03-03",
     "arrival_time": "19:01:00",
     "expected_arrival_time": "18:20:00",
     "status": null
@@ -862,7 +890,7 @@
     "departure_date": "2023-01-04",
     "departure_time": "22:00:00",
     "expected_departure_time": "20:47:00",
-    "arrival_date": "2023-01-05 00:00:00",
+    "arrival_date": "2023-01-05",
     "arrival_time": "11:53:00",
     "expected_arrival_time": "11:10:00",
     "status": null
@@ -876,7 +904,7 @@
     "departure_date": "2023-01-05",
     "departure_time": "16:45:00",
     "expected_departure_time": "16:40:00",
-    "arrival_date": "2023-01-05 00:00:00",
+    "arrival_date": "2023-01-05",
     "arrival_time": "18:46:00",
     "expected_arrival_time": "18:30:00",
     "status": null
@@ -890,7 +918,7 @@
     "departure_date": "2022-12-30",
     "departure_time": "06:47:00",
     "expected_departure_time": "06:50:00",
-    "arrival_date": "2022-12-30 00:00:00",
+    "arrival_date": "2022-12-30",
     "arrival_time": "08:32:00",
     "expected_arrival_time": "08:40:00",
     "status": null
@@ -904,7 +932,7 @@
     "departure_date": "2022-12-30",
     "departure_time": "11:06:00",
     "expected_departure_time": "09:45:00",
-    "arrival_date": "2022-12-30 00:00:00",
+    "arrival_date": "2022-12-30",
     "arrival_time": "13:37:00",
     "expected_arrival_time": "12:30:00",
     "status": null
@@ -918,7 +946,7 @@
     "departure_date": "2022-07-02",
     "departure_time": "08:10:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-07-02 00:00:00",
+    "arrival_date": "2022-07-02",
     "arrival_time": "09:40:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -932,7 +960,7 @@
     "departure_date": "2022-07-01",
     "departure_time": "18:05:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-07-01 00:00:00",
+    "arrival_date": "2022-07-01",
     "arrival_time": "19:25:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -946,7 +974,7 @@
     "departure_date": "2022-07-01",
     "departure_time": "20:15:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-07-01 00:00:00",
+    "arrival_date": "2022-07-01",
     "arrival_time": "21:25:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -960,7 +988,7 @@
     "departure_date": "2022-07-01",
     "departure_time": "21:06:00",
     "expected_departure_time": "21:00:00",
-    "arrival_date": "2022-07-01 00:00:00",
+    "arrival_date": "2022-07-01",
     "arrival_time": "22:16:00",
     "expected_arrival_time": "22:25:00",
     "status": "Missed"
@@ -974,7 +1002,7 @@
     "departure_date": "2022-06-19",
     "departure_time": "18:15:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-06-19 00:00:00",
+    "arrival_date": "2022-06-19",
     "arrival_time": "19:55:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -988,7 +1016,7 @@
     "departure_date": "2022-06-19",
     "departure_time": "06:21:00",
     "expected_departure_time": "06:20:00",
-    "arrival_date": "2022-06-19 00:00:00",
+    "arrival_date": "2022-06-19",
     "arrival_time": "08:01:00",
     "expected_arrival_time": "07:55:00",
     "status": null
@@ -1002,7 +1030,7 @@
     "departure_date": "2022-06-19",
     "departure_time": "12:45:00",
     "expected_departure_time": "12:24:00",
-    "arrival_date": "2022-06-19 00:00:00",
+    "arrival_date": "2022-06-19",
     "arrival_time": "14:00:00",
     "expected_arrival_time": "13:40:00",
     "status": null
@@ -1016,7 +1044,7 @@
     "departure_date": "2022-06-19",
     "departure_time": "20:53:00",
     "expected_departure_time": "20:35:00",
-    "arrival_date": "2022-06-19 00:00:00",
+    "arrival_date": "2022-06-19",
     "arrival_time": "22:06:00",
     "expected_arrival_time": "22:05:00",
     "status": null
@@ -1030,7 +1058,7 @@
     "departure_date": "2022-05-02",
     "departure_time": "16:10:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-05-02 00:00:00",
+    "arrival_date": "2022-05-02",
     "arrival_time": "17:35:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1044,7 +1072,7 @@
     "departure_date": "2022-05-02",
     "departure_time": "11:25:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-05-02 00:00:00",
+    "arrival_date": "2022-05-02",
     "arrival_time": "15:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1058,7 +1086,7 @@
     "departure_date": "2022-04-26",
     "departure_time": "17:27:00",
     "expected_departure_time": "17:15:00",
-    "arrival_date": "2022-04-26 00:00:00",
+    "arrival_date": "2022-04-26",
     "arrival_time": "19:43:00",
     "expected_arrival_time": "19:35:00",
     "status": null
@@ -1072,7 +1100,7 @@
     "departure_date": "2022-04-26",
     "departure_time": "11:25:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2022-04-26 00:00:00",
+    "arrival_date": "2022-04-26",
     "arrival_time": "12:15:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1086,7 +1114,7 @@
     "departure_date": "2022-04-26",
     "departure_time": "14:12:00",
     "expected_departure_time": "14:15:00",
-    "arrival_date": "2022-04-26 00:00:00",
+    "arrival_date": "2022-04-26",
     "arrival_time": "15:18:00",
     "expected_arrival_time": "15:35:00",
     "status": null
@@ -1100,7 +1128,7 @@
     "departure_date": "2022-02-05",
     "departure_time": "09:01:00",
     "expected_departure_time": "09:00:00",
-    "arrival_date": "2022-02-05 00:00:00",
+    "arrival_date": "2022-02-05",
     "arrival_time": "09:56:00",
     "expected_arrival_time": "09:50:00",
     "status": null
@@ -1114,7 +1142,7 @@
     "departure_date": "2022-02-05",
     "departure_time": "11:32:00",
     "expected_departure_time": "11:30:00",
-    "arrival_date": "2022-02-05 00:00:00",
+    "arrival_date": "2022-02-05",
     "arrival_time": "13:24:00",
     "expected_arrival_time": "13:25:00",
     "status": null
@@ -1128,7 +1156,7 @@
     "departure_date": "2021-10-12",
     "departure_time": "12:16:00",
     "expected_departure_time": "12:00:00",
-    "arrival_date": "2021-10-12 00:00:00",
+    "arrival_date": "2021-10-12",
     "arrival_time": "13:43:00",
     "expected_arrival_time": "13:35:00",
     "status": null
@@ -1142,7 +1170,7 @@
     "departure_date": "2021-10-12",
     "departure_time": "15:03:00",
     "expected_departure_time": "15:00:00",
-    "arrival_date": "2021-10-12 00:00:00",
+    "arrival_date": "2021-10-12",
     "arrival_time": "16:34:00",
     "expected_arrival_time": "16:30:00",
     "status": null
@@ -1156,7 +1184,7 @@
     "departure_date": "2020-02-10",
     "departure_time": "20:58:00",
     "expected_departure_time": "20:55:00",
-    "arrival_date": "2020-02-10 00:00:00",
+    "arrival_date": "2020-02-10",
     "arrival_time": "21:49:00",
     "expected_arrival_time": "21:50:00",
     "status": null
@@ -1170,7 +1198,7 @@
     "departure_date": "2020-02-07",
     "departure_time": "19:49:00",
     "expected_departure_time": "20:00:00",
-    "arrival_date": "2020-02-07 00:00:00",
+    "arrival_date": "2020-02-07",
     "arrival_time": "20:40:00",
     "expected_arrival_time": "20:50:00",
     "status": null
@@ -1184,7 +1212,7 @@
     "departure_date": "2020-01-04",
     "departure_time": "12:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2020-01-04 00:00:00",
+    "arrival_date": "2020-01-04",
     "arrival_time": "15:00:00",
     "expected_arrival_time": "14:40:00",
     "status": null
@@ -1198,7 +1226,7 @@
     "departure_date": "2019-12-19",
     "departure_time": "16:08:00",
     "expected_departure_time": "15:40:00",
-    "arrival_date": "2019-12-19 00:00:00",
+    "arrival_date": "2019-12-19",
     "arrival_time": "17:53:00",
     "expected_arrival_time": "16:35:00",
     "status": null
@@ -1212,7 +1240,7 @@
     "departure_date": "2019-12-19",
     "departure_time": "19:30:00",
     "expected_departure_time": "18:00:00",
-    "arrival_date": "2019-12-19 00:00:00",
+    "arrival_date": "2019-12-19",
     "arrival_time": "21:41:00",
     "expected_arrival_time": "19:35:00",
     "status": null
@@ -1226,7 +1254,7 @@
     "departure_date": "2019-11-01",
     "departure_time": "11:50:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2019-11-01 00:00:00",
+    "arrival_date": "2019-11-01",
     "arrival_time": "13:32:00",
     "expected_arrival_time": "13:35:00",
     "status": null
@@ -1240,7 +1268,7 @@
     "departure_date": "2019-11-01",
     "departure_time": "15:12:00",
     "expected_departure_time": "15:05:00",
-    "arrival_date": "2019-11-01 00:00:00",
+    "arrival_date": "2019-11-01",
     "arrival_time": "16:33:00",
     "expected_arrival_time": "16:35:00",
     "status": null
@@ -1254,7 +1282,7 @@
     "departure_date": "2019-10-12",
     "departure_time": "10:27:00",
     "expected_departure_time": "10:10:00",
-    "arrival_date": "2019-10-12 00:00:00",
+    "arrival_date": "2019-10-12",
     "arrival_time": "12:13:00",
     "expected_arrival_time": "11:45:00",
     "status": null
@@ -1268,7 +1296,7 @@
     "departure_date": "2019-10-12",
     "departure_time": "15:20:00",
     "expected_departure_time": "15:00:00",
-    "arrival_date": "2019-10-12 00:00:00",
+    "arrival_date": "2019-10-12",
     "arrival_time": "16:33:00",
     "expected_arrival_time": "16:30:00",
     "status": null
@@ -1282,7 +1310,7 @@
     "departure_date": "2019-08-27",
     "departure_time": "21:18:00",
     "expected_departure_time": "21:00:00",
-    "arrival_date": "2019-08-27 00:00:00",
+    "arrival_date": "2019-08-27",
     "arrival_time": "22:35:00",
     "expected_arrival_time": "22:25:00",
     "status": null
@@ -1296,7 +1324,7 @@
     "departure_date": "2019-08-27",
     "departure_time": "06:11:00",
     "expected_departure_time": "06:20:00",
-    "arrival_date": "2019-08-27 00:00:00",
+    "arrival_date": "2019-08-27",
     "arrival_time": "07:33:00",
     "expected_arrival_time": "07:50:00",
     "status": null
@@ -1310,7 +1338,7 @@
     "departure_date": "2019-06-16",
     "departure_time": "12:31:00",
     "expected_departure_time": "12:10:00",
-    "arrival_date": "2019-06-16 00:00:00",
+    "arrival_date": "2019-06-16",
     "arrival_time": "14:39:00",
     "expected_arrival_time": "14:20:00",
     "status": null
@@ -1324,7 +1352,7 @@
     "departure_date": "2019-06-16",
     "departure_time": "15:20:00",
     "expected_departure_time": "15:15:00",
-    "arrival_date": "2019-06-16 00:00:00",
+    "arrival_date": "2019-06-16",
     "arrival_time": "16:13:00",
     "expected_arrival_time": "16:10:00",
     "status": null
@@ -1338,7 +1366,7 @@
     "departure_date": "2019-06-13",
     "departure_time": "07:40:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2019-06-13 00:00:00",
+    "arrival_date": "2019-06-13",
     "arrival_time": "08:29:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -1352,7 +1380,7 @@
     "departure_date": "2019-06-13",
     "departure_time": "08:23:00",
     "expected_departure_time": "08:23:00",
-    "arrival_date": "2019-06-13 00:00:00",
+    "arrival_date": "2019-06-13",
     "arrival_time": "09:11:00",
     "expected_arrival_time": "09:10:00",
     "status": null
@@ -1366,7 +1394,7 @@
     "departure_date": "2019-06-13",
     "departure_time": "11:50:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2019-06-13 00:00:00",
+    "arrival_date": "2019-06-13",
     "arrival_time": "14:27:00",
     "expected_arrival_time": "14:00:00",
     "status": null
@@ -1380,7 +1408,7 @@
     "departure_date": "2019-06-13",
     "departure_time": "10:10:00",
     "expected_departure_time": "10:05:00",
-    "arrival_date": "2019-06-13 00:00:00",
+    "arrival_date": "2019-06-13",
     "arrival_time": "12:38:00",
     "expected_arrival_time": "12:15:00",
     "status": null
@@ -1394,7 +1422,7 @@
     "departure_date": "2019-06-05",
     "departure_time": "06:55:00",
     "expected_departure_time": "07:00:00",
-    "arrival_date": "2019-06-05 00:00:00",
+    "arrival_date": "2019-06-05",
     "arrival_time": "07:49:00",
     "expected_arrival_time": "07:50:00",
     "status": null
@@ -1408,7 +1436,7 @@
     "departure_date": "2019-06-04",
     "departure_time": "20:44:00",
     "expected_departure_time": "20:45:00",
-    "arrival_date": "2019-06-04 00:00:00",
+    "arrival_date": "2019-06-04",
     "arrival_time": "23:08:00",
     "expected_arrival_time": "23:20:00",
     "status": null
@@ -1422,7 +1450,7 @@
     "departure_date": "2019-05-30",
     "departure_time": "07:26:00",
     "expected_departure_time": "07:30:00",
-    "arrival_date": "2019-05-30 00:00:00",
+    "arrival_date": "2019-05-30",
     "arrival_time": "08:23:00",
     "expected_arrival_time": "08:20:00",
     "status": null
@@ -1436,7 +1464,7 @@
     "departure_date": "2019-05-30",
     "departure_time": "11:52:00",
     "expected_departure_time": "11:50:00",
-    "arrival_date": "2019-05-30 00:00:00",
+    "arrival_date": "2019-05-30",
     "arrival_time": "14:22:00",
     "expected_arrival_time": "14:20:00",
     "status": null
@@ -1450,7 +1478,7 @@
     "departure_date": "2019-04-10",
     "departure_time": "06:12:00",
     "expected_departure_time": "06:10:00",
-    "arrival_date": "2019-04-10 00:00:00",
+    "arrival_date": "2019-04-10",
     "arrival_time": "07:33:00",
     "expected_arrival_time": "07:50:00",
     "status": null
@@ -1464,7 +1492,7 @@
     "departure_date": "2019-04-10",
     "departure_time": "10:24:00",
     "expected_departure_time": "10:00:00",
-    "arrival_date": "2019-04-10 00:00:00",
+    "arrival_date": "2019-04-10",
     "arrival_time": "11:59:00",
     "expected_arrival_time": "11:30:00",
     "status": null
@@ -1478,7 +1506,7 @@
     "departure_date": "2019-04-08",
     "departure_time": "18:28:00",
     "expected_departure_time": "18:20:00",
-    "arrival_date": "2019-04-09 00:00:00",
+    "arrival_date": "2019-04-09",
     "arrival_time": "05:34:00",
     "expected_arrival_time": "05:45:00",
     "status": null
@@ -1492,7 +1520,7 @@
     "departure_date": "2019-04-09",
     "departure_time": "08:40:00",
     "expected_departure_time": "08:25:00",
-    "arrival_date": "2019-04-09 00:00:00",
+    "arrival_date": "2019-04-09",
     "arrival_time": "12:01:00",
     "expected_arrival_time": "11:50:00",
     "status": null
@@ -1506,7 +1534,7 @@
     "departure_date": "2019-04-07",
     "departure_time": "23:59:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2019-04-08 00:00:00",
+    "arrival_date": "2019-04-08",
     "arrival_time": "05:56:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1520,7 +1548,7 @@
     "departure_date": "2019-04-07",
     "departure_time": "18:37:00",
     "expected_departure_time": "18:48:00",
-    "arrival_date": "2019-04-07 00:00:00",
+    "arrival_date": "2019-04-07",
     "arrival_time": "21:19:00",
     "expected_arrival_time": "21:30:00",
     "status": null
@@ -1534,7 +1562,7 @@
     "departure_date": "2019-04-02",
     "departure_time": "09:42:00",
     "expected_departure_time": "08:20:00",
-    "arrival_date": "2019-04-02 00:00:00",
+    "arrival_date": "2019-04-02",
     "arrival_time": "17:57:00",
     "expected_arrival_time": "16:50:00",
     "status": null
@@ -1548,7 +1576,7 @@
     "departure_date": "2019-03-26",
     "departure_time": "13:14:00",
     "expected_departure_time": "13:10:00",
-    "arrival_date": "2019-03-26 00:00:00",
+    "arrival_date": "2019-03-26",
     "arrival_time": "15:59:00",
     "expected_arrival_time": "16:04:00",
     "status": null
@@ -1562,7 +1590,7 @@
     "departure_date": "2019-03-17",
     "departure_time": "09:49:00",
     "expected_departure_time": "09:47:00",
-    "arrival_date": "2019-03-17 00:00:00",
+    "arrival_date": "2019-03-17",
     "arrival_time": "12:26:00",
     "expected_arrival_time": "13:00:00",
     "status": null
@@ -1576,7 +1604,7 @@
     "departure_date": "2019-03-15",
     "departure_time": "14:33:00",
     "expected_departure_time": "14:30:00",
-    "arrival_date": "2019-03-15 00:00:00",
+    "arrival_date": "2019-03-15",
     "arrival_time": "18:13:00",
     "expected_arrival_time": "18:00:00",
     "status": null
@@ -1590,7 +1618,7 @@
     "departure_date": "2019-02-26",
     "departure_time": "13:12:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2019-02-26 00:00:00",
+    "arrival_date": "2019-02-26",
     "arrival_time": "16:02:00",
     "expected_arrival_time": "16:05:00",
     "status": null
@@ -1604,7 +1632,7 @@
     "departure_date": "2019-01-08",
     "departure_time": "19:44:00",
     "expected_departure_time": "19:30:00",
-    "arrival_date": "2019-01-08 00:00:00",
+    "arrival_date": "2019-01-08",
     "arrival_time": "21:48:00",
     "expected_arrival_time": "21:40:00",
     "status": null
@@ -1618,7 +1646,7 @@
     "departure_date": "2018-12-17",
     "departure_time": "09:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-12-17 00:00:00",
+    "arrival_date": "2018-12-17",
     "arrival_time": "11:30:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1632,7 +1660,7 @@
     "departure_date": "2018-12-10",
     "departure_time": "20:53:00",
     "expected_departure_time": "20:20:00",
-    "arrival_date": "2018-12-10 00:00:00",
+    "arrival_date": "2018-12-10",
     "arrival_time": "23:19:00",
     "expected_arrival_time": "22:55:00",
     "status": null
@@ -1646,7 +1674,7 @@
     "departure_date": "2018-12-10",
     "departure_time": "17:43:00",
     "expected_departure_time": "17:40:00",
-    "arrival_date": "2018-12-10 00:00:00",
+    "arrival_date": "2018-12-10",
     "arrival_time": "19:16:00",
     "expected_arrival_time": "19:20:00",
     "status": null
@@ -1660,7 +1688,7 @@
     "departure_date": "2018-12-10",
     "departure_time": "15:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-12-10 00:00:00",
+    "arrival_date": "2018-12-10",
     "arrival_time": "19:05:00",
     "expected_arrival_time": "19:20:00",
     "status": null
@@ -1674,7 +1702,7 @@
     "departure_date": "2018-12-01",
     "departure_time": "14:29:00",
     "expected_departure_time": "14:25:00",
-    "arrival_date": "2018-12-01 00:00:00",
+    "arrival_date": "2018-12-01",
     "arrival_time": "15:50:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1688,7 +1716,7 @@
     "departure_date": "2018-12-01",
     "departure_time": "17:28:00",
     "expected_departure_time": "17:20:00",
-    "arrival_date": "2018-12-01 00:00:00",
+    "arrival_date": "2018-12-01",
     "arrival_time": "18:24:00",
     "expected_arrival_time": "18:25:00",
     "status": null
@@ -1702,7 +1730,7 @@
     "departure_date": "2018-11-26",
     "departure_time": "13:52:00",
     "expected_departure_time": "13:45:00",
-    "arrival_date": "2018-11-26 00:00:00",
+    "arrival_date": "2018-11-26",
     "arrival_time": "15:08:00",
     "expected_arrival_time": "15:20:00",
     "status": null
@@ -1716,7 +1744,7 @@
     "departure_date": "2018-11-16",
     "departure_time": "15:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-11-16 00:00:00",
+    "arrival_date": "2018-11-16",
     "arrival_time": "19:14:00",
     "expected_arrival_time": "19:20:00",
     "status": null
@@ -1730,7 +1758,7 @@
     "departure_date": "2018-11-12",
     "departure_time": "13:50:00",
     "expected_departure_time": "13:45:00",
-    "arrival_date": "2018-11-12 00:00:00",
+    "arrival_date": "2018-11-12",
     "arrival_time": "15:01:00",
     "expected_arrival_time": "15:20:00",
     "status": null
@@ -1744,7 +1772,7 @@
     "departure_date": "2018-10-18",
     "departure_time": "09:05:00",
     "expected_departure_time": "08:55:00",
-    "arrival_date": "2018-10-18 00:00:00",
+    "arrival_date": "2018-10-18",
     "arrival_time": "10:04:00",
     "expected_arrival_time": "09:50:00",
     "status": null
@@ -1758,7 +1786,7 @@
     "departure_date": "2018-10-18",
     "departure_time": "10:55:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-10-18 00:00:00",
+    "arrival_date": "2018-10-18",
     "arrival_time": "13:50:00",
     "expected_arrival_time": "13:55:00",
     "status": null
@@ -1772,7 +1800,7 @@
     "departure_date": "2018-10-14",
     "departure_time": "14:21:00",
     "expected_departure_time": "14:00:00",
-    "arrival_date": "2018-10-14 00:00:00",
+    "arrival_date": "2018-10-14",
     "arrival_time": "16:16:00",
     "expected_arrival_time": "16:10:00",
     "status": null
@@ -1786,7 +1814,7 @@
     "departure_date": "2018-07-27",
     "departure_time": "16:10:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-07-27 00:00:00",
+    "arrival_date": "2018-07-27",
     "arrival_time": "19:35:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1800,7 +1828,7 @@
     "departure_date": "2018-07-24",
     "departure_time": "17:50:00",
     "expected_departure_time": "17:35:00",
-    "arrival_date": "2018-07-24 00:00:00",
+    "arrival_date": "2018-07-24",
     "arrival_time": "19:34:00",
     "expected_arrival_time": "19:35:00",
     "status": null
@@ -1814,7 +1842,7 @@
     "departure_date": "2018-07-24",
     "departure_time": "21:02:00",
     "expected_departure_time": "21:05:00",
-    "arrival_date": "2018-07-24 00:00:00",
+    "arrival_date": "2018-07-24",
     "arrival_time": "22:08:00",
     "expected_arrival_time": "22:10:00",
     "status": null
@@ -1828,7 +1856,7 @@
     "departure_date": "2018-07-22",
     "departure_time": "17:35:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-07-22 00:00:00",
+    "arrival_date": "2018-07-22",
     "arrival_time": "19:35:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1842,7 +1870,7 @@
     "departure_date": "2018-07-22",
     "departure_time": "21:05:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-07-22 00:00:00",
+    "arrival_date": "2018-07-22",
     "arrival_time": "22:10:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1856,7 +1884,7 @@
     "departure_date": "2018-07-13",
     "departure_time": "16:54:00",
     "expected_departure_time": "16:10:00",
-    "arrival_date": "2018-07-13 00:00:00",
+    "arrival_date": "2018-07-13",
     "arrival_time": "19:54:00",
     "expected_arrival_time": "19:35:00",
     "status": null
@@ -1870,7 +1898,7 @@
     "departure_date": "2018-07-08",
     "departure_time": "17:35:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-07-08 00:00:00",
+    "arrival_date": "2018-07-08",
     "arrival_time": "19:35:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -1884,7 +1912,7 @@
     "departure_date": "2018-07-01",
     "departure_time": "21:32:00",
     "expected_departure_time": "21:30:00",
-    "arrival_date": "2018-07-01 00:00:00",
+    "arrival_date": "2018-07-01",
     "arrival_time": "20:00:00",
     "expected_arrival_time": "22:10:00",
     "status": null
@@ -1898,7 +1926,7 @@
     "departure_date": "2018-07-01",
     "departure_time": "16:46:00",
     "expected_departure_time": "16:25:00",
-    "arrival_date": "2018-07-01 00:00:00",
+    "arrival_date": "2018-07-01",
     "arrival_time": "19:29:00",
     "expected_arrival_time": "19:10:00",
     "status": null
@@ -1912,7 +1940,7 @@
     "departure_date": "2018-07-01",
     "departure_time": "20:33:00",
     "expected_departure_time": "20:15:00",
-    "arrival_date": "2018-07-01 00:00:00",
+    "arrival_date": "2018-07-01",
     "arrival_time": "23:12:00",
     "expected_arrival_time": "23:00:00",
     "status": null
@@ -1926,7 +1954,7 @@
     "departure_date": "2018-06-29",
     "departure_time": "19:20:00",
     "expected_departure_time": "19:25:00",
-    "arrival_date": "2018-06-29 00:00:00",
+    "arrival_date": "2018-06-29",
     "arrival_time": "20:38:00",
     "expected_arrival_time": "20:45:00",
     "status": null
@@ -1940,7 +1968,7 @@
     "departure_date": "2018-06-29",
     "departure_time": "19:25:00",
     "expected_departure_time": "19:00:00",
-    "arrival_date": "2018-06-29 00:00:00",
+    "arrival_date": "2018-06-29",
     "arrival_time": "20:47:00",
     "expected_arrival_time": "20:20:00",
     "status": null
@@ -1954,7 +1982,7 @@
     "departure_date": "2018-06-23",
     "departure_time": "12:36:00",
     "expected_departure_time": "11:50:00",
-    "arrival_date": "2018-06-23 00:00:00",
+    "arrival_date": "2018-06-23",
     "arrival_time": "16:42:00",
     "expected_arrival_time": "16:00:00",
     "status": null
@@ -1968,7 +1996,7 @@
     "departure_date": "2018-06-18",
     "departure_time": "23:19:00",
     "expected_departure_time": "19:00:00",
-    "arrival_date": "2018-06-19 00:00:00",
+    "arrival_date": "2018-06-19",
     "arrival_time": "12:15:00",
     "expected_arrival_time": "08:10:00",
     "status": null
@@ -1982,7 +2010,7 @@
     "departure_date": "2018-06-18",
     "departure_time": "16:33:00",
     "expected_departure_time": "16:30:00",
-    "arrival_date": "2018-06-18 00:00:00",
+    "arrival_date": "2018-06-18",
     "arrival_time": "18:18:00",
     "expected_arrival_time": "17:43:00",
     "status": null
@@ -1996,7 +2024,7 @@
     "departure_date": "2018-03-21",
     "departure_time": "13:19:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-03-21 00:00:00",
+    "arrival_date": "2018-03-21",
     "arrival_time": "21:04:00",
     "expected_arrival_time": "21:30:00",
     "status": null
@@ -2010,7 +2038,7 @@
     "departure_date": "2018-03-21",
     "departure_time": "22:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-03-21 00:00:00",
+    "arrival_date": "2018-03-21",
     "arrival_time": "23:54:00",
     "expected_arrival_time": "23:49:00",
     "status": null
@@ -2024,7 +2052,7 @@
     "departure_date": "2018-03-16",
     "departure_time": "21:46:00",
     "expected_departure_time": "21:50:00",
-    "arrival_date": "2018-03-17 00:00:00",
+    "arrival_date": "2018-03-17",
     "arrival_time": "00:26:00",
     "expected_arrival_time": "00:31:00",
     "status": null
@@ -2038,7 +2066,7 @@
     "departure_date": "2018-03-16",
     "departure_time": "19:47:00",
     "expected_departure_time": "19:58:00",
-    "arrival_date": "2018-03-16 00:00:00",
+    "arrival_date": "2018-03-16",
     "arrival_time": "20:32:00",
     "expected_arrival_time": "21:00:00",
     "status": null
@@ -2052,7 +2080,7 @@
     "departure_date": "2018-03-11",
     "departure_time": "13:19:00",
     "expected_departure_time": "13:25:00",
-    "arrival_date": "2018-03-11 00:00:00",
+    "arrival_date": "2018-03-11",
     "arrival_time": "16:40:00",
     "expected_arrival_time": "17:02:00",
     "status": null
@@ -2066,7 +2094,7 @@
     "departure_date": "2018-03-11",
     "departure_time": "17:28:00",
     "expected_departure_time": "17:35:00",
-    "arrival_date": "2018-03-11 00:00:00",
+    "arrival_date": "2018-03-11",
     "arrival_time": "22:34:00",
     "expected_arrival_time": "22:45:00",
     "status": null
@@ -2080,7 +2108,7 @@
     "departure_date": "2018-03-03",
     "departure_time": "13:15:00",
     "expected_departure_time": "11:03:00",
-    "arrival_date": "2018-03-03 00:00:00",
+    "arrival_date": "2018-03-03",
     "arrival_time": "14:05:00",
     "expected_arrival_time": "12:03:00",
     "status": null
@@ -2094,7 +2122,7 @@
     "departure_date": "2018-03-03",
     "departure_time": "13:13:00",
     "expected_departure_time": "13:16:00",
-    "arrival_date": "2018-03-03 00:00:00",
+    "arrival_date": "2018-03-03",
     "arrival_time": "15:27:00",
     "expected_arrival_time": "15:49:00",
     "status": null
@@ -2108,7 +2136,7 @@
     "departure_date": "2018-03-03",
     "departure_time": "19:25:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-03-03 00:00:00",
+    "arrival_date": "2018-03-03",
     "arrival_time": "21:51:00",
     "expected_arrival_time": "21:45:00",
     "status": null
@@ -2122,7 +2150,7 @@
     "departure_date": "2018-02-20",
     "departure_time": "08:53:00",
     "expected_departure_time": "09:00:00",
-    "arrival_date": "2018-02-20 00:00:00",
+    "arrival_date": "2018-02-20",
     "arrival_time": "09:59:00",
     "expected_arrival_time": "10:24:00",
     "status": null
@@ -2136,7 +2164,7 @@
     "departure_date": "2018-02-20",
     "departure_time": "12:20:00",
     "expected_departure_time": "11:50:00",
-    "arrival_date": "2018-02-20 00:00:00",
+    "arrival_date": "2018-02-20",
     "arrival_time": "14:07:00",
     "expected_arrival_time": "13:52:00",
     "status": null
@@ -2150,7 +2178,7 @@
     "departure_date": "2018-02-20",
     "departure_time": "16:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-02-20 00:00:00",
+    "arrival_date": "2018-02-20",
     "arrival_time": "17:38:00",
     "expected_arrival_time": "nan",
     "status": "Cancelled"
@@ -2164,7 +2192,7 @@
     "departure_date": "2018-01-11",
     "departure_time": "18:35:00",
     "expected_departure_time": "18:10:00",
-    "arrival_date": "2018-01-12 00:00:00",
+    "arrival_date": "2018-01-12",
     "arrival_time": "07:28:00",
     "expected_arrival_time": "07:25:00",
     "status": null
@@ -2178,7 +2206,7 @@
     "departure_date": "2018-01-12",
     "departure_time": "09:03:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2018-01-12 00:00:00",
+    "arrival_date": "2018-01-12",
     "arrival_time": "11:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2192,7 +2220,7 @@
     "departure_date": "2017-12-29",
     "departure_time": "06:25:00",
     "expected_departure_time": "06:15:00",
-    "arrival_date": "2017-12-29 00:00:00",
+    "arrival_date": "2017-12-29",
     "arrival_time": "07:35:00",
     "expected_arrival_time": "07:25:00",
     "status": null
@@ -2206,7 +2234,7 @@
     "departure_date": "2017-12-29",
     "departure_time": "14:41:00",
     "expected_departure_time": "14:15:00",
-    "arrival_date": "2017-12-29 00:00:00",
+    "arrival_date": "2017-12-29",
     "arrival_time": "17:34:00",
     "expected_arrival_time": "16:40:00",
     "status": null
@@ -2220,7 +2248,7 @@
     "departure_date": "2017-12-19",
     "departure_time": "18:14:00",
     "expected_departure_time": "18:00:00",
-    "arrival_date": "2017-12-20 00:00:00",
+    "arrival_date": "2017-12-20",
     "arrival_time": "07:24:00",
     "expected_arrival_time": "07:20:00",
     "status": null
@@ -2234,7 +2262,7 @@
     "departure_date": "2017-12-20",
     "departure_time": "16:48:00",
     "expected_departure_time": "16:40:00",
-    "arrival_date": "2017-12-20 00:00:00",
+    "arrival_date": "2017-12-20",
     "arrival_time": "18:03:00",
     "expected_arrival_time": "18:00:00",
     "status": null
@@ -2248,7 +2276,7 @@
     "departure_date": "2017-10-19",
     "departure_time": "07:35:00",
     "expected_departure_time": "07:20:00",
-    "arrival_date": "2017-10-19 00:00:00",
+    "arrival_date": "2017-10-19",
     "arrival_time": "08:49:00",
     "expected_arrival_time": "08:45:00",
     "status": null
@@ -2262,7 +2290,7 @@
     "departure_date": "2017-10-19",
     "departure_time": "10:48:00",
     "expected_departure_time": "10:45:00",
-    "arrival_date": "2017-10-19 00:00:00",
+    "arrival_date": "2017-10-19",
     "arrival_time": "13:03:00",
     "expected_arrival_time": "13:00:00",
     "status": null
@@ -2276,7 +2304,7 @@
     "departure_date": "2017-01-21",
     "departure_time": "16:18:00",
     "expected_departure_time": "16:15:00",
-    "arrival_date": "2017-01-22 00:00:00",
+    "arrival_date": "2017-01-22",
     "arrival_time": "10:32:00",
     "expected_arrival_time": "10:40:00",
     "status": null
@@ -2290,7 +2318,7 @@
     "departure_date": "2017-01-22",
     "departure_time": "15:28:00",
     "expected_departure_time": "15:25:00",
-    "arrival_date": "2017-01-22 00:00:00",
+    "arrival_date": "2017-01-22",
     "arrival_time": "18:07:00",
     "expected_arrival_time": "18:05:00",
     "status": null
@@ -2304,7 +2332,7 @@
     "departure_date": "2017-01-13",
     "departure_time": "11:16:00",
     "expected_departure_time": "11:25:00",
-    "arrival_date": "2017-01-13 00:00:00",
+    "arrival_date": "2017-01-13",
     "arrival_time": "12:30:00",
     "expected_arrival_time": "12:10:00",
     "status": null
@@ -2318,7 +2346,7 @@
     "departure_date": "2017-01-13",
     "departure_time": "17:11:00",
     "expected_departure_time": "15:05:00",
-    "arrival_date": "2017-01-13 00:00:00",
+    "arrival_date": "2017-01-13",
     "arrival_time": "20:32:00",
     "expected_arrival_time": "18:20:00",
     "status": null
@@ -2332,7 +2360,7 @@
     "departure_date": "2016-11-25",
     "departure_time": "20:50:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-11-25 00:00:00",
+    "arrival_date": "2016-11-25",
     "arrival_time": "22:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2346,7 +2374,7 @@
     "departure_date": "2016-05-29",
     "departure_time": "20:35:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-05-29 00:00:00",
+    "arrival_date": "2016-05-29",
     "arrival_time": "22:25:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2360,7 +2388,7 @@
     "departure_date": "2016-05-27",
     "departure_time": "14:05:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-05-27 00:00:00",
+    "arrival_date": "2016-05-27",
     "arrival_time": "15:45:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2374,7 +2402,7 @@
     "departure_date": "2016-04-29",
     "departure_time": "22:30:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-04-30 00:00:00",
+    "arrival_date": "2016-04-30",
     "arrival_time": "12:45:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2388,7 +2416,7 @@
     "departure_date": "2016-04-30",
     "departure_time": "17:45:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-04-30 00:00:00",
+    "arrival_date": "2016-04-30",
     "arrival_time": "19:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2402,7 +2430,7 @@
     "departure_date": "2016-04-29",
     "departure_time": "19:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-04-29 00:00:00",
+    "arrival_date": "2016-04-29",
     "arrival_time": "21:13:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2416,7 +2444,7 @@
     "departure_date": "2016-04-23",
     "departure_time": "22:19:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2016-04-24 00:00:00",
+    "arrival_date": "2016-04-24",
     "arrival_time": "00:34:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2430,7 +2458,7 @@
     "departure_date": "2016-04-23",
     "departure_time": "14:51:00",
     "expected_departure_time": "14:45:00",
-    "arrival_date": "2016-04-23 00:00:00",
+    "arrival_date": "2016-04-23",
     "arrival_time": "15:50:00",
     "expected_arrival_time": "16:10:00",
     "status": null
@@ -2444,7 +2472,7 @@
     "departure_date": "2016-04-23",
     "departure_time": "17:19:00",
     "expected_departure_time": "17:10:00",
-    "arrival_date": "2016-04-23 00:00:00",
+    "arrival_date": "2016-04-23",
     "arrival_time": "19:41:00",
     "expected_arrival_time": "20:00:00",
     "status": null
@@ -2458,7 +2486,7 @@
     "departure_date": "2015-04-29",
     "departure_time": "12:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2015-04-29 00:00:00",
+    "arrival_date": "2015-04-29",
     "arrival_time": "15:10:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2472,7 +2500,7 @@
     "departure_date": "2015-04-25",
     "departure_time": "18:05:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2015-04-25 00:00:00",
+    "arrival_date": "2015-04-25",
     "arrival_time": "19:20:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2486,7 +2514,7 @@
     "departure_date": "2014-08-02",
     "departure_time": "21:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-08-03 00:00:00",
+    "arrival_date": "2014-08-03",
     "arrival_time": "08:40:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2500,7 +2528,7 @@
     "departure_date": "2014-08-03",
     "departure_time": "12:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-08-03 00:00:00",
+    "arrival_date": "2014-08-03",
     "arrival_time": "15:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2514,7 +2542,7 @@
     "departure_date": "2014-07-29",
     "departure_time": "12:33:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-07-29 00:00:00",
+    "arrival_date": "2014-07-29",
     "arrival_time": "12:30:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2528,7 +2556,7 @@
     "departure_date": "2014-07-29",
     "departure_time": "13:22:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-07-29 00:00:00",
+    "arrival_date": "2014-07-29",
     "arrival_time": "16:45:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2542,7 +2570,7 @@
     "departure_date": "2014-07-24",
     "departure_time": "07:15:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-07-24 00:00:00",
+    "arrival_date": "2014-07-24",
     "arrival_time": "09:05:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2556,7 +2584,7 @@
     "departure_date": "2014-07-24",
     "departure_time": "10:30:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-07-24 00:00:00",
+    "arrival_date": "2014-07-24",
     "arrival_time": "12:50:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2570,7 +2598,7 @@
     "departure_date": "2014-07-24",
     "departure_time": "16:25:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2014-07-24 00:00:00",
+    "arrival_date": "2014-07-24",
     "arrival_time": "18:15:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2584,7 +2612,7 @@
     "departure_date": "2002-08-05",
     "departure_time": "08:00:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2002-08-05 00:00:00",
+    "arrival_date": "2002-08-05",
     "arrival_time": "10:25:00",
     "expected_arrival_time": "nan",
     "status": null
@@ -2598,7 +2626,7 @@
     "departure_date": "2002-07-29",
     "departure_time": "11:10:00",
     "expected_departure_time": "nan",
-    "arrival_date": "2002-07-29 00:00:00",
+    "arrival_date": "2002-07-29",
     "arrival_time": "15:45:00",
     "expected_arrival_time": "nan",
     "status": null
