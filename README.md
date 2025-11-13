@@ -7,60 +7,6 @@ A modern, robust 3D globe visualization built with Babylon.js that displays flig
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-yellow)
 ![Architecture](https://img.shields.io/badge/Architecture-Modular-purple)
 
-## ✨ Features
-
-### �️ Modern Architecture
-
-- **Fully modular codebase** with clean separation of concerns
-- **Robust error handling** with user-friendly error overlays and recovery
-- **Smart data loading** with in-memory caching and simplified state management
-- **Comprehensive logging** with organized console groups (Scene, Earth, Flights)
-- **Advanced debugging utilities** for development and troubleshooting
-
-### 🌐 Enhanced Earth Rendering
-
-- **Progressive tile loading** with intelligent level-of-detail optimization
-- **Multiple map providers**: OpenStreetMap, CartoDB, ESRI World Imagery, Bing Satellite
-- **Fixed rendering artifacts** with improved mesh geometry and normals
-- **Solid black background** with proper alpha channel handling
-- **Enhanced texture filtering** and UV clamping for crisp visuals
-- **Real-time sun visualization** with astronomically accurate positioning
-- **Optimized lighting system** with realistic sun and fill lights
-
-### ✈️ Advanced Flight Visualization
-
-- **State-driven flight system** with centralized configuration
-- **Batch processing** for optimal performance with large datasets
-- **3D flight arcs** following mathematically accurate great circle paths
-- **Interactive airport points** with hover tooltips and visual feedback
-- **Comprehensive search utilities** for airports and flight data
-- **Glowing visual effects** with proper material handling
-
-### ☀️ Real-time Sun System
-
-- **Astronomically accurate positioning** based on current date and time
-- **Visual sun sphere** with realistic scaling and emissive materials
-- **Dynamic lighting** that follows real-world sun position
-- **Automatic updates** every 15 minutes for continuous accuracy
-- **Runtime controls** for visibility and size adjustments
-- **Proper cleanup** and resource management
-
-### 🎮 Interactive Controls & UX
-
-- **Responsive mouse/touch controls** with adaptive sensitivity
-- **Smart tooltip system** with positioning and hover states
-- **Error recovery overlays** with user-friendly messaging
-- **Performance monitoring** and automatic optimization
-- **Camera position utilities** for precise navigation
-
-### � Developer Experience
-
-- **Comprehensive debug utilities** accessible via console
-- **System status monitoring** with `getSystemStatus()` and `quickStatus()`
-- **Data file validation** with `testDataFiles()` utility
-- **Easy reinitialization** with `reinitializeFlights()` command
-- **Detailed error logging** with stack traces and context
-
 ## 🚀 Quick Start
 
 1. **Clone the repository**
