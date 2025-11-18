@@ -65,9 +65,9 @@ function initCameraLight() {
   );
 
   // Configure for soft, diffused lighting
-  window.cameraLight.intensity = 0.6; // Moderate intensity to not overpower the sun
-  window.cameraLight.diffuse = BABYLON.Color3.FromHexString("#99b3e6"); // Cool, atmospheric blue-white
-  window.cameraLight.specular = BABYLON.Color3.FromHexString("#1a1a33"); // Minimal specular for soft look
+  window.cameraLight.intensity = 0.1; // Moderate intensity to not overpower the sun
+  window.cameraLight.diffuse = BABYLON.Color3.FromHexString("#dce699ff"); // Cool, atmospheric blue-white
+  window.cameraLight.specular = BABYLON.Color3.FromHexString("#293302ff"); // Minimal specular for soft look
 
   console.log("💡 ✅ Camera-following light created");
 

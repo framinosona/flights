@@ -102,9 +102,9 @@ function initSunLight(sunPosition, sunDirection) {
   );
 
   // Configure sun properties
-  window.sunLight.intensity = 0.5; // Bright sunlight
+  window.sunLight.intensity = 0.9; // Bright sunlight
   window.sunLight.diffuse = BABYLON.Color3.FromHexString("#fff2cc"); // Slightly warm white
-  window.sunLight.specular = BABYLON.Color3.FromHexString("#ffffe6"); // Bright specular highlights
+  window.sunLight.specular = BABYLON.Color3.FromHexString("#ffffffff"); // Bright specular highlights
 
   // Enable shadows (optional)
   window.sunLight.setEnabled(true);
