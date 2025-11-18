@@ -43,9 +43,14 @@ window.skyboxSets = {
     description: "Red space",
     baseName: "img/skybox/tyro8/",
   },
+  TYRO9: {
+    name: "Tyro 9",
+    description: "Red space",
+    baseName: "img/skybox/tyro9/",
+  },
 };
 
-window.skyboxSet = window.skyboxSets.TYRO1;
+window.skyboxSet = window.skyboxSets.TYRO9;
 
 // ==============================
 // SKYBOX CREATION FUNCTIONS
