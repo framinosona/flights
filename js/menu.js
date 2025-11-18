@@ -148,10 +148,10 @@ function initializeMenu() {
   console.log("💡 ✅ Initializing menu...");
 
   // Initialize tile provider selector
-  initializeTileProviderSelector();
+  //initializeTileProviderSelector();
 
   // Initialize skybox selector
-  initializeSkyboxSelector();
+  //initializeSkyboxSelector();
 
   console.log("💡 ✅ Menu initialized successfully");
 }
