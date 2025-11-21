@@ -65,7 +65,7 @@ function initCameraLight() {
   );
 
   // Configure for soft, diffused lighting
-  window.cameraLight.intensity = 0.1; // Moderate intensity to not overpower the sun
+  window.cameraLight.intensity = 0.4; // Moderate intensity to not overpower the sun
   window.cameraLight.diffuse = BABYLON.Color3.FromHexString("#dce699ff"); // Cool, atmospheric blue-white
   window.cameraLight.specular = BABYLON.Color3.FromHexString("#293302ff"); // Minimal specular for soft look
 
