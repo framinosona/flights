@@ -1,0 +1,15 @@
+# Robots.txt for flights.francois.raminosona.com
+# Allow all web crawlers to index the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://flights.francois.raminosona.com/sitemap.xml
+
+# Crawl-delay for polite crawling (optional)
+Crawl-delay: 1
+
+# Disallow access to potentially sensitive directories
+Disallow: /js/data/
+Disallow: /*.json$
