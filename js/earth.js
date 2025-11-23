@@ -2,7 +2,7 @@
 // EARTH TILE SYSTEM AND RENDERING
 // ==============================
 
-const tileDefinition = 4;
+const tileDefinition = 2;
 
 let sharedEarthResources = {
   baseEarthMaterial: null,
