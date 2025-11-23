@@ -29,8 +29,8 @@ const FLIGHT_CONFIG = {
   flightArc: {
     radius: 1,
     thickness: 0.001,
-    tessellation: 6,
-    points: 50,
+    tessellation: 4, // Reduced from 6 for better performance
+    points: 30, // Reduced from 50 for better performance
     height: 0.05,
     colors: {
       default: { emissive: "#4db3ff", diffuse: "#3399e6" },
@@ -466,24 +466,8 @@ function createAirportPoint(airport, radius = FLIGHT_CONFIG.airportPoint.radius)
     airportSphere.createdAt = Date.now();
     airportSphere.isFlightSystemObject = true;
 
-    // Configure interaction
-    airportSphere.isPickable = true;
-    airportSphere.actionManager = new BABYLON.ActionManager(window.scene);
-
-    // Add hover effects
-    airportSphere.actionManager.registerAction(
-      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, () => {
-        pointMaterial.emissiveColor = airportSphere.hoverEmissive.clone();
-        pointMaterial.diffuseColor = airportSphere.hoverDiffuse.clone();
-      })
-    );
-
-    airportSphere.actionManager.registerAction(
-      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, () => {
-        pointMaterial.emissiveColor = airportSphere.originalEmissive.clone();
-        pointMaterial.diffuseColor = airportSphere.originalDiffuse.clone();
-      })
-    );
+    // Disable picking for better performance (no hover effects)
+    airportSphere.isPickable = false;
 
     return airportSphere;
   } catch (error) {
@@ -755,24 +739,8 @@ function createFlightArc(
 
     arcTube.material = arcMaterial;
 
-    // Configure interaction
-    arcTube.isPickable = true;
-    arcTube.actionManager = new BABYLON.ActionManager(window.scene);
-
-    // Add hover effects
-    arcTube.actionManager.registerAction(
-      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, () => {
-        arcMaterial.emissiveColor = arcMaterial.hoverEmissive.clone();
-        arcMaterial.diffuseColor = arcMaterial.hoverDiffuse.clone();
-      })
-    );
-
-    arcTube.actionManager.registerAction(
-      new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, () => {
-        arcMaterial.emissiveColor = arcMaterial.originalEmissive.clone();
-        arcMaterial.diffuseColor = arcMaterial.originalDiffuse.clone();
-      })
-    );
+    // Disable picking for better performance (no hover effects)
+    arcTube.isPickable = false;
 
     // Store metadata
     arcTube.isFlightSystemObject = true;

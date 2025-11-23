@@ -2,7 +2,7 @@
 // EARTH TILE SYSTEM AND RENDERING
 // ==============================
 
-const tileDefinition = 4;
+const tileDefinition = 0;
 
 let sharedEarthResources = {
   baseEarthMaterial: null,
@@ -97,7 +97,7 @@ function getVertexDataForTile(tileY, tileZ) {
   var positions = [];
   var indices = [];
   var uvs = [];
-  var subdivisions = 8; // Increased subdivisions for smoother geometry
+  var subdivisions = 6; // Reduced from 8 for better performance
 
   // Generate vertices for the tile mesh
   for (var sy = 0; sy <= subdivisions + 0.5; sy++) {

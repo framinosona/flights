@@ -16,21 +16,40 @@ async function initEngineAsync() {
     preserveDrawingBuffer: true,
     stencil: true,
     disableWebGL2Support: false,
-    adaptToDeviceRatio: true, // Better for high-DPI displays
-    antialias: true, // Enable antialiasing
-    powerPreference: "high-performance", // Request high-performance GPU
+    adaptToDeviceRatio: true, // Enabled for better performance on high-DPI displays
+    antialias: false,
+    powerPreference: "high-performance",
     doNotHandleContextLost: true,
   });
+
+  // Reduce resolution on high-DPI displays for better performance
+  //window.engine.setHardwareScalingLevel(1.5); // 1.5 = render at ~67% resolution
+
   // Validate engine creation
   if (!window.engine) {
     throw new Error("Engine creation failed - engine should not be null");
   }
+
+  console.log("🔧 ✅ Engine created with performance optimizations");
 }
 
 function initRenderLoop() {
+  // Optional: Limit FPS to 30 for better performance (comment out for 60fps)
+  const targetFPS = 30;
+  const frameTime = 1000 / targetFPS;
+  let lastFrameTime = performance.now();
+
   window.engine.runRenderLoop(function () {
-    if (window.scene && window.scene.activeCamera) {
-      window.scene.render();
+    const now = performance.now();
+    const elapsed = now - lastFrameTime;
+
+    // Throttle to target FPS
+    if (elapsed >= frameTime) {
+      lastFrameTime = now - (elapsed % frameTime);
+
+      if (window.scene && window.scene.activeCamera) {
+        window.scene.render();
+      }
     }
   });
 }
@@ -47,11 +66,19 @@ function initScene() {
 
   window.scene.ambientColor = BABYLON.Color3.FromHexString("#333344");
   window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
-  window.scene.freezeActiveMeshes();
+
+  // Performance optimizations
   window.scene.autoClear = true;
   window.scene.autoClearDepthAndStencil = true;
+  window.scene.blockMaterialDirtyMechanism = true; // Prevent unnecessary material updates
+  window.scene.skipPointerMovePicking = true; // Disable pointer move picking for performance
+  window.scene.skipFrustumClipping = false; // Keep frustum culling enabled
+  window.scene.useRightHandedSystem = false;
 
-  console.log("🔧 ✅ Scene created");
+  // Reduce render targets and post-processing overhead
+  window.scene.constantlyUpdateMeshUnderPointer = false;
+
+  console.log("🔧 ✅ Scene created with performance optimizations");
 }
 
 // ==============================
