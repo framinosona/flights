@@ -1,6 +1,8 @@
 /* SIDE UI BLOCKS */
 
 #framinosona-menu-top-bar {
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,6 +20,9 @@
   font-size: 1.2em;
   font-weight: 500;
   letter-spacing: 1px;
+}
+#framinosona-menu-top-bar h1 small{
+  font-weight: 200;
 }
 #framinosona-menu-top-bar h1 a {
   color: #87ceeb;
