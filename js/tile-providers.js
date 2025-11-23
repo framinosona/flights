@@ -83,7 +83,7 @@ window.tileProviders = {
     short: "High-res imagery",
     urlTemplate: null, // Special handling for quadkey system
     attribution: "© Microsoft",
-    northCapColor: "#01121f",
+    northCapColor: "#000000ff",
     southCapColor: "#e2e5f2",
   },
 };

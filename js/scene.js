@@ -42,17 +42,16 @@ function initScene() {
   window.scene ||= new BABYLON.Scene(window.engine);
   // Validate scene creation
   if (!window.scene) {
-    throw new Error("Scene creation failed - scene should not be null");
+    throw new Error("Scene creation failed");
   }
-  console.log("🔧 ✅ Scene created successfully");
-  window.scene.ambientColor = BABYLON.Color3.FromHexString("#333344"); // Reduced ambient light for more realistic look
-  window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1); // Ensure solid black background
 
-  // Performance optimizations (but keep auto-clear enabled for proper background)
-  window.scene.freezeActiveMeshes(); // Optimize rendering for static meshes
-  window.scene.autoClear = true; // Enable automatic clearing for proper background
+  window.scene.ambientColor = BABYLON.Color3.FromHexString("#333344");
+  window.scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
+  window.scene.freezeActiveMeshes();
+  window.scene.autoClear = true;
   window.scene.autoClearDepthAndStencil = true;
-  console.log("🔧 ✅ Scene properties configured");
+
+  console.log("🔧 ✅ Scene created");
 }
 
 // ==============================
@@ -138,16 +137,13 @@ async function initFunction() {
   console.group("🚀 3D Flight Visualization - Initialization");
 
   try {
-    console.log("🔧 🚀 Starting application initialization...");
+    // Core initialization
+    await tryInitializeAsync("🔧", "Engine", initEngineAsync);
+    await tryInitializeAsync("🔧", "Scene", initScene);
+    await tryInitializeAsync("🔧", "Render Loop", initRenderLoop);
+    await tryInitializeAsync("🎥", "Camera", initCamera);
 
-    // In this file :
-    await tryInitializeAsync("🔧", "Engine Creation", initEngineAsync);
-    await tryInitializeAsync("🔧", "Scene Creation", initScene);
-    await tryInitializeAsync("🔄", "Render Loop", initRenderLoop);
-    await tryInitializeAsync("🎥", "Camera Creation", initCamera);
-
-    // PARALLEL PHASE 1: Independent visual systems (can run simultaneously)
-    console.log("🔧 🚀 Starting parallel initialization of visual systems...");
+    // PARALLEL PHASE 1: Independent visual systems
     const visualSystemsPromises = [
       tryInitializeAsync("💡", "Lights", initializeLighting),
       tryInitializeAsync("☀️", "Sun", initSun),
@@ -155,39 +151,28 @@ async function initFunction() {
     ];
 
     const visualResults = await Promise.allSettled(visualSystemsPromises);
-
-    // Log any failures but continue
-    const visualEmojis = ["💡", "☀️", "🌌"];
-    const visualLabels = ["Lights", "Sun", "Space"];
     visualResults.forEach((result, index) => {
+      const labels = ["Lights", "Sun", "Space"];
       if (result.status === "rejected") {
-        console.warn(`${visualEmojis[index]} ⚠️ ${visualLabels[index]} failed:`, result.reason);
-      } else {
-        console.log(`${visualEmojis[index]} ✅ ${visualLabels[index]} initialized successfully`);
+        console.warn(`⚠️ ${labels[index]} failed:`, result.reason);
       }
     });
 
-    // PARALLEL PHASE 2: Data-heavy systems (Earth and Flights can load concurrently)
-    console.log("🔧 🚀 Starting parallel initialization of data systems...");
+    // PARALLEL PHASE 2: Data-heavy systems
     const dataSystemsPromises = [
       tryInitializeAsync("🌍", "Earth", initializeEarth),
-      tryInitializeAsync("🔧", "Flights", initializeFlights),
+      tryInitializeAsync("✈️", "Flights", initializeFlights),
     ];
 
     const dataResults = await Promise.allSettled(dataSystemsPromises);
-
-    // Handle data system results
-    const dataEmojis = ["🌍", "✈️"];
-    const dataLabels = ["Earth", "Flights"];
     dataResults.forEach((result, index) => {
+      const labels = ["Earth", "Flights"];
       if (result.status === "rejected") {
-        console.error(`${dataEmojis[index]} ❌ ${dataLabels[index]} failed:`, result.reason);
-      } else {
-        console.log(`${dataEmojis[index]} ✅ ${dataLabels[index]} initialized successfully`);
+        console.error(`❌ ${labels[index]} failed:`, result.reason);
       }
     });
 
-    console.log("🚀 ✅ Application initialized successfully!");
+    console.log("🚀 ✅ Initialization complete");
   } catch (error) {
     console.error("🚀 ❌ Failed to initialize application:", error);
 

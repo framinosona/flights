@@ -289,6 +289,7 @@ function initPoleCaps() {
 window.setNorthPoleColor = function (color) {
   if (window.northPoleCap && window.northPoleCap.material) {
     window.northPoleCap.material.diffuseColor = BABYLON.Color3.FromHexString(color);
+    window.northPoleCap.material.ambientColor = BABYLON.Color3.FromHexString(color);
     console.log(`🌍 ✅ North pole cap color set to: ${color}`);
   } else {
     console.warn("🌍 ⚠️ North pole cap not found or material missing");
@@ -308,8 +309,6 @@ window.setSouthPoleColor = function (color) {
  * Sets up the progressive tile refinement system
  */
 function initTileRefinement() {
-  console.log("🌍 🔄 Setting up progressive refinement...");
-
   // Simple camera-based refinement trigger
   window.scene.registerAfterRender(() => {
     // Find tiles that can be refined (haven't reached max zoom level)
@@ -324,8 +323,7 @@ function initTileRefinement() {
     }
   });
 
-  console.log("🌍 ✅ Progressive refinement system ready");
-  console.log(`🌍 🔄 Tile refinement will process up to ${tileDefinition} zoom levels`);
+  console.log("🌍 ✅ Tile refinement initialized (max zoom: ${tileDefinition})");
 }
 
 /**
@@ -375,7 +373,6 @@ async function refineTile(mesh) {
  * Initializes the initial Earth tiles
  */
 async function initEarthTiles() {
-  console.log("🌍 📊 Loading initial tiles...");
   await getMeshes(new TileId(0, 0, 0));
   console.log("🌍 ✅ Initial tiles loaded");
 }
@@ -384,13 +381,11 @@ async function initEarthTiles() {
  * Initializes the Earth tile system in the given scene
  */
 async function initializeEarth() {
-  console.log("🌍 🚀 Starting Earth initialization...");
-
   // PARALLEL PHASE 1: Independent Earth components that can load simultaneously
   const independentPromises = [
-    tryInitializeAsync("🌍", "📚 Shared Resources", initSharedResources),
-    tryInitializeAsync("🌍", "🔄 Tile Refinement", initTileRefinement),
-    tryInitializeAsync("🌍", "🧊 Polar Caps", initPoleCaps),
+    tryInitializeAsync("🌍", "Shared Resources", initSharedResources),
+    tryInitializeAsync("🌍", "Tile Refinement", initTileRefinement),
+    tryInitializeAsync("🌍", "Polar Caps", initPoleCaps),
   ];
 
   // PARALLEL PHASE 2: Core tiles (must complete before refinement can work effectively)
@@ -400,22 +395,14 @@ async function initializeEarth() {
   await tryInitializeAsync("🌍", `Earth Tiles for ${window.tileProvider.name}`, initEarthTiles);
 
   // Log results of independent components
-  const componentEmojis = ["📚", "🔄", "🧊"];
   const componentLabels = ["Shared Resources", "Tile Refinement", "Polar Caps"];
   independentResults.forEach((result, index) => {
     if (result.status === "rejected") {
-      console.warn(
-        `🌍 ${componentEmojis[index]} ⚠️ ${componentLabels[index]} failed:`,
-        result.reason
-      );
-    } else {
-      console.log(
-        `🌍 ${componentEmojis[index]} ✅ ${componentLabels[index]} initialized successfully`
-      );
+      console.warn(`🌍 ⚠️ ${componentLabels[index]} failed:`, result.reason);
     }
   });
 
-  console.log("🌍 ✅ Parallel Earth initialization complete");
+  console.log("🌍 ✅ Earth initialized");
 }
 
 // ==============================

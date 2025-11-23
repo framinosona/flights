@@ -61,7 +61,7 @@ window.skyboxSet = window.skyboxSets.TYRO9;
  */
 async function initializeSpaceEnvironment() {
   await setSkyboxSet(window.skyboxSet);
-  console.log("🌌 ✅ Skybox material applied");
+  console.log("🌌 ✅ Skybox initialized");
   return true;
 }
 
@@ -74,20 +74,16 @@ async function initializeSpaceEnvironment() {
  * @param {Object} skyboxSet - skybox object
  */
 window.setSkybox = function (skyboxSet) {
-  console.log(`🌌 🔄 Switching skybox...`);
   setSkyboxSet(skyboxSet);
   return true;
 };
 
 async function setSkyboxSet(skyboxSet) {
   window.skyboxSet = skyboxSet;
-  console.log(`🌌 ✅ Skybox set changed to: ${window.skyboxSet.name}`);
 
   // PARALLEL LOADING: Preload all skybox face textures concurrently
   const faceNames = ["right", "top", "front", "left", "bottom", "back"];
   const textureUrls = faceNames.map((dir) => `${window.skyboxSet.baseName}${dir}.png`);
-
-  console.log("🌌 🚀 Starting parallel skybox texture preloading...");
 
   // Preload all textures in parallel before creating the cube texture
   const preloadPromises = textureUrls.map(
@@ -102,7 +98,6 @@ async function setSkyboxSet(skyboxSet) {
 
   try {
     await Promise.all(preloadPromises);
-    console.log("🌌 ✅ All skybox textures preloaded successfully");
 
     // Now create the cube texture with preloaded images
     var skyboxTexture = new BABYLON.CubeTexture(
@@ -112,7 +107,7 @@ async function setSkyboxSet(skyboxSet) {
     );
 
     window.scene.createDefaultSkybox(skyboxTexture);
-    console.log(`🌌 ✅ Skybox textures updated for set: ${window.skyboxSet.name}`);
+    console.log(`🌌 ✅ Skybox set to: ${window.skyboxSet.name}`);
     return true;
   } catch (error) {
     console.error("🌌 ❌ Failed to preload skybox textures:", error);

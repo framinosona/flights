@@ -6,7 +6,7 @@ const sunDistance = 200; // Realistic distance from Earth center for visibility
 
 function initSun() {
   var sunPosition = calculateSunPosition();
-  console.log("☀️ 📊 Calculated sun position:", sunPosition);
+  console.log("☀️ Calculated sun position:", sunPosition);
 
   // Scale the sun position to a realistic astronomical distance for visibility
   var scaledSunPosition = sunPosition.scale(sunDistance);
@@ -15,7 +15,6 @@ function initSun() {
 
   var sunDirection = sunPosition.normalize();
   sunDirection.scaleInPlace(-1);
-  console.log(`☀️ 📊 Adjusted sun direction:`, sunDirection);
   initSunLight(scaledSunPosition, sunDirection);
 
   // Initialize volumetric light scattering effect
@@ -30,7 +29,7 @@ function initSun() {
 
     var sunDirection = sunPosition.normalize();
     sunDirection.scaleInPlace(-1);
-    updateSunLight(sunPosition, sunDirection);
+    updateSunLight(sunDirection);
 
     // Update volumetric light scattering position
     updateVolumetricLightScattering(scaledSunPosition);
@@ -43,7 +42,6 @@ function initSun() {
  * @returns {BABYLON.Vector3} The sun's direction vector
  */
 function calculateSunPosition() {
-  console.log("☀️ 📊 Calculating sun position based on current time...");
   // Get current date and time
   var now = new Date();
   var dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
@@ -56,9 +54,6 @@ function calculateSunPosition() {
   // Calculate hour angle based on current UTC time
   var utcHours = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600;
   var hourAngle = (utcHours - 12) * 15 * (Math.PI / 180); // Convert to radians
-  console.log(
-    `☀️ 📊 Sun declination: ${declination.toFixed(4)} rad, Hour angle: ${hourAngle.toFixed(4)} rad`
-  );
 
   // Calculate sun position in 3D space
   // Match the coordinate system used in flights.js where longitude is adjusted by -180°
@@ -89,9 +84,7 @@ function calculateSunPosition() {
  * @param {BABYLON.Vector3} sunDirection - The new direction vector for the sun light
  */
 function initSunLight(sunPosition, sunDirection) {
-  // Create directional light to simulate the Sun
-  console.log("☀️ 🏗️ Creating sun lighting...");
-  //window.sunLight ||= new BABYLON.DirectionalLight("sunlight", sunDirection, window.scene);
+  // Create spot light to simulate the Sun
   window.sunLight ||= new BABYLON.SpotLight(
     "sunlight",
     sunPosition,
@@ -105,10 +98,9 @@ function initSunLight(sunPosition, sunDirection) {
   window.sunLight.intensity = 0.9; // Bright sunlight
   window.sunLight.diffuse = BABYLON.Color3.FromHexString("#fff2cc"); // Slightly warm white
   window.sunLight.specular = BABYLON.Color3.FromHexString("#ffffffff"); // Bright specular highlights
-
-  // Enable shadows (optional)
   window.sunLight.setEnabled(true);
-  console.log("☀️ ✅ Sun lighting created with realistic position");
+
+  console.log("☀️ ✅ Sun light created");
 }
 
 /**
@@ -117,13 +109,11 @@ function initSunLight(sunPosition, sunDirection) {
  */
 function updateSunLight(sunDirection) {
   if (!window.sunLight) {
-    console.warn("☀️ ⚠️ Sun light not found, cannot update direction");
+    console.warn("☀️ ⚠️ Sun light not found");
     return;
   }
 
-  // Update sun light direction based on calculated position
   window.sunLight.direction = sunDirection;
-  console.log(`☀️ Sun light direction updated to:`, sunDirection);
 }
 
 // ==============================
@@ -202,11 +192,9 @@ function updateVolumetricLightScattering(sunPosition) {
  * Positioned according to real-time astronomical calculations
  */
 function initSunSphere(sunPosition) {
-  console.log("☀️ 🏗️ Creating visual sun sphere...");
-
   // Validate scene exists
   if (!window.scene) {
-    console.error("☀️ ⚠️ Scene not found - sun cannot be created");
+    console.error("☀️ ❌ Scene not found");
     return false;
   }
 
@@ -220,13 +208,10 @@ function initSunSphere(sunPosition) {
     window.scene
   );
 
-  // Validate sun sphere creation
   if (!window.sunSphere) {
-    console.error("☀️ ⚠️ Sun sphere creation failed");
+    console.error("☀️ ❌ Sun sphere creation failed");
     return false;
   }
-
-  console.log("☀️ ✅ Sun sphere mesh created successfully");
 
   // Create glowing sun material using StandardMaterial with emissive properties
   window.sunMaterial = new BABYLON.StandardMaterial("sunMaterial", window.scene);
@@ -249,11 +234,10 @@ function initSunSphere(sunPosition) {
 
 function updateSunSphere(sunPosition) {
   if (!window.sunSphere) {
-    console.warn("☀️ ⚠️ Sun sphere not found, cannot update position");
+    console.warn("☀️ ⚠️ Sun sphere not found");
     return;
   }
 
-  // Position the sun sphere at the calculated astronomical position
   window.sunSphere.position = sunPosition;
 }
 

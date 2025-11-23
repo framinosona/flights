@@ -274,9 +274,6 @@ async function loadFlightData() {
   }
 }
 
-// Maintain backward compatibility
-const getAirportCoords = loadAirportCoords;
-const getFlightLogs = loadFlightLogs;
 // ==============================
 // ENHANCED AIRPORT POINT VISUALIZATION
 // ==============================
@@ -917,9 +914,8 @@ async function createFlightArcs(flights, airportCoords) {
  * @returns {Promise<Object>} Initialization result with statistics
  */
 async function initializeFlights() {
-  // Simple check - if already initialized, return status
   if (flightSystem.initialized) {
-    console.log("✈️ ✅ Flight system already initialized");
+    console.log("✈️ ✅ Already initialized");
     return true;
   }
 
@@ -931,11 +927,9 @@ async function initializeFlights() {
 
   try {
     // Step 1: Load flight data (uses caching)
-    console.log("✈️ 📥 Loading flight data...");
     const { airportCoords, flightLogs } = await loadFlightData();
 
     // Step 2: Process airports
-    console.log("✈️ 🏗️ Processing airports...");
     const distinctAirports = getDistinctAirports(airportCoords, flightLogs);
 
     if (distinctAirports.length === 0) {
@@ -943,7 +937,6 @@ async function initializeFlights() {
     }
 
     // Step 3 & 4: PARALLEL CREATION - Create airport points and flight arcs simultaneously
-    console.log("✈️ 🚀 Starting parallel creation of airport points and flight arcs...");
     const flightArray = Array.isArray(flightLogs) ? flightLogs : Object.values(flightLogs);
 
     const creationPromises = [
@@ -971,12 +964,10 @@ async function initializeFlights() {
     // Step 5: Finalize initialization
     flightSystem.initialized = true;
 
-    console.log("✈️ 📊 Initialization Complete!", {
+    console.log("✈️ ✅ Initialized:", {
       airports: flightSystem.airportPoints.length,
       flights: flightSystem.flightArcs.length,
     });
-
-    console.log("✈️ ✅ Flight system ready with parallel processing!");
 
     return true;
   } catch (error) {
