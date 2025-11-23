@@ -1059,3 +1059,159 @@ window.disposeFlights = function () {
 
   console.log("✈️ ✅ All flight resources cleaned up");
 };
+
+// ==============================
+// FLIGHT STATISTICS
+// ==============================
+
+/**
+ * Calculates flight statistics from loaded data
+ * @returns {Object} Statistics object with flight data
+ */
+window.calculateFlightStats = function () {
+  if (!flightSystem.airportCoords || !flightSystem.flightLogs) {
+    console.warn("✈️ ⚠️ Flight data not loaded, cannot calculate statistics");
+    return null;
+  }
+
+  const flights = Array.isArray(flightSystem.flightLogs)
+    ? flightSystem.flightLogs
+    : Object.values(flightSystem.flightLogs);
+
+  // Calculate total flights
+  const totalFlights = flights.length;
+
+  // Calculate total distance and collect unique airports
+  let totalDistance = 0;
+  const uniqueAirports = new Set();
+
+  flights.forEach((flight) => {
+    if (flight.from_code && flight.to_code) {
+      uniqueAirports.add(flight.from_code);
+      uniqueAirports.add(flight.to_code);
+
+      const fromAirport = flightSystem.airportCoords[flight.from_code];
+      const toAirport = flightSystem.airportCoords[flight.to_code];
+
+      if (fromAirport && toAirport) {
+        // Calculate great circle distance
+        const lat1 = (fromAirport.latitude * Math.PI) / 180;
+        const lat2 = (toAirport.latitude * Math.PI) / 180;
+        const lng1 = (fromAirport.longitude * Math.PI) / 180;
+        const lng2 = (toAirport.longitude * Math.PI) / 180;
+
+        const dLat = lat2 - lat1;
+        const dLng = lng2 - lng1;
+
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = 6371 * c; // Earth radius in km
+
+        totalDistance += distance;
+      }
+    }
+  });
+
+  // Calculate times around the globe (Earth's circumference ≈ 40,075 km)
+  const earthCircumference = 40075;
+  const timesAroundGlobe = totalDistance / earthCircumference;
+
+  return {
+    totalFlights,
+    totalDistance: Math.round(totalDistance),
+    timesAroundGlobe: timesAroundGlobe.toFixed(2),
+    airportsVisited: uniqueAirports.size,
+  };
+};
+
+/**
+ * Updates the info overlay with flight statistics
+ */
+window.updateFlightStatsDisplay = function () {
+  const stats = window.calculateFlightStats();
+
+  if (!stats) {
+    console.warn("✈️ ⚠️ Could not calculate statistics");
+    return;
+  }
+
+  // Update DOM elements
+  const totalFlightsEl = document.getElementById("totalFlights");
+  const totalDistanceEl = document.getElementById("totalDistance");
+  const timesAroundGlobeEl = document.getElementById("timesAroundGlobe");
+  const airportsVisitedEl = document.getElementById("airportsVisited");
+
+  if (totalFlightsEl) {
+    totalFlightsEl.textContent = stats.totalFlights.toLocaleString();
+  }
+  if (totalDistanceEl) {
+    totalDistanceEl.textContent = stats.totalDistance.toLocaleString() + " km";
+  }
+  if (timesAroundGlobeEl) {
+    timesAroundGlobeEl.textContent = stats.timesAroundGlobe + "×";
+  }
+  if (airportsVisitedEl) {
+    airportsVisitedEl.textContent = stats.airportsVisited.toLocaleString();
+  }
+
+  console.log("✈️ ✅ Flight statistics updated:", stats);
+};
+
+// ==============================
+// INFO OVERLAY TOGGLE
+// ==============================
+
+/**
+ * Initializes the info overlay toggle functionality
+ */
+window.initInfoOverlay = function () {
+  const infoToggleButton = document.getElementById("infoToggleButton");
+  const infoCloseButton = document.getElementById("infoCloseButton");
+  const infoOverlay = document.getElementById("infoOverlay");
+
+  if (!infoToggleButton || !infoCloseButton || !infoOverlay) {
+    console.warn("✈️ ⚠️ Info overlay elements not found");
+    return;
+  }
+
+  const showOverlay = () => {
+    // Update statistics before showing
+    window.updateFlightStatsDisplay();
+    infoOverlay.classList.add("show");
+  };
+
+  const hideOverlay = () => {
+    infoOverlay.classList.remove("show");
+  };
+
+  // Toggle button click
+  infoToggleButton.addEventListener("click", showOverlay);
+
+  // Close button click
+  infoCloseButton.addEventListener("click", hideOverlay);
+
+  // Click outside overlay to close
+  infoOverlay.addEventListener("click", (e) => {
+    if (e.target === infoOverlay) {
+      hideOverlay();
+    }
+  });
+
+  // ESC key to close
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && infoOverlay.classList.contains("show")) {
+      hideOverlay();
+    }
+  });
+
+  console.log("✈️ ✅ Info overlay initialized");
+};
+
+// Initialize info overlay when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", window.initInfoOverlay);
+} else {
+  window.initInfoOverlay();
+}

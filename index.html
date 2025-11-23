@@ -66,6 +66,49 @@
   <body>
     <div id="framinosona-menu-top-bar">
       <h1>My Flights <small>by <a href="https://francois.raminosona.com">Francois Raminosona</a></small></h1>
+      <button id="infoToggleButton" class="info-toggle-button" title="Flight Statistics">
+        <img src="img/icon/information.svg" alt="Info" class="info-icon" />
+      </button>
+    </div>
+
+    <!-- INFORMATION OVERLAY PANEL -->
+    <div id="infoOverlay" class="info-overlay">
+      <div class="info-panel">
+        <div class="info-header">
+          <h2>Flight Statistics</h2>
+          <button id="infoCloseButton" class="info-close-button">&times;</button>
+        </div>
+        <div class="info-content">
+          <div class="info-stat">
+            <div class="info-stat-icon">✈️</div>
+            <div class="info-stat-data">
+              <div class="info-stat-value" id="totalFlights">—</div>
+              <div class="info-stat-label">Total Flights</div>
+            </div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-icon">🌍</div>
+            <div class="info-stat-data">
+              <div class="info-stat-value" id="totalDistance">—</div>
+              <div class="info-stat-label">Kilometers Flown</div>
+            </div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-icon">🔄</div>
+            <div class="info-stat-data">
+              <div class="info-stat-value" id="timesAroundGlobe">—</div>
+              <div class="info-stat-label">Times Around Earth</div>
+            </div>
+          </div>
+          <div class="info-stat">
+            <div class="info-stat-icon">📍</div>
+            <div class="info-stat-data">
+              <div class="info-stat-value" id="airportsVisited">—</div>
+              <div class="info-stat-label">Airports Visited</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- CONTENT -->
