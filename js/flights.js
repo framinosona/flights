@@ -36,7 +36,7 @@ const FLIGHT_CONFIG = {
       default: { emissive: "#4db3ff", diffuse: "#3399e6" },
       hover: { emissive: "#80b3ff", diffuse: "#66a3e6" },
     },
-    alpha: 0.1,
+    alpha: 0.2,
   },
   // Performance settings
   batchSize: 100,
