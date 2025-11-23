@@ -9,7 +9,7 @@
   width: 100%;
   height: 4em;
   padding: 0 1.4em;
-  background-color: #0b3041; /* @darker-blue */
+  background-color: #0b304195; /* @darker-blue */
   color: white;
   z-index: 999;
   display: flex;
@@ -19,7 +19,6 @@
 #framinosona-menu-top-bar h1 {
   font-size: 1.2em;
   font-weight: 500;
-  letter-spacing: 1px;
 }
 #framinosona-menu-top-bar h1 small{
   font-weight: 200;
