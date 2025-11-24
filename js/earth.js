@@ -97,7 +97,7 @@ function getVertexDataForTile(tileY, tileZ) {
   var positions = [];
   var indices = [];
   var uvs = [];
-  var subdivisions = 6; // Reduced from 8 for better performance
+  var subdivisions = 4; // Reduced from 8 for better performance
 
   // Generate vertices for the tile mesh
   for (var sy = 0; sy <= subdivisions + 0.5; sy++) {
