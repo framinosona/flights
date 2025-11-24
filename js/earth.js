@@ -3,6 +3,7 @@
 // ==============================
 
 const tileDefinition = 0;
+const subdivisions = 6; // Subdivision level for tile mesh generation
 
 let sharedEarthResources = {
   baseEarthMaterial: null,
@@ -97,7 +98,6 @@ function getVertexDataForTile(tileY, tileZ) {
   var positions = [];
   var indices = [];
   var uvs = [];
-  var subdivisions = 4; // Reduced from 8 for better performance
 
   // Generate vertices for the tile mesh
   for (var sy = 0; sy <= subdivisions + 0.5; sy++) {
