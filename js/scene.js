@@ -17,7 +17,7 @@ async function initEngineAsync() {
     stencil: true,
     disableWebGL2Support: false,
     adaptToDeviceRatio: true, // Enabled for better performance on high-DPI displays
-    antialias: false,
+    antialias: true,
     powerPreference: "high-performance",
     doNotHandleContextLost: true,
   });
