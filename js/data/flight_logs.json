@@ -1,4 +1,46 @@
 {
+  "LH2558_260108": {
+    "flight_id": "LH 2558",
+    "from": "Munich",
+    "from_code": "MUC",
+    "to": "Tbilisi",
+    "to_code": "TBS",
+    "departure_date": "2026-01-08",
+    "departure_time": "22:50:00",
+    "expected_departure_time": "22:05:00",
+    "arrival_date": "2026-01-09",
+    "arrival_time": "05:05:00",
+    "expected_arrival_time": "05:05:00",
+    "status": null
+  },
+  "LH112_260108": {
+    "flight_id": "LH 112",
+    "from": "Frankfurt",
+    "from_code": "FRA",
+    "to": "Munich",
+    "to_code": "MUC",
+    "departure_date": "2026-01-08",
+    "departure_time": "16:24:00",
+    "expected_departure_time": "nan",
+    "arrival_date": "2026-01-08",
+    "arrival_time": "17:18:00",
+    "expected_arrival_time": "17:10:00",
+    "status": null
+  },
+  "LH869_260108": {
+    "flight_id": "LH 869",
+    "from": "Stavanger",
+    "from_code": "SVG",
+    "to": "Frankfurt",
+    "to_code": "FRA",
+    "departure_date": "2026-01-08",
+    "departure_time": "13:10:00",
+    "expected_departure_time": "nan",
+    "arrival_date": "2026-01-08",
+    "arrival_time": "14:51:00",
+    "expected_arrival_time": "15:05:00",
+    "status": null
+  },
   "DY1334_251204": {
     "flight_id": "DY 1334",
     "from": "London",
