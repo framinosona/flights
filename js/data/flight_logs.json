@@ -515,7 +515,7 @@
     "arrival_date": "2024-06-24",
     "arrival_time": "nan",
     "expected_arrival_time": "nan",
-    "status": null
+    "status": "Cancelled"
   },
   "KL1858_240624": {
     "flight_id": "KL 1858",
