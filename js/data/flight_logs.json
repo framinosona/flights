@@ -2862,11 +2862,11 @@
     "to": "Oslo",
     "to_code": "OSL",
     "departure_date": "2026-02-02",
-    "departure_time": "09:35:00",
-    "expected_departure_time": "nan",
+    "departure_time": "10:45:00",
+    "expected_departure_time": "09:35:00",
     "arrival_date": "2026-02-02",
-    "arrival_time": "10:30:00",
-    "expected_arrival_time": "nan",
+    "arrival_time": "11:40:00",
+    "expected_arrival_time": "10:30:00",
     "status": null
   },
   "DY1308_260205": {
@@ -2974,11 +2974,11 @@
     "to": "Oslo",
     "to_code": "OSL",
     "departure_date": "2026-06-05",
-    "departure_time": "19:45:00",
-    "expected_departure_time": "19:55:00",
+    "departure_time": "19:55:00",
+    "expected_departure_time": "19:45:00",
     "arrival_date": "2026-06-05",
-    "arrival_time": "22:55:00",
-    "expected_arrival_time": "nan",
+    "arrival_time": "23:05:00",
+    "expected_arrival_time": "22:55:00",
     "status": null
   },
   "DY1336_260609": {
