@@ -218,7 +218,7 @@
     "departure_date": "2025-04-22",
     "departure_time": "12:45:00",
     "expected_departure_time": "12:57:00",
-    "arrival_date": "2025-05-23",
+    "arrival_date": "2025-04-23",
     "arrival_time": "07:55:00",
     "expected_arrival_time": "08:52:00",
     "status": null
@@ -2085,20 +2085,6 @@
     "expected_arrival_time": "nan",
     "status": null
   },
-  "LH922_180701": {
-    "flight_id": "LH 922",
-    "from": "Frankfurt",
-    "from_code": "FRA",
-    "to": "London",
-    "to_code": "LHR",
-    "departure_date": "2018-07-01",
-    "departure_time": "21:32:00",
-    "expected_departure_time": "21:30:00",
-    "arrival_date": "2018-07-01",
-    "arrival_time": "20:00:00",
-    "expected_arrival_time": "22:10:00",
-    "status": null
-  },
   "LH2477_180701": {
     "flight_id": "LH 2477",
     "from": "London",
@@ -3063,6 +3049,20 @@
     "arrival_date": "2026-08-13",
     "arrival_time": "22:30:00",
     "expected_arrival_time": "nan",
+    "status": null
+  },
+  "LH922_180629": {
+    "flight_id": "LH 922",
+    "from": "Frankfurt",
+    "from_code": "FRA",
+    "to": "London",
+    "to_code": "LHR",
+    "departure_date": "2018-06-29",
+    "departure_time": "21:32:00",
+    "expected_departure_time": "21:30:00",
+    "arrival_date": "2018-06-29",
+    "arrival_time": "22:10:00",
+    "expected_arrival_time": "22:10:00",
     "status": null
   }
 }
